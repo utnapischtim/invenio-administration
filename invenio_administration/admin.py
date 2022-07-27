@@ -9,6 +9,8 @@
 """Invenio Administration core admin module."""
 
 from invenio_administration.dashboard import AdminDashboardView
+from invenio_administration.menu import AdminMenu
+from flask_menu import current_menu
 
 
 class Administration:
@@ -39,9 +41,7 @@ class Administration:
         self.app = app
 
         self._views = []
-        self._menu = []
-        self._menu_categories = dict()
-        self._menu_links = []
+        self._menu = AdminMenu()
 
         if name is None:
             name = "Administration"
@@ -57,13 +57,13 @@ class Administration:
         self.base_template = base_template or "invenio_administration/base.html"
 
         if self.dashboard_view is not None:
-
             self._add_dashboard_view(
                 dashboard_view=self.dashboard_view, endpoint=ui_endpoint, url=url
             )
-        # import ipdb;ipdb.set_trace()
-        # if app is not None:
-        #     self._init_extension()
+
+        @app.before_first_request
+        def init_menu():
+            self._menu.register_menu_entries(current_menu)
 
     def add_view(self, view, *args, **kwargs):
         """
@@ -78,7 +78,7 @@ class Administration:
         if self.app is not None:
             self.app.register_blueprint(view.create_blueprint(self))
 
-        # self._add_view_to_menu(view)
+        self._menu.add_view_to_menu(view)
 
     def add_views(self, *args):
         """Add multiple views."""
@@ -108,7 +108,6 @@ class Administration:
         # assume index view is always the first element of views.
         if len(self._views) > 0:
             self._views[0] = self.dashboard_view
-            ## TODO menus
-            # self._menu[0] = MenuView(self.dashboard_view.name, self.index_view)
+            self._menu.add_view_to_menu(self.dashboard_view, index=0)
         else:
             self.add_view(self.dashboard_view)

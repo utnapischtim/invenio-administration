@@ -84,6 +84,15 @@ class AdminBaseView(metaclass=AdminViewMeta):
         """Get the flask extension of the view."""
         return current_app.extensions[self._extension]
 
+    @property
+    def endpoint_location_name(self):
+        """Get name for endpoint location e.g: 'administration.index' ."""
+
+        path, name, methods = self._urls[0]
+        prefix = self.endpoint
+        endpoint_name = prefix + "." + name
+        return endpoint_name
+
     def _get_endpoint(self, endpoint=None):
         """
         Generate Flask endpoint name. Defaults to class name if not provided.
@@ -134,6 +143,7 @@ class AdminBaseView(metaclass=AdminViewMeta):
             template_folder="templates",
             static_folder="static",
         )
+
         for url, name, methods in self._urls:
             self.blueprint.add_url_rule(url, name, getattr(self, name), methods=methods)
 
