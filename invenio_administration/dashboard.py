@@ -43,8 +43,8 @@ class AdminDashboardView(AdminBaseView):
             endpoint or "administration",
             "/administration" if url is None else url,
         )
-        self._template = template
+        self.template = template
 
     @expose()
     def index(self):
-        return self.render(self._template)
+        return self.render()

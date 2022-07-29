@@ -3,6 +3,7 @@ from flask import Blueprint, url_for, render_template, abort
 from invenio_administration.decorators import _wrap_view, expose
 from flask import current_app
 
+from invenio_administration.errors import InvalidResource
 from invenio_administration.marshmallow_utils import jsonify_schema
 
 
@@ -36,10 +37,12 @@ class AdminViewMeta(type):
 
 
 class AdminBaseView(metaclass=AdminViewMeta):
+
     _extension = None
     name = None
     category = None
     endpoint = None
+    template = "TODO"
 
     def __init__(
         self, name=__name__, category=None, endpoint=None, url=None, extension=None
@@ -126,7 +129,7 @@ class AdminBaseView(metaclass=AdminViewMeta):
 
         return self.blueprint
 
-    def render(self, template, **kwargs):
+    def render(self, **kwargs):
         """
         Render template
         :param template:
@@ -136,7 +139,7 @@ class AdminBaseView(metaclass=AdminViewMeta):
         """
         kwargs["admin_base_template"] = self.administration.base_template
 
-        return render_template(template, **kwargs)
+        return render_template(self.template, **kwargs)
 
     def _run_view(self, fn, *args, **kwargs):
         """
@@ -210,11 +213,8 @@ class AdminResourceBaseView(AdminBaseView):
     def _get_resource(self, extension):
         try:
             return getattr(extension, self.resource)
-        except Exception:
-            # TODO
-            import ipdb
-
-            ipdb.set_trace()
+        except AttributeError:
+            raise InvalidResource(resource=self.resource, view=self.name)
 
     def _get_service_schema(self):
         current_extension = self._get_view_extension()
@@ -253,7 +253,7 @@ class AdminResourceDetailView(AdminResourceBaseView):
         serialize_schema = self._schema_to_json(schema)
 
         # TODO context processor?
-        return self.render(self.template, **{"schema": serialize_schema})
+        return self.render(**{"schema": serialize_schema})
 
 
 class AdminResourceListView(AdminResourceBaseView):
@@ -278,7 +278,8 @@ class AdminResourceListView(AdminResourceBaseView):
     @expose()
     def index(self):
         search_conf = self.init_search_config()
-        return self.render(self.template, **{"search_config": search_conf})
+        schema = self._get_service_schema()
+        return self.render(**{"search_config": search_conf})
 
 
 class AdminResourceViewSet:
