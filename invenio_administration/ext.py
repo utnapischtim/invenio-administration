@@ -17,7 +17,8 @@ from .admin import Administration
 class InvenioAdministration:
     """Invenio extension."""
 
-    def __init__(self, app=None, entry_point_group="invenio_administration.views"):
+    def __init__(self,
+                 app=None, entry_point_group="invenio_administration.views"):
         """Extension initialization."""
         self.entry_point_group = entry_point_group
 
@@ -27,6 +28,7 @@ class InvenioAdministration:
             self.init_app(app)
 
     def init_app(self, app):
+        """Initialize application."""
         self.init_config(app)
         self.administration = Administration(
             app, name=app.config["ADMINISTRATION_APPNAME"]
@@ -39,15 +41,21 @@ class InvenioAdministration:
 
     def load_entry_point_group(self):
         """Load admin interface views from entry point group."""
-        for ep in set(importlib_metadata.entry_points(group=self.entry_point_group)):
+        entrypoints =  \
+            set(importlib_metadata.entry_points(group=self.entry_point_group))
+        for ep in entrypoints:
             admin_ep = ep.load()
-            self.register_view(admin_ep, self._normalize_entry_point_name(ep.name))
+            self.register_view(
+                admin_ep,
+                self._normalize_entry_point_name(ep.name)
+            )
 
     def _normalize_entry_point_name(self, entry_point_name):
         return entry_point_name.replace("_", "-")
 
     def register_view(self, view_class, extension_name, *args, **kwargs):
         """Register an admin view on this admin instance.
+
         :param view_class: The view class name passed to the view factory.
         :param args: Positional arguments for view class.
         :param kwargs: Keyword arguments to view class.
@@ -61,6 +69,7 @@ class InvenioAdministration:
     @staticmethod
     def init_config(app):
         """Initialize configuration.
+
         :param app: The Flask application.
         """
         # Set default configuration
@@ -69,6 +78,7 @@ class InvenioAdministration:
                 app.config.setdefault(k, getattr(config, k))
 
     def register_resource_schemas(self, app):
+        """Set views schema."""
         @app.before_first_request
         def register_resource_view_schemas():
             for view in self._views:

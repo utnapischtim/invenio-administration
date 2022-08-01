@@ -15,5 +15,4 @@ API Docs
 Views
 -----
 
-.. automodule:: invenio_administration.views
-   :members:
+

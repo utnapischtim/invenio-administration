@@ -32,10 +32,10 @@ def _wrap_view(f):
 
 
 def expose(url="/", methods=("GET",)):
-    """
-    Use this decorator to expose views in your view classes.
+    """Use this decorator to expose views in your view classes.
+
     :param url:
-        Relative URL for the view
+        Relative URL for the view.
     :param methods:
         Allowed HTTP methods. By default only GET is allowed.
     """

@@ -8,9 +8,10 @@
 
 """Invenio Administration core admin module."""
 
+from flask_menu import current_menu
+
 from invenio_administration.dashboard import AdminDashboardView
 from invenio_administration.menu import AdminMenu
-from flask_menu import current_menu
 
 
 class Administration:
@@ -32,9 +33,10 @@ class Administration:
         :param url: base admin url to register the dashboard view and subviews
         :param dashboard_view: home page view
         :param ui_endpoint: base UI endpoint,
-                         leaves flexibility to implement two different admin apps,
-                         or to provide custom endpoint.
-        :param base_template: base admin template. Defaults to "admin/base.html"
+                     leaves flexibility to implement two different admin apps,
+                     or to provide custom endpoint
+        :param base_template: base admin template.
+                     Defaults to "admin/base.html"
         """
         super().__init__()
 
@@ -54,22 +56,24 @@ class Administration:
         self.ui_endpoint = ui_endpoint or "administration"
         self.url = url or self.dashboard_view.url
         self.url = url or "/administration"
-        self.base_template = base_template or "invenio_administration/base.html"
+        self.base_template = \
+            base_template or "invenio_administration/base.html"
 
         if self.dashboard_view is not None:
             self._add_dashboard_view(
-                dashboard_view=self.dashboard_view, endpoint=ui_endpoint, url=url
+                dashboard_view=self.dashboard_view,
+                endpoint=ui_endpoint, url=url
             )
 
         @app.before_first_request
         def init_menu():
-            self._menu.register_menu_entries(current_menu)
+            if current_menu:
+                self._menu.register_menu_entries(current_menu)
 
     def add_view(self, view, *args, **kwargs):
-        """
-        Add a view to the collection.
-        :param view:
-            View to add.
+        """Add a view to the collection.
+
+        :param view: View to add
         """
         # Add to views
         self._views.append(view)
@@ -85,16 +89,16 @@ class Administration:
         for view in args:
             self.add_view(view)
 
-    def _add_dashboard_view(self, dashboard_view=None, endpoint=None, url=None):
-        """
-          Add the admin index view.
-        :param index_view:
+    def _add_dashboard_view(self,
+                            dashboard_view=None, endpoint=None, url=None):
+        """Add the admin index view.
+
+        :param dashboard_view:
              Home page view to use. Defaults to `AdminIndexView`.
-         :param url:
-             Base URL
-        :param endpoint:
-             Base endpoint name for index view. If you use multiple instances of the `Admin` class with
-             a single Flask application, you have to set a unique endpoint name for each instance.
+        :param url: Base URL.
+        :param endpoint: Base endpoint name for index view.
+            When using multiple instances of the `Admin` class in a flask app
+            you have to set a unique endpoint name for each instance.
         """
         from invenio_administration.dashboard import AdminDashboardView
 

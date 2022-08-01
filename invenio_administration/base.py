@@ -8,23 +8,22 @@
 
 """Invenio Administration views base module."""
 
-from flask import Blueprint, url_for, render_template, abort
+from flask import Blueprint, abort, current_app, render_template, url_for
 
 from invenio_administration.decorators import _wrap_view, expose
-from flask import current_app
-
 from invenio_administration.errors import InvalidResource
 from invenio_administration.marshmallow_utils import jsonify_schema
 
 
 class AdminViewMeta(type):
-    """
-    View metaclass.
-    Does some pre-calculations (like getting list of view methods from the class)
+    """View metaclass.
+
+    Does pre-calculations (like getting list of view methods from the class)
     to avoid calculating them for each view class instance.
     """
 
     def __init__(cls, classname, bases, fields):
+        """Constructor."""
         type.__init__(cls, classname, bases, fields)
 
         # Gather exposed views
@@ -47,6 +46,7 @@ class AdminViewMeta(type):
 
 
 class AdminBaseView(metaclass=AdminViewMeta):
+    """Base view for admin views."""
 
     _extension = None
     name = None
@@ -55,10 +55,10 @@ class AdminBaseView(metaclass=AdminViewMeta):
     template = "TODO"
 
     def __init__(
-        self, name=__name__, category=None, endpoint=None, url=None, extension=None
+        self,
+        name=__name__, category=None, endpoint=None, url=None, extension=None
     ):
         """Constructor."""
-
         if self._extension is None:
             self._extension = extension
         if self.name is None:
@@ -76,8 +76,9 @@ class AdminBaseView(metaclass=AdminViewMeta):
         # Default view
         if self._default_view is None:
             raise Exception(
-                f"Cannot instanciate administration view {self.__class__.__name__} "
-                f"without a default view"
+                "Cannot instantiate administration view"
+                f" {self.__class__.__name__} "
+                "without a default view"
             )
 
     def _get_view_extension(self):
@@ -86,16 +87,16 @@ class AdminBaseView(metaclass=AdminViewMeta):
 
     @property
     def endpoint_location_name(self):
-        """Get name for endpoint location e.g: 'administration.index' ."""
-
+        """Get name for endpoint location e.g: 'administration.index'."""
         path, name, methods = self._urls[0]
         prefix = self.endpoint
         endpoint_name = prefix + "." + name
         return endpoint_name
 
     def _get_endpoint(self, endpoint=None):
-        """
-        Generate Flask endpoint name. Defaults to class name if not provided.
+        """Generate Flask endpoint name.
+
+        Defaults to class name if not provided.
         """
         if endpoint:
             return endpoint
@@ -104,9 +105,7 @@ class AdminBaseView(metaclass=AdminViewMeta):
             return self.name.lower()
 
     def _get_view_url(self, admin, url):
-        """
-        Generate URL for the view. Override to change default behavior.
-        """
+        """Generate URL for the view. Override to change default behavior."""
         if url is None:
             if admin.url != "/":
                 url = "%s/%s" % (admin.url, self.endpoint)
@@ -122,9 +121,7 @@ class AdminBaseView(metaclass=AdminViewMeta):
         return url
 
     def create_blueprint(self, admin):
-        """
-        Create Flask blueprint.
-        """
+        """Create Flask blueprint."""
         # Store admin instance
         self.administration = admin
 
@@ -145,13 +142,15 @@ class AdminBaseView(metaclass=AdminViewMeta):
         )
 
         for url, name, methods in self._urls:
-            self.blueprint.add_url_rule(url, name, getattr(self, name), methods=methods)
+            self.blueprint.add_url_rule(
+                url, name, getattr(self, name), methods=methods
+            )
 
         return self.blueprint
 
     def render(self, **kwargs):
-        """
-        Render template
+        """Render template.
+
         :param template:
             Template path to render
         :param kwargs:
@@ -162,10 +161,11 @@ class AdminBaseView(metaclass=AdminViewMeta):
         return render_template(self.template, **kwargs)
 
     def _run_view(self, fn, *args, **kwargs):
-        """
-        This method will run actual view function.
+        """This method will run actual view function.
+
         While it is similar to _handle_view, can be used to change
         arguments that are passed to the view.
+
         :param fn:
             View function
         :param kwargs:
@@ -174,25 +174,25 @@ class AdminBaseView(metaclass=AdminViewMeta):
         return fn(self, *args, **kwargs)
 
     def is_accessible(self):
-        """
-        Override this method to add permission checks.
-        Flask-Admin does not make any assumptions about the authentication system used in your application, so it is
-        up to you to implement it.
+        """Override this method to add permission checks.
+
+        Flask-Admin does not make assumptions about the authentication system
+        used in your application, so it is up to you to implement it.
         By default, it will allow access for everyone.
         """
         return True
 
     def inaccessible_callback(self, name, **kwargs):
-        """
-        Handle the response to inaccessible views.
+        """Handle the response to inaccessible views.
+
         By default, it throw HTTP 403 error. Override this method to
         customize the behaviour.
         """
         return abort(403)
 
     def _handle_view(self, name, **kwargs):
-        """
-        This method will be executed before calling any view method.
+        """This method will be executed before calling any view method.
+
         It will execute the ``inaccessible_callback`` if the view is not
         accessible.
         :param name:
@@ -205,6 +205,8 @@ class AdminBaseView(metaclass=AdminViewMeta):
 
 
 class AdminResourceBaseView(AdminBaseView):
+    """Base view for admin resources."""
+
     display_edit = False
     display_delete = False
     resource = None
@@ -212,8 +214,10 @@ class AdminResourceBaseView(AdminBaseView):
     schema = None
 
     def __init__(
-        self, name=__name__, category=None, endpoint=None, url=None, extension=None
+        self,
+        name=__name__, category=None, endpoint=None, url=None, extension=None
     ):
+        """Constructor."""
         super().__init__(name, category, endpoint, url, extension)
 
         if self._extension is None:
@@ -228,6 +232,7 @@ class AdminResourceBaseView(AdminBaseView):
             )
 
     def set_schema(self):
+        """Set schema."""
         self.schema = self._get_service_schema()
 
     def _get_resource(self, extension):
@@ -239,7 +244,8 @@ class AdminResourceBaseView(AdminBaseView):
     def _get_service_schema(self):
         current_extension = self._get_view_extension()
         resource = self._get_resource(current_extension)
-        # schema.schema due to the schema wrapper imposed, when the actual class needed
+        # schema.schema due to the schema wrapper imposed,
+        # when the actual class needed
         return resource.service.schema.schema()
 
     def _schema_to_json(self, schema):
@@ -247,13 +253,17 @@ class AdminResourceBaseView(AdminBaseView):
 
     def serialize_actions(self):
         """Serialize actions for the resource view.
+
         {"action_name":
         {"text": "BLA"
          #"api_endpoint": either from links.actions or provided by the resource
 
-         if provided by the resource, there will be no mapping on the frontend side
-         but we don't use the power of the links generated via permissions
-         so better have specialized component which knows from where to read the endpoint
+         If provided by resource,
+         there will be no mapping on the frontend side.
+
+         Also means we don't have links generated with permissions.
+         Best to have a specialized component,
+         which knows from where to read the endpoint.
 
          "payload_schema": schema in json
 
@@ -269,6 +279,7 @@ class AdminResourceDetailView(AdminResourceBaseView):
 
     @expose(url="/<pid_value:pid_value>")
     def index(self, pid_value=None):
+        """Main details view."""
         schema = self._get_service_schema()
         serialize_schema = self._schema_to_json(schema)
 
@@ -297,6 +308,7 @@ class AdminResourceListView(AdminResourceBaseView):
 
     @expose()
     def index(self):
+        """Main list view."""
         search_conf = self.init_search_config()
         schema = self._get_service_schema()
         return self.render(**{"search_config": search_conf})
@@ -330,7 +342,9 @@ class AdminResourceViewSet:
     details_view = None
 
     def list_view(self):
+        """List view."""
         pass
 
     def details_view(self):
+        """Details view."""
         pass

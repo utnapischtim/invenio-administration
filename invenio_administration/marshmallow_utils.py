@@ -9,11 +9,12 @@
 """Invenio administration marshmallow utils module."""
 
 from invenio_vocabularies.services.schema import VocabularySchema
-from marshmallow_utils import fields as invenio_fields
 from marshmallow import fields
+from marshmallow_utils import fields as invenio_fields
 
 
 def jsonify_schema(schema):
+    """Marshmallow schema to dict."""
     schema_dict = {}
 
     custom_mapping = {
@@ -47,7 +48,10 @@ def jsonify_schema(schema):
         field_type_name = field_type.__class__
         is_required = field_type.required
 
-        if isinstance(field_type, fields.Nested):
+        nested_field = isinstance(field_type, fields.Nested)
+        list_field = isinstance(field_type, fields.List)
+
+        if nested_field:
             if isinstance(field_type.schema, VocabularySchema):
                 schema_type = "vocabulary"
             else:
@@ -57,7 +61,7 @@ def jsonify_schema(schema):
                 "required": is_required,
                 "properties": jsonify_schema(field_type.schema),
             }
-        elif isinstance(field_type, fields.List) and hasattr(field_type, "properties"):
+        elif list_field and hasattr(field_type, "properties"):
             schema_dict[field] = {
                 "type": "array",
                 "properties": jsonify_schema(field_type.inner.schema),
@@ -71,6 +75,8 @@ def jsonify_schema(schema):
                     "required": is_required,
                 }
             except KeyError:
-                raise Exception(f"Unrecognised schema field {field}: {field_type_name}")
+                raise Exception(
+                    f"Unrecognised schema field {field}: {field_type_name}"
+                )
 
     return schema_dict

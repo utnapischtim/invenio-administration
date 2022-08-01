@@ -10,7 +10,7 @@
 
 from flask import Flask
 
-from invenio_administration import invenioadministration
+from invenio_administration import InvenioAdministration
 
 
 def test_version():
@@ -23,11 +23,11 @@ def test_version():
 def test_init():
     """Test extension initialization."""
     app = Flask("testapp")
-    ext = invenioadministration(app)
+    ext = InvenioAdministration(app)
     assert "invenio-administration" in app.extensions
 
     app = Flask("testapp")
-    ext = invenioadministration()
+    ext = InvenioAdministration()
     assert "invenio-administration" not in app.extensions
     ext.init_app(app)
     assert "invenio-administration" in app.extensions
@@ -35,6 +35,5 @@ def test_init():
 
 def test_view(base_client):
     """Test view."""
-    res = base_client.get("/")
+    res = base_client.get("/administration/")
     assert res.status_code == 200
-    assert "Welcome to invenio-administration" in str(res.data)

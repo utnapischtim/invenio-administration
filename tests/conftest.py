@@ -18,9 +18,9 @@ import tempfile
 import pytest
 from flask import Flask
 from flask_babelex import Babel
+from flask_menu import Menu, current_menu
 
-from invenio_administration import invenioadministration
-from invenio_administration.views import blueprint
+from invenio_administration import InvenioAdministration
 
 
 @pytest.fixture(scope="module")
@@ -40,8 +40,15 @@ def create_app(instance_path):
         app = Flask("testapp", instance_path=instance_path)
         app.config.update(**config)
         Babel(app)
-        invenioadministration(app)
-        app.register_blueprint(blueprint)
+        InvenioAdministration(app)
+        Menu(app)
+
         return app
 
     return factory
+
+
+@pytest.fixture(scope="module")
+def admin_menu():
+    """Admin flask menu instance."""
+    return current_menu

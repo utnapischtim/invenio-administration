@@ -8,14 +8,15 @@
 
 """Invenio Administration dashboard view."""
 
-from invenio_administration.decorators import expose
 from invenio_administration.base import AdminBaseView
+from invenio_administration.decorators import expose
 
 
 class AdminDashboardView(AdminBaseView):
-    """
-    Default administrative interface index page when visiting the ``/admin/`` URL.
-    It can be overridden by passing your own view class to the ``Admin`` constructor::
+    """Default view for the ``/admin/`` URL.
+
+    It can be overridden,
+    by passing your own view class to the ``Admin`` constructor::
 
         class MyHomeView(AdminDashboardView):
             @expose('/')
@@ -47,6 +48,7 @@ class AdminDashboardView(AdminBaseView):
         url=None,
         template="invenio_administration/index.html",
     ):
+        """Constructor."""
         super(AdminDashboardView, self).__init__(
             name or "Home",
             category,
@@ -57,4 +59,5 @@ class AdminDashboardView(AdminBaseView):
 
     @expose()
     def index(self):
+        """Main view."""
         return self.render()

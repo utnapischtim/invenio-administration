@@ -12,6 +12,8 @@ from flask_babelex import gettext as _
 
 
 class InvalidResource(Exception):
+    """Exception for invalid resources."""
+
     def __init__(self, resource, view):
         """Initialise error."""
         super().__init__(

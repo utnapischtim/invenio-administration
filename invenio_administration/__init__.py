@@ -12,4 +12,4 @@ from .ext import InvenioAdministration
 
 __version__ = "0.1.0"
 
-__all__ = "InvenioAdministration"
+__all__ = ["InvenioAdministration"]

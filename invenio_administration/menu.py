@@ -1,16 +1,31 @@
+# -*- coding: utf-8 -*-
+#
+# This file is part of Invenio.
+# Copyright (C) 2022 CERN.
+#
+# Invenio is free software; you can redistribute it and/or modify it
+# under the terms of the MIT License; see LICENSE file for more details.
+
+"""Invenio Administration menu module."""
+
 from flask import request
 
 
 class AdminMenu:
+    """Main class for the admin menu."""
+
     def __init__(self):
+        """Constructor."""
         self._menu_items = []
         self._menu_key = "admin_navigation"
 
     @property
     def items(self):
+        """Return all raw menu items."""
         return self._menu_items
 
     def register_menu_entries(self, flask_menu_instance):
+        """Register all menu items to a flask menu instance."""
         main_menu = flask_menu_instance.submenu(self._menu_key)
 
         for menu_entry in self._menu_items:
@@ -27,17 +42,18 @@ class AdminMenu:
                     endpoint=endpoint,
                     text=name,
                     order=order,
-                    active_when=active_when or self.default_active_when
+                    active_when=active_when or self.default_active_when,
                 )
             else:
                 main_menu.submenu(name).register(
                     endpoint=endpoint,
                     text=name,
                     order=order,
-                    active_when=active_when or self.default_active_when
+                    active_when=active_when or self.default_active_when,
                 )
 
     def add_menu_item(self, item, index=None):
+        """Add menu item."""
         is_menu_item = isinstance(item, MenuItem)
 
         if not is_menu_item:
@@ -50,16 +66,31 @@ class AdminMenu:
         self._menu_items.append(item)
 
     def add_view_to_menu(self, view, index=None):
-        menu_item = MenuItem(endpoint=view.endpoint_location_name, name=view.name, category=view.category)
+        """Add menu item from view."""
+        menu_item = MenuItem(
+            endpoint=view.endpoint_location_name,
+            name=view.name,
+            category=view.category
+        )
+
         self.add_menu_item(menu_item, index)
 
     @staticmethod
     def default_active_when(self):
+        """Default condition for the menu item active state."""
         return request.endpoint == self._endpoint
 
 
 class MenuItem:
-    def __init__(self, name="", endpoint="", category="", order=None, active_when=None):
+    """Class for menu item."""
+
+    def __init__(self,
+                 name="",
+                 endpoint="",
+                 category="",
+                 order=None,
+                 active_when=None):
+        """Constructor."""
         self.name = name
         self.endpoint = endpoint
         self.category = category
