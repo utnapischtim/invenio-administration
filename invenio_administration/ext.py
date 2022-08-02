@@ -50,21 +50,30 @@ class InvenioAdministration:
                 self._normalize_entry_point_name(ep.name)
             )
 
-    def _normalize_entry_point_name(self, entry_point_name):
-        return entry_point_name.replace("_", "-")
-
-    def register_view(self, view_class, extension_name, *args, **kwargs):
+    def register_view(self, view_class, *args, **kwargs):
         """Register an admin view on this admin instance.
 
         :param view_class: The view class name passed to the view factory.
         :param args: Positional arguments for view class.
         :param kwargs: Keyword arguments to view class.
         """
-        view_instance = view_class(extension=extension_name, *args, **kwargs)
+        view_instance = view_class(*args, **kwargs)
         self._views.append(view_instance)
         if "endpoint" not in kwargs:
             kwargs["endpoint"] = view_instance.endpoint
         self.administration.add_view(view_instance, *args, **kwargs)
+
+    def register_resource_schemas(self, app):
+        """Set views schema."""
+        @app.before_first_request
+        def register_resource_view_schemas():
+            for view in self._views:
+                if view.schema:
+                    view.set_schema()
+
+    @staticmethod
+    def _normalize_entry_point_name(entry_point_name):
+        return entry_point_name.replace("_", "-")
 
     @staticmethod
     def init_config(app):
@@ -76,11 +85,3 @@ class InvenioAdministration:
         for k in dir(config):
             if k.startswith("ADMINISTRATION_"):
                 app.config.setdefault(k, getattr(config, k))
-
-    def register_resource_schemas(self, app):
-        """Set views schema."""
-        @app.before_first_request
-        def register_resource_view_schemas():
-            for view in self._views:
-                if view.schema:
-                    view.set_schema()

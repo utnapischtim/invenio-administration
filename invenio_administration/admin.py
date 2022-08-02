@@ -44,6 +44,7 @@ class Administration:
 
         self._views = []
         self._menu = AdminMenu()
+        self._menu_key = "admin_navigation"
 
         if name is None:
             name = "Administration"
@@ -67,13 +68,12 @@ class Administration:
 
         @app.before_first_request
         def init_menu():
-            if current_menu:
-                self._menu.register_menu_entries(current_menu)
+            self._menu.register_menu_entries(current_menu, self._menu_key)
 
     def add_view(self, view, *args, **kwargs):
         """Add a view to the collection.
 
-        :param view: View to add
+        :param view: View to add.
         """
         # Add to views
         self._views.append(view)

@@ -49,7 +49,7 @@ class AdminDashboardView(AdminBaseView):
         template="invenio_administration/index.html",
     ):
         """Constructor."""
-        super(AdminDashboardView, self).__init__(
+        super().__init__(
             name or "Home",
             category,
             endpoint or "administration",

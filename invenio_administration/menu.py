@@ -17,16 +17,19 @@ class AdminMenu:
     def __init__(self):
         """Constructor."""
         self._menu_items = []
-        self._menu_key = "admin_navigation"
 
     @property
     def items(self):
         """Return all raw menu items."""
         return self._menu_items
 
-    def register_menu_entries(self, flask_menu_instance):
+    def register_menu_entries(
+        self,
+        flask_menu_instance,
+        menu_key="admin_navigation"
+    ):
         """Register all menu items to a flask menu instance."""
-        main_menu = flask_menu_instance.submenu(self._menu_key)
+        main_menu = flask_menu_instance.submenu(menu_key)
 
         for menu_entry in self._menu_items:
             category = menu_entry.category
@@ -54,10 +57,11 @@ class AdminMenu:
 
     def add_menu_item(self, item, index=None):
         """Add menu item."""
-        is_menu_item = isinstance(item, MenuItem)
+        menu_item = isinstance(item, MenuItem)
+        error_message = "item should be MenuItem instance"
 
-        if not is_menu_item:
-            return
+        if not menu_item:
+            return TypeError(error_message)
 
         if index:
             self._menu_items[index] = item

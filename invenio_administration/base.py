@@ -88,9 +88,12 @@ class AdminBaseView(metaclass=AdminViewMeta):
     @property
     def endpoint_location_name(self):
         """Get name for endpoint location e.g: 'administration.index'."""
-        path, name, methods = self._urls[0]
+        if len(self._urls) > 0:
+            path, name, methods = self._urls[0]
+        else:
+            name = "index"
         prefix = self.endpoint
-        endpoint_name = prefix + "." + name
+        endpoint_name = f"{prefix}.{name}"
         return endpoint_name
 
     def _get_endpoint(self, endpoint=None):
