@@ -30,3 +30,6 @@ ADMINISTRATION_DASHBOARD_VIEW = (
     "invenio_administration.views.dashboard.AdminDashboardView"
 )
 """Administration dashboard view class."""
+
+ADMINISTRATION_THEME_BASE_TEMPLATE = "invenio_theme/page.html"
+"""Administration base template."""

@@ -1,0 +1,59 @@
+{#
+    -*- coding: utf-8 -*-
+    Copyright (C) 2022 CERN.
+
+    Invenio App RDM is free software; you can redistribute it and/or modify it
+    under the terms of the MIT License; see LICENSE file for more details.
+#}
+
+<header>
+  {%- block navbar %}
+    <nav id="invenio-admin-top-nav" class="ui inverted menu borderless stackable">
+
+      <a class="item rel-pl-1 rel-pr-1 computer only" href="{{ url_for("administration.dashboard") }}">
+        <i class="inverted home icon"></i>
+      </a>
+
+      <div id="rdm-burger-toggle">
+        <button
+          id="rdm-burger-menu-icon"
+          class="ui button transparent"
+          aria-label="{{ _('Menu') }}"
+          aria-haspopup="menu"
+          aria-expanded="false"
+          aria-controls="invenio-menu"
+        >
+          <span class="navicon"></span>
+        </button>
+      </div>
+
+      <div
+        role="menu"
+        id="invenio-menu"
+        aria-labelledby="rdm-burger-menu-icon"
+        class="ui fluid menu borderless mobile-hidden"
+      >
+        <button
+          id="rdm-close-burger-menu-icon"
+          class="ui button transparent"
+          aria-label="{{ _('Close menu') }}"
+        >
+          <span class="navicon"></span>
+        </button>
+
+        {%- block navbar_right %}
+          <div class="right menu item">
+            <div class="item inbox mobile tablet only">
+              <a role="menuitem" href="{{ url_for("administration.dashboard") }}"
+                 aria-label="{{ _("Administration dashboard") }}">
+                <i class="fitted home icon inverted"></i>
+                <span class="mobile tablet only inline">{{ _("Dashboard") }}</span>
+              </a>
+            </div>
+            {%- include "invenio_administration/header_login.html" %}
+          </div>
+        {%- endblock navbar_right %}
+      </div>
+    </nav>
+  {%- endblock navbar %}
+</header>
