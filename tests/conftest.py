@@ -53,13 +53,13 @@ def current_app(create_app):
 @pytest.fixture(scope="module")
 def current_admin_menu(current_app):
     """Current Admin flask menu instance."""
-    return current_app.extensions['menu']
+    return current_app.extensions["menu"]
 
 
 @pytest.fixture(scope="module")
 def current_admin_ext(current_app):
     """Current invenio-administration extension."""
-    return current_app.extensions['invenio-administration']
+    return current_app.extensions["invenio-administration"]
 
 
 @pytest.fixture(scope="module")

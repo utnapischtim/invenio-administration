@@ -46,9 +46,9 @@ source_suffix = ".rst"
 master_doc = "index"
 
 # General information about the project.
-project = u"invenio-administration"
-copyright = u"2022, CERN"
-author = u"CERN"
+project = "invenio-administration"
+copyright = "2022, CERN"
+author = "CERN"
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -244,8 +244,8 @@ latex_documents = [
     (
         master_doc,
         "invenio-administration.tex",
-        u"invenio-administration Documentation",
-        u"CERN",
+        "invenio-administration Documentation",
+        "CERN",
         "manual",
     ),
 ]
@@ -279,7 +279,7 @@ man_pages = [
     (
         master_doc,
         "invenio-administration",
-        u"invenio-administration Documentation",
+        "invenio-administration Documentation",
         [author],
         1,
     )
@@ -298,7 +298,7 @@ texinfo_documents = [
     (
         master_doc,
         "invenio-administration",
-        u"invenio-administration Documentation",
+        "invenio-administration Documentation",
         author,
         "invenio-administration",
         "Invenio module providing extensible administration panel.",

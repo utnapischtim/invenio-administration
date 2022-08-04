@@ -12,37 +12,28 @@ from invenio_administration.dashboard import AdminDashboardView
 
 
 def test_menu_generation(
-    current_admin_menu,
-    current_admin_app,
-    current_admin_ext,
-    current_app
+    current_admin_menu, current_admin_app, current_admin_ext, current_app
 ):
-    name = "Test name"
+    name = "dashboard"
     category = "Test category"
-    endpoint = "test_endpoint"
+    # endpoint = "test_endpoint"
     url = "test_url"
     # test view so that we can test its properties
     test_view = AdminDashboardView(
-        name=name,
-        category=category,
-        endpoint=endpoint,
-        url=url
+        name=name, category=category, url=url,
+        extension="administration-test", admin=current_admin_ext.administration
     )
 
     # register the view equal to the above one and add it to app
     current_admin_ext.register_view(
-        AdminDashboardView,
-        name=name,
-        category=category,
-        endpoint=endpoint,
-        url=url
+        AdminDashboardView, category=category, url=url,
+        extension_name="administration-test"
     )
 
     # register menu items on flask-menu instance
     current_admin_app._menu.register_menu_entries(current_admin_menu)
     # default admin navigation menu
-    flask_menu_admin_instance = \
-        current_admin_menu.submenu("admin_navigation")
+    flask_menu_admin_instance = current_admin_menu.submenu("admin_navigation")
 
     # check if menu category was made correctly and has children
     category_menu = flask_menu_admin_instance.submenu(category)
@@ -59,6 +50,6 @@ def test_menu_generation(
     app_context = current_app.app_context()
     test_context = current_app.test_request_context()
     with app_context, test_context:
-        expected_url = f"/administration/{url}/"
+        expected_url = f"/administration/"
         # check if url from endpoint matches expected url
         assert menu_entry.url == expected_url

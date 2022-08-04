@@ -8,9 +8,10 @@
 
 """Invenio Administration core admin module."""
 
+from flask import Blueprint
 from flask_menu import current_menu
+from werkzeug.utils import import_string
 
-from invenio_administration.dashboard import AdminDashboardView
 from invenio_administration.menu import AdminMenu
 
 
@@ -22,7 +23,6 @@ class Administration:
         app=None,
         name=None,
         url=None,
-        dashboard_view=None,
         ui_endpoint=None,
         base_template=None,
     ):
@@ -41,7 +41,6 @@ class Administration:
         super().__init__()
 
         self.app = app
-
         self._views = []
         self._menu = AdminMenu()
         self._menu_key = "admin_navigation"
@@ -50,68 +49,53 @@ class Administration:
             name = "Administration"
         self.name = name
 
-        self.dashboard_view = dashboard_view or AdminDashboardView(
-            endpoint=ui_endpoint, url=url
-        )
-        # self.ui_endpoint = ui_endpoint or self.dashboard_view.endpoint
-        self.ui_endpoint = ui_endpoint or "administration"
-        self.url = url or self.dashboard_view.url
+        self.dashboard_view_class = self.load_admin_dashboard(app)
+        self.endpoint = ui_endpoint or "administration"
         self.url = url or "/administration"
-        self.base_template = \
-            base_template or "invenio_administration/base.html"
+        self.base_template = base_template or "invenio_administration/base.html"
 
-        if self.dashboard_view is not None:
-            self._add_dashboard_view(
-                dashboard_view=self.dashboard_view,
-                endpoint=ui_endpoint, url=url
-            )
+        self.create_blueprint()
+
+        if self.dashboard_view_class is not None:
+            self._add_dashboard_view()
 
         @app.before_first_request
         def init_menu():
             self._menu.register_menu_entries(current_menu, self._menu_key)
 
-    def add_view(self, view, *args, **kwargs):
-        """Add a view to the collection.
+    def load_admin_dashboard(self, app):
+        """Load dashboard view configuration."""
+        dashboard_config = app.config["ADMINISTRATION_DASHBOARD_VIEW"]
+        dashboard_class = import_string(dashboard_config)
+        return dashboard_class
 
-        :param view: View to add.
-        """
-        # Add to views
+    def create_blueprint(self):
+        """Create Flask blueprint."""
+        # Create blueprint and register rules
+        self.blueprint = Blueprint(
+            self.endpoint,
+            __name__,
+            url_prefix=self.url,
+            template_folder="templates",
+            static_folder="static",
+        )
+
+    def add_view(self, view, view_instance, *args, **kwargs):
+        """Add a view to admin views."""
         self._views.append(view)
 
-        # If app was provided in constructor, register view with Flask app
-        if self.app is not None:
-            self.app.register_blueprint(view.create_blueprint(self))
+        self.blueprint.add_url_rule(view_instance.url, view_func=view)
+        self._menu.add_view_to_menu(view_instance)
 
-        self._menu.add_view_to_menu(view)
-
-    def add_views(self, *args):
-        """Add multiple views."""
-        for view in args:
-            self.add_view(view)
-
-    def _add_dashboard_view(self,
-                            dashboard_view=None, endpoint=None, url=None):
-        """Add the admin index view.
-
-        :param dashboard_view:
-             Home page view to use. Defaults to `AdminIndexView`.
-        :param url: Base URL.
-        :param endpoint: Base endpoint name for index view.
-            When using multiple instances of the `Admin` class in a flask app
-            you have to set a unique endpoint name for each instance.
-        """
-        from invenio_administration.dashboard import AdminDashboardView
-
-        self.dashboard_view = dashboard_view or AdminDashboardView(
-            endpoint=endpoint, url=url
+    def _add_dashboard_view(self):
+        """Add the admin dashboard view."""
+        dashboard_instance = self.dashboard_view_class(
+            admin=self, extension="invenio-administration"
         )
-        self.endpoint = endpoint or self.dashboard_view.endpoint
-        self.url = url or self.dashboard_view.url
+        dashboard_view = self.dashboard_view_class.as_view(
+            self.dashboard_view_class.name,
+            admin=self,
+            extension="invenio-administration",
+        )
 
-        # Add predefined index view
-        # assume index view is always the first element of views.
-        if len(self._views) > 0:
-            self._views[0] = self.dashboard_view
-            self._menu.add_view_to_menu(self.dashboard_view, index=0)
-        else:
-            self.add_view(self.dashboard_view)
+        self.add_view(dashboard_view, dashboard_instance)

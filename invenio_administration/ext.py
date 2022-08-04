@@ -17,8 +17,7 @@ from .admin import Administration
 class InvenioAdministration:
     """Invenio extension."""
 
-    def __init__(self,
-                 app=None, entry_point_group="invenio_administration.views"):
+    def __init__(self, app=None, entry_point_group="invenio_administration.views"):
         """Extension initialization."""
         self.entry_point_group = entry_point_group
 
@@ -31,40 +30,49 @@ class InvenioAdministration:
         """Initialize application."""
         self.init_config(app)
         self.administration = Administration(
-            app, name=app.config["ADMINISTRATION_APPNAME"]
+            app,
+            name=app.config["ADMINISTRATION_APPNAME"],
+            base_template=app.config["ADMINISTRATION_BASE_TEMPLATE"],
         )
         if self.entry_point_group:
-            self.load_entry_point_group()
+            self.load_entry_point_group(app)
         app.extensions["invenio-administration"] = self
 
         self.register_resource_schemas(app)
 
-    def load_entry_point_group(self):
+    def load_entry_point_group(self, app):
         """Load admin interface views from entry point group."""
-        entrypoints =  \
-            set(importlib_metadata.entry_points(group=self.entry_point_group))
+        entrypoints = set(importlib_metadata.entry_points(group=self.entry_point_group))
         for ep in entrypoints:
             admin_ep = ep.load()
-            self.register_view(
-                admin_ep,
-                self._normalize_entry_point_name(ep.name)
-            )
+            self.register_view(admin_ep, self._normalize_entry_point_name(ep.name))
+        app.register_blueprint(self.administration.blueprint)
 
-    def register_view(self, view_class, *args, **kwargs):
+    def register_view(self, view_class, extension_name, *args, **kwargs):
         """Register an admin view on this admin instance.
 
         :param view_class: The view class name passed to the view factory.
+        :param extension_name: The name of the extension which registered the view.
         :param args: Positional arguments for view class.
         :param kwargs: Keyword arguments to view class.
         """
-        view_instance = view_class(*args, **kwargs)
+        view_instance = view_class(
+            extension=extension_name, admin=self.administration, *args, **kwargs
+        )
+        view = view_class.as_view(
+            view_class.name,
+            extension=extension_name,
+            admin=self.administration,
+            *args,
+            **kwargs
+        )
+
         self._views.append(view_instance)
-        if "endpoint" not in kwargs:
-            kwargs["endpoint"] = view_instance.endpoint
-        self.administration.add_view(view_instance, *args, **kwargs)
+        self.administration.add_view(view, view_instance, *args, **kwargs)
 
     def register_resource_schemas(self, app):
         """Set views schema."""
+
         @app.before_first_request
         def register_resource_view_schemas():
             for view in self._views:

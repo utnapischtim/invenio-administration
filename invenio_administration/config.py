@@ -8,7 +8,7 @@
 
 """Configuration for Invenio-Admin."""
 
-ADMINISTRATION_BASE_TEMPLATE = None
+ADMINISTRATION_BASE_TEMPLATE = "invenio_administration/base.html"
 """Admin panel base template.
 By default (``None``) uses the Flask-Admin template."""
 
@@ -25,3 +25,6 @@ panel will be redirected to this endpoint."""
 # ADMINISTRATION_PERMISSION_FACTORY =
 # "invenio_administration.permissions.admin_permission_factory"
 """Permission factory for the admin views."""
+
+ADMINISTRATION_DASHBOARD_VIEW = "invenio_administration.dashboard.AdminDashboardView"
+"""Administration dashboard view class."""

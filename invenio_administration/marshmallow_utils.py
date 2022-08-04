@@ -75,8 +75,6 @@ def jsonify_schema(schema):
                     "required": is_required,
                 }
             except KeyError:
-                raise Exception(
-                    f"Unrecognised schema field {field}: {field_type_name}"
-                )
+                raise Exception(f"Unrecognised schema field {field}: {field_type_name}")
 
     return schema_dict

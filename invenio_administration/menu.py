@@ -23,11 +23,7 @@ class AdminMenu:
         """Return all raw menu items."""
         return self._menu_items
 
-    def register_menu_entries(
-        self,
-        flask_menu_instance,
-        menu_key="admin_navigation"
-    ):
+    def register_menu_entries(self, flask_menu_instance, menu_key="admin_navigation"):
         """Register all menu items to a flask menu instance."""
         main_menu = flask_menu_instance.submenu(menu_key)
 
@@ -74,9 +70,8 @@ class AdminMenu:
         menu_item = MenuItem(
             endpoint=view.endpoint_location_name,
             name=view.name,
-            category=view.category
+            category=view.category,
         )
-
         self.add_menu_item(menu_item, index)
 
     @staticmethod
@@ -88,12 +83,7 @@ class AdminMenu:
 class MenuItem:
     """Class for menu item."""
 
-    def __init__(self,
-                 name="",
-                 endpoint="",
-                 category="",
-                 order=None,
-                 active_when=None):
+    def __init__(self, name="", endpoint="", category="", order=0, active_when=None):
         """Constructor."""
         self.name = name
         self.endpoint = endpoint
