@@ -63,6 +63,6 @@ def current_admin_ext(current_app):
 
 
 @pytest.fixture(scope="module")
-def current_admin_app(current_admin_ext):
+def current_admin_core(current_admin_ext):
     """Current Admin instance."""
     return current_admin_ext.administration

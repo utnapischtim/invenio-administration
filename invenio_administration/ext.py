@@ -38,17 +38,15 @@ class InvenioAdministration:
             self.load_entry_point_group(app)
         app.extensions["invenio-administration"] = self
 
-        self.register_resource_schemas(app)
-
     def load_entry_point_group(self, app):
         """Load admin interface views from entry point group."""
         entrypoints = set(importlib_metadata.entry_points(group=self.entry_point_group))
         for ep in entrypoints:
             admin_ep = ep.load()
-            self.register_view(admin_ep, self._normalize_entry_point_name(ep.name))
+            self.register_view(admin_ep, self._normalize_entry_point_name(ep.name), app)
         app.register_blueprint(self.administration.blueprint)
 
-    def register_view(self, view_class, extension_name, *args, **kwargs):
+    def register_view(self, view_class, extension_name, app, *args, **kwargs):
         """Register an admin view on this admin instance.
 
         :param view_class: The view class name passed to the view factory.
@@ -66,18 +64,19 @@ class InvenioAdministration:
             *args,
             **kwargs
         )
-
-        self._views.append(view_instance)
+        self._views.append(view_class)
         self.administration.add_view(view, view_instance, *args, **kwargs)
+        self.register_resource(app, view_class, extension_name)
 
-    def register_resource_schemas(self, app):
+    def register_resource(self, app, view_class, extension_name):
         """Set views schema."""
 
         @app.before_first_request
-        def register_resource_view_schemas():
-            for view in self._views:
-                if view.schema:
-                    view.set_schema()
+        def register_view_resource():
+            if view_class.resource_config:
+                view_class.set_resource(extension=extension_name)
+            if view_class.schema:
+                view_class.set_schema(extension=extension_name)
 
     @staticmethod
     def _normalize_entry_point_name(entry_point_name):

@@ -8,11 +8,11 @@
 
 """Invenio Administration menu test module."""
 
-from invenio_administration.dashboard import AdminDashboardView
+from invenio_administration.views.dashboard import AdminDashboardView
 
 
 def test_menu_generation(
-    current_admin_menu, current_admin_app, current_admin_ext, current_app
+    current_admin_menu, current_admin_core, current_admin_ext, current_app
 ):
     name = "dashboard"
     category = "Test category"
@@ -20,18 +20,24 @@ def test_menu_generation(
     url = "test_url"
     # test view so that we can test its properties
     test_view = AdminDashboardView(
-        name=name, category=category, url=url,
-        extension="administration-test", admin=current_admin_ext.administration
+        name=name,
+        category=category,
+        url=url,
+        extension="administration-test",
+        admin=current_admin_ext.administration,
     )
 
     # register the view equal to the above one and add it to app
     current_admin_ext.register_view(
-        AdminDashboardView, category=category, url=url,
-        extension_name="administration-test"
+        AdminDashboardView,
+        category=category,
+        url=url,
+        extension_name="administration-test",
+        app=current_app
     )
 
     # register menu items on flask-menu instance
-    current_admin_app._menu.register_menu_entries(current_admin_menu)
+    current_admin_core._menu.register_menu_entries(current_admin_menu)
     # default admin navigation menu
     flask_menu_admin_instance = current_admin_menu.submenu("admin_navigation")
 

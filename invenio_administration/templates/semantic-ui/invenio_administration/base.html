@@ -18,7 +18,7 @@
         {% block admin_sidenav %}
           {% block admin_sidenav_title %}
             <h2 class="ui center aligned header rel-mt-1">
-              Invenio-RDM Backoffice
+              Invenio-RDM Administration
             </h2>
             <div class="ui divider hidden"></div>
           {% endblock %}
@@ -47,9 +47,10 @@
 
           </div>
         {% endblock %}
-
+        {% block admin_page_content %}
         <div class="pl-10 pr-10 pt-10 pb-10">
         </div>
+        {% endblock admin_page_content %}
       </div>
     {% endblock %}
 

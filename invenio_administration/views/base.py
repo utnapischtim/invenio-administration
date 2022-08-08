@@ -7,12 +7,24 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 
 """Invenio Administration views base module."""
+from functools import partial
+
 from flask import current_app, render_template
 from flask.views import MethodView
 from flask_security import roles_required
+from invenio_search_ui.searchconfig import search_app_config
 
 from invenio_administration.errors import InvalidResource
 from invenio_administration.marshmallow_utils import jsonify_schema
+
+# class AdminViewType(MethodViewType):
+#     """Metaclass for :class:`AdminView`."""
+#
+#     def __init__(cls, name, bases, d):
+#         super().__init__(name, bases, d)
+#         if "extension" in d:
+#             cls._extension = d["extension"]
+#
 
 
 class AdminBaseView(MethodView):
@@ -59,17 +71,19 @@ class AdminBaseView(MethodView):
                 "without a default GET view"
             )
 
-    def _get_view_extension(self):
-        """Get the flask extension of the view."""
-        return current_app.extensions[self._extension]
-
     @property
     def endpoint_location_name(self):
         """Get name for endpoint location e.g: 'administration.index'."""
-        print(self.administration, "ADMIN-----")
         if self.administration is None:
             return self.endpoint
         return f"{self.administration.endpoint}.{self.endpoint}"
+
+    @classmethod
+    def _get_view_extension(cls, extension=None):
+        """Get the flask extension of the view."""
+        if extension:
+            return current_app.extensions[extension]
+        return current_app.extensions[cls._extension]
 
     def _get_endpoint(self, endpoint=None):
         """Generate Flask endpoint name.
@@ -96,7 +110,7 @@ class AdminBaseView(MethodView):
         return url
 
     def _get_template(self):
-        return f"{self.template}"
+        return self.template
 
     def render(self, **kwargs):
         """Render template."""
@@ -113,6 +127,7 @@ class AdminResourceBaseView(AdminBaseView):
 
     display_edit = False
     display_delete = False
+    resource_config = None
     resource = None
     actions = {}
     schema = None
@@ -134,28 +149,35 @@ class AdminResourceBaseView(AdminBaseView):
                 f"Cannot instanciate resource view {self.__class__.__name__} "
                 f"without an associated flask extension."
             )
-        if self.resource is None:
+        if self.resource_config is None:
             raise Exception(
                 f"Cannot instanciate resource view {self.__class__.__name__} "
                 f"without a resource."
             )
 
-    def set_schema(self):
+    @classmethod
+    def set_schema(cls):
         """Set schema."""
-        self.schema = self._get_service_schema()
+        cls.schema = cls._get_service_schema()
 
-    def _get_resource(self, extension):
+    @classmethod
+    def set_resource(cls, extension=None):
+        """Set resource."""
+        cls.resource = cls._get_resource(extension)
+
+    @classmethod
+    def _get_resource(cls, extension=None):
+        extension = cls._get_view_extension(extension)
         try:
-            return getattr(extension, self.resource)
+            return getattr(extension, cls.resource_config)
         except AttributeError:
-            raise InvalidResource(resource=self.resource, view=self.name)
+            raise InvalidResource(resource=cls.resource_config, view=cls.__name__)
 
-    def _get_service_schema(self):
-        current_extension = self._get_view_extension()
-        resource = self._get_resource(current_extension)
+    @classmethod
+    def _get_service_schema(cls):
         # schema.schema due to the schema wrapper imposed,
         # when the actual class needed
-        return resource.service.schema.schema()
+        return cls.resource.service.schema.schema()
 
     def _schema_to_json(self, schema):
         return jsonify_schema(schema)
@@ -203,21 +225,78 @@ class AdminResourceListView(AdminResourceBaseView):
     # decides if there is a detail view
     display_read = True
 
-    sort_options = None
-    available_filters = None
+    search_config_name = None
+    search_facets_config_name = None
+    search_sort_config_name = None
+    sort_options = {}
+    available_facets = {}
     column_exclude_list = None
-    column_list = None
+    columns = None
     template = "invenio_administration/search.html"
+    search_api_endpoint = None
+
+    search_request_headers = {"Accept": "application/vnd.inveniordm.v1+json"}
+
+    def get_search_request_headers(self):
+        """Get search request headers."""
+        return self.search_request_headers
+
+    def get_search_app_name(self):
+        """Get search app name."""
+        if self.search_config_name is None:
+            return f"{self.name.upper()}_SEARCH"
+        return self.search_config_name
+
+    def get_search_api_endpoint(self):
+        """Get search API endpoint."""
+        blueprint_name = f"{self.resource.config.blueprint_name}.search"
+        if self.search_api_endpoint:
+            return self.search_api_endpoint
+
+        # TODO improve fetching of the api endpoint
+        blueprint_rule = (
+            current_app.wsgi_app.app.mounts["/api"]
+            .url_map._rules_by_endpoint[blueprint_name][0]
+            .rule
+        )
+
+        api_endpoint = f"/api/{blueprint_rule}"
+        return api_endpoint
 
     def init_search_config(self):
         """Build search view config."""
-        pass
+        return partial(
+            search_app_config,
+            config_name=self.get_search_app_name(),
+            available_facets=current_app.config[self.search_facets_config_name],
+            sort_options=current_app.config[self.search_sort_config_name],
+            endpoint=self.get_search_api_endpoint(),
+            headers=self.get_search_request_headers(),
+        )
+
+    def get_sort_options(self):
+        """Get search sort options."""
+        if not self.sort_options:
+            return self.resource.service.config.search.sort_options
+        return self.sort_options
+
+    def get_available_facets(self):
+        """Get search available facets."""
+        if not self.available_facets:
+            return self.resource.service.config.search.facets
+        return self.available_facets
 
     def get(self):
         """GET view method."""
         search_conf = self.init_search_config()
         schema = self._get_service_schema()
-        return self.render(**{"search_config": search_conf})
+        return self.render(
+            **{
+                "search_config": search_conf,
+                "resource_schema": schema,
+                "columns": self.columns,
+            }
+        )
 
 
 class AdminResourceViewSet:

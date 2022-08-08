@@ -1,4 +1,4 @@
-from invenio_administration.base import AdminBaseView
+from invenio_administration.views.base import AdminBaseView
 
 
 class TestCustomView(AdminBaseView):

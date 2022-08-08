@@ -8,7 +8,7 @@
 
 """Invenio Administration dashboard view."""
 
-from invenio_administration.base import AdminBaseView
+from invenio_administration.views.base import AdminBaseView
 
 
 class AdminDashboardView(AdminBaseView):

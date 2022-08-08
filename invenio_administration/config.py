@@ -26,5 +26,7 @@ panel will be redirected to this endpoint."""
 # "invenio_administration.permissions.admin_permission_factory"
 """Permission factory for the admin views."""
 
-ADMINISTRATION_DASHBOARD_VIEW = "invenio_administration.dashboard.AdminDashboardView"
+ADMINISTRATION_DASHBOARD_VIEW = (
+    "invenio_administration.views.dashboard.AdminDashboardView"
+)
 """Administration dashboard view class."""
