@@ -15,6 +15,7 @@ import {
   Count,
 } from "react-searchkit";
 import { i18next } from "@translations/invenio_communities/i18next";
+import PropTypes from "prop-types";
 
 export const SearchResults = ({ paginationOptions, currentResultsState }) => {
   const { total } = currentResultsState.data;
@@ -67,4 +68,9 @@ export const SearchResults = ({ paginationOptions, currentResultsState }) => {
       </Grid>
     )
   );
+};
+
+SearchResults.propTypes = {
+  paginationOptions: PropTypes.object.isRequired,
+  currentResultsState: PropTypes.object.isRequired,
 };

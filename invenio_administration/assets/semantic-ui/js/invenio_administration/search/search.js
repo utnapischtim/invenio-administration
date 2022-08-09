@@ -13,10 +13,8 @@ import { SearchBarElement } from "./SearchBarElement";
 import SearchEmptyResults from "./SearchEmptyResults";
 import { SearchResultsContainer } from "./SearchResultsContainer";
 import { SearchResults } from "./SearchResults";
-import React, { Component } from "react";
 import { parametrize } from "react-overridable";
 import { DropdownSort } from "@js/invenio_search_ui/components";
-import PropTypes from "prop-types";
 
 const domContainer = document.getElementById("invenio-search-config");
 const columns = JSON.parse(domContainer.dataset.columns);

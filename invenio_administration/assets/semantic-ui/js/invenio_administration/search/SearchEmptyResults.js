@@ -11,6 +11,7 @@ import { Button, Header, Icon, Segment } from "semantic-ui-react";
 import { withState } from "react-searchkit";
 //TODO add translations
 import { i18next } from "@translations/invenio_communities/i18next";
+import PropTypes from "prop-types";
 
 class SearchEmptyResults extends Component {
   render() {
@@ -45,5 +46,18 @@ class SearchEmptyResults extends Component {
     );
   }
 }
+
+SearchEmptyResults.propTypes = {
+  resetQuery: PropTypes.func.isRequired,
+  extraContent: PropTypes.node,
+  queryString: PropTypes.string,
+  currentQueryState: PropTypes.object.isRequired,
+  currentResultsState: PropTypes.object.isRequired,
+};
+
+SearchEmptyResults.defaultProps = {
+  extraContent: undefined,
+  queryString: undefined,
+};
 
 export default withState(SearchEmptyResults);

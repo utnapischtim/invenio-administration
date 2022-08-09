@@ -6,11 +6,11 @@
  * under the terms of the MIT License; see LICENSE file for more details.
  */
 
-import React, { Component } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import { BucketAggregation } from "react-searchkit";
 
-export const SearchFacets = ({ aggs, currentResultsState }) => {
+export const SearchFacets = ({ aggs }) => {
   return (
     <>
       {aggs.map((agg) => {
@@ -22,4 +22,8 @@ export const SearchFacets = ({ aggs, currentResultsState }) => {
       })}
     </>
   );
+};
+
+SearchFacets.propTypes = {
+  aggs: PropTypes.array.isRequired,
 };

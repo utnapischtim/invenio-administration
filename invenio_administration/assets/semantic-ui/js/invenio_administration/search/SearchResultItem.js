@@ -15,7 +15,7 @@ export class SearchResultItem extends Component {
     const { result, columns } = this.props;
     return (
       <Table.Row>
-        {Object.entries(columns).map(([key, value], index) => {
+        {Object.entries(columns).map(([key], index) => {
           return (
             <Table.Cell key={`${key}-${index}`}>{_get(result, key)}</Table.Cell>
           );
@@ -27,4 +27,5 @@ export class SearchResultItem extends Component {
 
 SearchResultItem.propTypes = {
   result: PropTypes.object.isRequired,
+  columns: PropTypes.object.isRequired,
 };
