@@ -15,11 +15,9 @@ export const SearchResultsContainer = ({ results, columns }) => {
     <Table>
       <Table.Header>
         <Table.Row>
-          {Object.keys(columns).map((key, index) => {
+          {columns.map(([property, { text, order }]) => {
             return (
-              <Table.HeaderCell key={`${key}-${index}`}>
-                {columns[key]}
-              </Table.HeaderCell>
+              <Table.HeaderCell key={property + order}>{text}</Table.HeaderCell>
             );
           })}
         </Table.Row>
@@ -30,6 +28,6 @@ export const SearchResultsContainer = ({ results, columns }) => {
 };
 
 SearchResultsContainer.propTypes = {
-  results: PropTypes.object.isRequired,
-  columns: PropTypes.object.isRequired,
+  results: PropTypes.array.isRequired,
+  columns: PropTypes.array.isRequired,
 };

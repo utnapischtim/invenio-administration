@@ -217,10 +217,13 @@ class AdminResourceDetailView(AdminResourceBaseView):
 class AdminResourceListView(AdminResourceBaseView):
     """List view based on provided resource."""
 
-    display_create = False
+    template = "invenio_administration/search.html"
 
     # decides if there is a detail view
     display_read = True
+
+    # hides searchbar
+    display_search = True
 
     search_config_name = None
     search_facets_config_name = None
@@ -229,7 +232,6 @@ class AdminResourceListView(AdminResourceBaseView):
     available_facets = {}
     item_field_exclude_list = None
     item_field_list = None
-    template = "invenio_administration/search.html"
     api_endpoint = None
     list_title = None
 
@@ -287,6 +289,7 @@ class AdminResourceListView(AdminResourceBaseView):
             **{
                 "search_config": search_conf,
                 "list_title": self.list_title,
+                "display_search": self.display_search,
                 "name": self.name,
                 "resource_schema": serialized_schema,
                 "fields": self.item_field_list,

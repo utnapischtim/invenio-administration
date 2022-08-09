@@ -13,11 +13,14 @@ import { Table } from "semantic-ui-react";
 export class SearchResultItem extends Component {
   render() {
     const { result, columns } = this.props;
+
     return (
       <Table.Row>
-        {Object.entries(columns).map(([key], index) => {
+        {columns.map(([property, { text, order }]) => {
           return (
-            <Table.Cell key={`${key}-${index}`}>{_get(result, key)}</Table.Cell>
+            <Table.Cell key={`${text}-${order}`} data-label={text}>
+              {_get(result, property)}
+            </Table.Cell>
           );
         })}
       </Table.Row>
@@ -27,5 +30,5 @@ export class SearchResultItem extends Component {
 
 SearchResultItem.propTypes = {
   result: PropTypes.object.isRequired,
-  columns: PropTypes.object.isRequired,
+  columns: PropTypes.array.isRequired,
 };
