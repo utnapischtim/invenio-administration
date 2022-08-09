@@ -235,6 +235,7 @@ class AdminResourceListView(AdminResourceBaseView):
     api_endpoint = None
     list_title = None
 
+
     search_request_headers = {"Accept": "application/vnd.inveniordm.v1+json"}
 
     def get_search_request_headers(self):

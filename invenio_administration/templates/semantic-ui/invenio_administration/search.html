@@ -8,19 +8,20 @@
 {% extends admin_base_template %}
 
 {% block admin_page_content %}
-   <div class="ui container fluid rel-pt-4 rel-pr-2 rel-pb-4 rel-pl-2 ">
+  <div class="ui container fluid rel-pt-4 rel-pr-2 rel-pb-4 rel-pl-2 ">
     <h1>{{ list_title or name }}</h1>
 
-  {%- block search_app %}
-    <div
-      id="invenio-search-config"
-      data-invenio-search-config='{{ search_config() | tojson }}'
-      data-fields='{{ fields | tojson }}'
-      data-display-search='{{ display_search | tojson }}'
-    >
-    </div>
-  {%- endblock search_app %}
-   </div>
+    {%- block search_app %}
+      <div
+        id="invenio-search-config"
+        data-invenio-search-config='{{ search_config() | tojson }}'
+        data-fields='{{ fields | tojson }}'
+        data-display-search="{{ display_search | tojson }}"
+
+      >
+      </div>
+    {%- endblock search_app %}
+  </div>
 {% endblock admin_page_content %}
 
 
