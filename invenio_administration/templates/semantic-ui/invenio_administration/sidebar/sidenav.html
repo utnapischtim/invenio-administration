@@ -1,0 +1,26 @@
+{% set menu_items = current_menu.submenu('admin_navigation').children %}
+
+<div class="ui secondary inverted vertical menu fluid m-0 rel-mt-1">
+  {% for item in menu_items|sort(attribute='order') if item.visible recursive %}
+    {% if item.children %}
+    <div class="ui divider"></div>
+
+      <div class="sub-menu">
+        <div class="ui small header item mb-5">
+          {{ item.text|safe }}
+        </div>
+
+          {{ loop(item.children) }}
+      </div>
+
+      <div class="ui divider"></div>
+
+    {% else %}
+      <a class="item {{ 'active' if item.active else '' }}" href="{{ item.url }}">
+        {{ item.text }}
+      </a>
+
+    {% endif %}
+
+  {% endfor %}
+</div>

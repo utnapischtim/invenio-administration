@@ -55,3 +55,32 @@ $invenioMenu.on("keydown", (event) => {
     handleBurgerCloseClick();
   }
 });
+
+/* Expand and collapse side menu */
+
+const $toggleButton = $(".side-menu-toggle");
+const $leftIcon = $(".side-menu-toggle .left.icon");
+const $rightIcon = $(".side-menu-toggle .right.icon");
+const $sidebarMenu = $("#admin-side-menu");
+const $mainContent = $("#admin-main-content");
+const mainContentClassList = $mainContent[0].classList.value;
+
+$toggleButton.on("click", () => {
+  if ($mainContent.hasClass(mainContentClassList)) {
+    $mainContent
+      .removeClass(mainContentClassList)
+      .addClass("sixteen wide column");
+  } else {
+    $mainContent[0].classList.value = mainContentClassList; // addClass() does not add multiple of the same class, needed for responsive "wide" classes
+  }
+
+  $leftIcon.each(function () {
+    $(this).toggleClass("hidden");
+  });
+
+  $rightIcon.each(function () {
+    $(this).toggleClass("hidden");
+  });
+
+  $sidebarMenu.toggleClass("hidden");
+});

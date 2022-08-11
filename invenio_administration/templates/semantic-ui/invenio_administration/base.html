@@ -12,37 +12,34 @@
 {% endblock %}
 
 {% block body_inner %}
-  <div class="ui grid rel-pl-1 rel-pr-1 invenio-administration">
+  <div class="ui grid invenio-administration">
+
+    <div class="sixteen wide column">
+      {% block admin_topnav %}
+        {% include "invenio_administration/header/header.html" %}
+      {% endblock admin_topnav %}
+    </div>
+
     {% block admin_side_column %}
-      <div class="three wide column">
-        {% block admin_sidenav %}
-          {% block admin_sidenav_title %}
-            <h2 class="ui center aligned header rel-mt-1">
-              Invenio-RDM Administration
-            </h2>
-            <div class="ui divider hidden"></div>
-          {% endblock %}
+      {% block admin_sidenav %}
 
+        <section id="admin-side-menu" aria-label="{{ _('Side menu')}}" class="six wide mobile four wide tablet three wide computer side-bar column ml-0 mr-0 pr-0">
           {% block admin_sidenav_menu %}
-            {% include "invenio_administration/sidenav.html" %}
-          {% endblock admin_sidenav_menu %}
+            {% include "invenio_administration/sidebar/sidenav.html" %}
+          {% endblock %}
+        </section>
 
-        {% endblock admin_sidenav %}
-
-      </div>
+      {% endblock admin_sidenav %}
     {% endblock %}
 
     {% block admin_main_column %}
-      <div class="thirteen wide column pr-0 pl-0">
-        {% block admin_topnav %}
-          {% include "invenio_administration/header.html" %}
-        {% endblock admin_topnav %}
+      <main id="admin-main-content" class="ten wide mobile twelve wide tablet thirteen wide computer column">
 
         {% block admin_page_content %}
           <div class="pl-10 pr-10 pt-10 pb-10">
           </div>
         {% endblock admin_page_content %}
-      </div>
+      </main>
     {% endblock %}
 
   </div>
