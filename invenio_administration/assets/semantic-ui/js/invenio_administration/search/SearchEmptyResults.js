@@ -9,8 +9,7 @@
 import React, { Component } from "react";
 import { Button, Header, Icon, Segment } from "semantic-ui-react";
 import { withState } from "react-searchkit";
-//TODO add translations
-import { i18next } from "@translations/invenio_communities/i18next";
+import { i18next } from "@translations/invenio_administration/i18next";
 import PropTypes from "prop-types";
 
 class SearchEmptyResults extends Component {

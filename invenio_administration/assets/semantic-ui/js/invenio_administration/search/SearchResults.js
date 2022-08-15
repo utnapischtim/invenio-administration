@@ -14,7 +14,7 @@ import {
   ResultsPerPage,
   Count,
 } from "react-searchkit";
-import { i18next } from "@translations/invenio_communities/i18next";
+import { i18next } from "@translations/invenio_administration/i18next";
 import PropTypes from "prop-types";
 
 export const SearchResults = ({ paginationOptions, currentResultsState }) => {
