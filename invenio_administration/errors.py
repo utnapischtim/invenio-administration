@@ -17,3 +17,45 @@ class InvalidResource(Exception):
     def __init__(self, resource, view):
         """Initialise error."""
         super().__init__(_(f"Invalid resource {resource} configured for view {view}."))
+
+
+class InvalidExtensionName(KeyError):
+    """Exception for invalid extension names."""
+
+    def __init__(self, extension_name):
+        """Initialise error."""
+        super().__init__(_(f"No extension found with name '{extension_name}' ."))
+
+
+class MissingResourceConfiguration(Exception):
+    """Exception for missing resource configurations."""
+
+    def __init__(self, name):
+        """Initialise error."""
+        super().__init__(
+            f"Cannot instantiate resource view {name} "
+            f"without a resource."
+        )
+
+
+class MissingExtensionName(Exception):
+    """Exception for missing resource configurations."""
+
+    def __init__(self, name):
+        """Initialise error."""
+        super().__init__(
+            f"Cannot instantiate resource view {name} "
+            f"without an associated flask extension."
+        )
+
+
+class MissingDefaultGetView(Exception):
+    """Exception for missing default GET views."""
+
+    def __init__(self, name):
+        """Initialise error."""
+        super().__init__(
+            "Cannot instantiate administration view"
+            f" {name} "
+            "without a default GET view"
+        )

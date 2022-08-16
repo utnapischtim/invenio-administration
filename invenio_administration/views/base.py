@@ -9,12 +9,18 @@
 """Invenio Administration views base module."""
 from functools import partial
 
-from flask import current_app, render_template
+from flask import current_app, render_template, url_for
 from flask.views import MethodView
 from flask_security import roles_required
 from invenio_search_ui.searchconfig import search_app_config
 
-from invenio_administration.errors import InvalidResource
+from invenio_administration.errors import (
+    InvalidExtensionName,
+    InvalidResource,
+    MissingDefaultGetView,
+    MissingExtensionName,
+    MissingResourceConfiguration,
+)
 from invenio_administration.marshmallow_utils import jsonify_schema
 
 # class AdminViewType(MethodViewType):
@@ -30,7 +36,7 @@ from invenio_administration.marshmallow_utils import jsonify_schema
 class AdminBaseView(MethodView):
     """Base view for admin views."""
 
-    _extension = None
+    extension_name = None
     name = None
     category = None
     endpoint = None
@@ -45,12 +51,12 @@ class AdminBaseView(MethodView):
         category=None,
         endpoint=None,
         url=None,
-        extension=None,
+        extension_name=None,
         admin=None,
     ):
         """Constructor."""
-        if self._extension is None:
-            self._extension = extension
+        if self.extension_name is None:
+            self.extension_name = extension_name
 
         if self.name is None:
             self.name = name
@@ -65,11 +71,7 @@ class AdminBaseView(MethodView):
 
         # Default view
         if self.get is None:
-            raise Exception(
-                "Cannot instantiate administration view"
-                f" {self.__class__.__name__} "
-                "without a default GET view"
-            )
+            raise MissingDefaultGetView(self.__class__.__name__)
 
     @property
     def endpoint_location_name(self):
@@ -79,11 +81,14 @@ class AdminBaseView(MethodView):
         return f"{self.administration.endpoint}.{self.endpoint}"
 
     @classmethod
-    def _get_view_extension(cls, extension=None):
+    def _get_view_extension(cls, extension_name=None):
         """Get the flask extension of the view."""
-        if extension:
-            return current_app.extensions[extension]
-        return current_app.extensions[cls._extension]
+        try:
+            if extension_name:
+                return current_app.extensions[extension_name]
+            return current_app.extensions[cls.extension_name]
+        except KeyError:
+            raise InvalidExtensionName(extension_name)
 
     def _get_endpoint(self, endpoint=None):
         """Generate Flask endpoint name.
@@ -138,22 +143,16 @@ class AdminResourceBaseView(AdminBaseView):
         category=None,
         endpoint=None,
         url=None,
-        extension=None,
+        extension_name=None,
         admin=None,
     ):
         """Constructor."""
-        super().__init__(name, category, endpoint, url, extension, admin)
+        super().__init__(name, category, endpoint, url, extension_name, admin)
 
-        if self._extension is None:
-            raise Exception(
-                f"Cannot instanciate resource view {self.__class__.__name__} "
-                f"without an associated flask extension."
-            )
+        if self.extension_name is None:
+            raise MissingExtensionName(self.__class__.__name__)
         if self.resource_config is None:
-            raise Exception(
-                f"Cannot instanciate resource view {self.__class__.__name__} "
-                f"without a resource."
-            )
+            raise MissingResourceConfiguration(self.__class__.__name__)
 
     @classmethod
     def set_schema(cls):
@@ -161,15 +160,15 @@ class AdminResourceBaseView(AdminBaseView):
         cls.schema = cls._get_service_schema()
 
     @classmethod
-    def set_resource(cls, extension=None):
+    def set_resource(cls, extension_name=None):
         """Set resource."""
-        cls.resource = cls._get_resource(extension)
+        cls.resource = cls._get_resource(extension_name)
 
     @classmethod
-    def _get_resource(cls, extension=None):
-        extension = cls._get_view_extension(extension)
+    def _get_resource(cls, extension_name=None):
+        extension_name = cls._get_view_extension(extension_name)
         try:
-            return getattr(extension, cls.resource_config)
+            return getattr(extension_name, cls.resource_config)
         except AttributeError:
             raise InvalidResource(resource=cls.resource_config, view=cls.__name__)
 
@@ -233,7 +232,8 @@ class AdminResourceListView(AdminResourceBaseView):
     column_exclude_list = None
     columns = None
     template = "invenio_administration/search.html"
-    search_api_endpoint = None
+    api_endpoint = None
+    list_title = None
 
     search_request_headers = {"Accept": "application/vnd.inveniordm.v1+json"}
 
@@ -249,26 +249,20 @@ class AdminResourceListView(AdminResourceBaseView):
 
     def get_search_api_endpoint(self):
         """Get search API endpoint."""
-        blueprint_name = f"{self.resource.config.blueprint_name}.search"
-        if self.search_api_endpoint:
-            return self.search_api_endpoint
+        api_url_prefix = current_app.config["SITE_API_URL"]
+        slash_tpl = "/" if not self.api_endpoint.startswith("/") else ""
 
-        # TODO improve fetching of the api endpoint
-        blueprint_rule = (
-            current_app.wsgi_app.app.mounts["/api"]
-            .url_map._rules_by_endpoint[blueprint_name][0]
-            .rule
-        )
+        if not self.api_endpoint.startswith(api_url_prefix):
+            return f"{api_url_prefix}{slash_tpl}{self.api_endpoint}"
 
-        api_endpoint = f"/api/{blueprint_rule}"
-        return api_endpoint
+        return f"{slash_tpl}{self.api_endpoint}"
 
     def init_search_config(self):
         """Build search view config."""
         return partial(
             search_app_config,
             config_name=self.get_search_app_name(),
-            available_facets=current_app.config[self.search_facets_config_name],
+            available_facets=current_app.config.get(self.search_facets_config_name),
             sort_options=current_app.config[self.search_sort_config_name],
             endpoint=self.get_search_api_endpoint(),
             headers=self.get_search_request_headers(),
@@ -295,6 +289,8 @@ class AdminResourceListView(AdminResourceBaseView):
                 "search_config": search_conf,
                 "resource_schema": schema,
                 "columns": self.columns,
+                "list_title": self.list_title,
+                "name": self.name
             }
         )
 

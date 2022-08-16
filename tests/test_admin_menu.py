@@ -23,7 +23,7 @@ def test_menu_generation(
         name=name,
         category=category,
         url=url,
-        extension="administration-test",
+        extension_name="administration-test",
         admin=current_admin_ext.administration,
     )
 

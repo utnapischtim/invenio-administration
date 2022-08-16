@@ -42,24 +42,31 @@ class InvenioAdministration:
         """Load admin interface views from entry point group."""
         entrypoints = set(importlib_metadata.entry_points(group=self.entry_point_group))
         for ep in entrypoints:
-            admin_ep = ep.load()
-            self.register_view(admin_ep, self._normalize_entry_point_name(ep.name), app)
+            admin_view = ep.load()
+            entrypoint_path = ep.value
+
+            extension_name_from_path = self._extract_extension_name(entrypoint_path)
+            extension_name_from_view = admin_view.extension_name
+            # fallback to extracted extension_name if property not set on view
+            extension_name = extension_name_from_view or extension_name_from_path
+
+            self.register_view(admin_view, extension_name, app)
         app.register_blueprint(self.administration.blueprint)
 
     def register_view(self, view_class, extension_name, app, *args, **kwargs):
         """Register an admin view on this admin instance.
 
         :param view_class: The view class name passed to the view factory.
-        :param extension_name: The name of the extension which registered the view.
+        :param extension_name: The name of the extension associated with the view.
         :param args: Positional arguments for view class.
         :param kwargs: Keyword arguments to view class.
         """
         view_instance = view_class(
-            extension=extension_name, admin=self.administration, *args, **kwargs
+            extension_name=extension_name, admin=self.administration, *args, **kwargs
         )
         view = view_class.as_view(
             view_class.name,
-            extension=extension_name,
+            extension_name=extension_name,
             admin=self.administration,
             *args,
             **kwargs
@@ -68,19 +75,22 @@ class InvenioAdministration:
         self.administration.add_view(view, view_instance, *args, **kwargs)
         self.register_resource(app, view_class, extension_name)
 
-    def register_resource(self, app, view_class, extension_name):
+    @staticmethod
+    def register_resource(app, view_class, extension_name):
         """Set views schema."""
 
         @app.before_first_request
         def register_view_resource():
             if view_class.resource_config:
-                view_class.set_resource(extension=extension_name)
+                view_class.set_resource(extension_name=extension_name)
             if view_class.schema:
-                view_class.set_schema(extension=extension_name)
+                view_class.set_schema(extension_name=extension_name)
 
     @staticmethod
-    def _normalize_entry_point_name(entry_point_name):
-        return entry_point_name.replace("_", "-")
+    def _extract_extension_name(entrypoint_path):
+        name = entrypoint_path.split(".")[0]
+        normalized_name = name.replace("_", "-")
+        return normalized_name
 
     @staticmethod
     def init_config(app):

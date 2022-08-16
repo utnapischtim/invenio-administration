@@ -44,6 +44,7 @@ class Administration:
         self._views = []
         self._menu = AdminMenu()
         self._menu_key = "admin_navigation"
+        self.blueprint = None
 
         if name is None:
             name = "Administration"
@@ -84,18 +85,23 @@ class Administration:
         """Add a view to admin views."""
         self._views.append(view)
 
-        self.blueprint.add_url_rule(view_instance.url, view_func=view)
+        self.blueprint.add_url_rule(
+            rule=view_instance.url,
+            endpoint=view_instance.endpoint,
+            view_func=view
+        )
+
         self._menu.add_view_to_menu(view_instance)
 
     def _add_dashboard_view(self):
         """Add the admin dashboard view."""
         dashboard_instance = self.dashboard_view_class(
-            admin=self, extension="invenio-administration"
+            admin=self, extension_name="invenio-administration"
         )
         dashboard_view = self.dashboard_view_class.as_view(
             self.dashboard_view_class.name,
             admin=self,
-            extension="invenio-administration",
+            extension_name="invenio-administration",
         )
 
         self.add_view(dashboard_view, dashboard_instance)
