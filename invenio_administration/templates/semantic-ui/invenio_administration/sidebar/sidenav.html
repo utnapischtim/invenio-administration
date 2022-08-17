@@ -20,6 +20,9 @@
         {{ item.text }}
       </a>
 
+      {% if item.icon %}
+        <i class="{{ item.icon }}"></i>
+      {% endif %}
     {% endif %}
 
   {% endfor %}

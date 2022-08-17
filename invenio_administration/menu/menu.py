@@ -9,6 +9,7 @@
 """Invenio Administration menu module."""
 
 from flask import request
+from invenio_theme.proxies import current_theme_icons
 
 
 class AdminMenu:
@@ -34,6 +35,7 @@ class AdminMenu:
             order = menu_entry.order
             active_when = menu_entry.active_when
             label = menu_entry.label
+            icon = menu_entry.icon
 
             if category:
                 category_menu = main_menu.submenu(category)
@@ -43,6 +45,7 @@ class AdminMenu:
                     text=label,
                     order=order,
                     active_when=active_when or self.default_active_when,
+                    icon=icon,
                 )
             else:
                 main_menu.submenu(name).register(
@@ -50,6 +53,7 @@ class AdminMenu:
                     text=label,
                     order=order,
                     active_when=active_when or self.default_active_when,
+                    icon=icon,
                 )
 
     def add_menu_item(self, item, index=None):
@@ -70,6 +74,8 @@ class AdminMenu:
             name=view.name,
             category=view.category,
             label=view.menu_label,
+            order=view.order,
+            icon_key=view.icon,
         )
         self.add_menu_item(menu_item, index)
 
@@ -83,7 +89,14 @@ class MenuItem:
     """Class for menu item."""
 
     def __init__(
-        self, name="", endpoint="", category="", order=0, active_when=None, label=""
+        self,
+        name="",
+        endpoint="",
+        category="",
+        order=0,
+        icon_key=None,
+        active_when=None,
+        label="",
     ):
         """Constructor."""
         self.name = name
@@ -91,4 +104,13 @@ class MenuItem:
         self.category = category
         self.order = order
         self.active_when = active_when
+        self.icon_key = icon_key
         self.label = label
+
+    @property
+    def icon(self):
+        """Return corresponding template path for icon."""
+        if not self.icon_key:
+            return None
+
+        return current_theme_icons[self.icon_key]

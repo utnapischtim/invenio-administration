@@ -17,3 +17,4 @@ class AdminDashboardView(AdminView):
     template = "invenio_administration/index.html"
     name = "dashboard"
     url = "/"
+    icon = "home"
