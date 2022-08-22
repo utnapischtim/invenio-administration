@@ -1,6 +1,6 @@
 import $ from "jquery";
 
-const menuId = "#invenio-admin-top-nav"
+const menuId = "#invenio-admin-top-nav";
 
 /* Expand and collapse navbar  */
 const toggleIcon = $("#rdm-burger-menu-icon");

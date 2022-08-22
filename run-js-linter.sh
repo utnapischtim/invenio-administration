@@ -18,7 +18,7 @@ NC='\033[0m' # No Color
 for arg in $@; do
 	case ${arg} in
 		-i|--install)
-			npm install @inveniosoftware/eslint-config-invenio@^1.0.0;;
+			npm install --no-save --no-package-lock @inveniosoftware/eslint-config-invenio@^1.0.0;;
 		*)
 			printf "Argument ${RED}$arg${NC} not supported\n"
 			exit;;
@@ -26,4 +26,4 @@ for arg in $@; do
 done
 
 printf "${GREEN}Run eslint${NC}\n"
-npx eslint -c .eslintrc.yml invenio_administration/**/*.js --fix
+npx eslint -c .eslintrc.yml invenio_administration/**/*.js

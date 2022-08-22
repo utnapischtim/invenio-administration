@@ -10,14 +10,4 @@ extends:
   - '@inveniosoftware/eslint-config-invenio'
   - '@inveniosoftware/eslint-config-invenio/prettier'
 
-parser: babel-eslint
-
-parserOptions:
-  sourceType: module
-  allowImportExportEverywhere: true
-
-env:
-  browser: true
-  es6: true
-  jest: true
-  node: true
+parser: '@babel/eslint-parser'
