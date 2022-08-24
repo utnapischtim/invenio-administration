@@ -33,19 +33,21 @@ class AdminMenu:
             endpoint = menu_entry.endpoint
             order = menu_entry.order
             active_when = menu_entry.active_when
+            label = menu_entry.label
+
             if category:
                 category_menu = main_menu.submenu(category)
                 category_menu.register(text=category)
                 category_menu.submenu(name).register(
                     endpoint=endpoint,
-                    text=name,
+                    text=label,
                     order=order,
                     active_when=active_when or self.default_active_when,
                 )
             else:
                 main_menu.submenu(name).register(
                     endpoint=endpoint,
-                    text=name,
+                    text=label,
                     order=order,
                     active_when=active_when or self.default_active_when,
                 )
@@ -64,9 +66,10 @@ class AdminMenu:
     def add_view_to_menu(self, view, index=None):
         """Add menu item from view."""
         menu_item = MenuItem(
-            endpoint=view.endpoint_location_name,
+            endpoint=view.endpoint,
             name=view.name,
             category=view.category,
+            label=view.menu_label,
         )
         self.add_menu_item(menu_item, index)
 
@@ -79,10 +82,13 @@ class AdminMenu:
 class MenuItem:
     """Class for menu item."""
 
-    def __init__(self, name="", endpoint="", category="", order=0, active_when=None):
+    def __init__(
+        self, name="", endpoint="", category="", order=0, active_when=None, label=""
+    ):
         """Constructor."""
         self.name = name
         self.endpoint = endpoint
         self.category = category
         self.order = order
         self.active_when = active_when
+        self.label = label

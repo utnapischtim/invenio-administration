@@ -14,6 +14,8 @@ from werkzeug.utils import import_string
 
 from invenio_administration.menu import AdminMenu
 
+from .views.base import AdminBaseView
+
 
 class Administration:
     """Admin views core manager."""
@@ -81,14 +83,24 @@ class Administration:
             static_folder="static",
         )
 
+    @property
+    def views(self):
+        """Registered admin views."""
+        return self._views
+
     def add_view(self, view, view_instance, *args, **kwargs):
         """Add a view to admin views."""
-        self._views.append(view)
+        # Validate view's class and name's uniqueness.
+        if not issubclass(view.view_class, AdminBaseView):
+            raise TypeError(f"View class must be of type {AdminBaseView.__name__}")
+        if any(v.view_class.name == view.view_class.name for v in self.views):
+            raise ValueError(f"View name already registered: {view.view_class.name}")
+
+        self.views.append(view)
 
         self.blueprint.add_url_rule(
             rule=view_instance.url,
-            endpoint=view_instance.endpoint,
-            view_func=view
+            view_func=view,
         )
 
         self._menu.add_view_to_menu(view_instance)

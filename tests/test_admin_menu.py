@@ -8,33 +8,19 @@
 
 """Invenio Administration menu test module."""
 
-from invenio_administration.views.dashboard import AdminDashboardView
+from mock_module.administration.mock import MockView
 
 
-def test_menu_generation(
-    current_admin_menu, current_admin_core, current_admin_ext, current_app
-):
-    name = "dashboard"
-    category = "Test category"
-    # endpoint = "test_endpoint"
-    url = "test_url"
-    # test view so that we can test its properties
-    test_view = AdminDashboardView(
-        name=name,
-        category=category,
-        url=url,
-        extension_name="administration-test",
-        admin=current_admin_ext.administration,
+def test_menu_generation(current_admin_menu, current_admin_core, test_app):
+    # Retrieve mock module's view from registered views.
+    registered_view = list(
+        filter(lambda x: x.view_class.name == MockView.name, current_admin_core.views)
     )
+    assert len(registered_view) == 1
 
-    # register the view equal to the above one and add it to app
-    current_admin_ext.register_view(
-        AdminDashboardView,
-        category=category,
-        url=url,
-        extension_name="administration-test",
-        app=current_app
-    )
+    mock_view = registered_view[0].view_class
+    category = mock_view.category
+    name = mock_view.name
 
     # register menu items on flask-menu instance
     current_admin_core._menu.register_menu_entries(current_admin_menu)
@@ -46,16 +32,15 @@ def test_menu_generation(
     assert category_menu.text == category
     assert len(category_menu.children) > 0
     # menu entry from the registered view
-    menu_entry = category_menu.children[0]
+    menu_entry_filter = [x for x in category_menu.children if x.text == name]
 
     # check if correct menu entry made under the category
-    assert menu_entry.text == name
-    assert menu_entry._endpoint == test_view.endpoint_location_name
+    assert len(menu_entry_filter) == 1
+    menu_entry = menu_entry_filter[0]
+    # assert menu_entry._endpoint == test_view.endpoint
 
     # needs context to generate url from endpoint
-    app_context = current_app.app_context()
-    test_context = current_app.test_request_context()
+    app_context = test_app.app_context()
+    test_context = test_app.test_request_context()
     with app_context, test_context:
-        expected_url = f"/administration/"
-        # check if url from endpoint matches expected url
-        assert menu_entry.url == expected_url
+        assert menu_entry.url == f"{current_admin_core.url}/{mock_view.url}"

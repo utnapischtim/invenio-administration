@@ -12,6 +12,7 @@ import importlib_metadata
 
 from . import config
 from .admin import Administration
+from .views.base import AdminBaseView
 
 
 class InvenioAdministration:
@@ -22,7 +23,6 @@ class InvenioAdministration:
         self.entry_point_group = entry_point_group
 
         self.administration = None
-        self._views = []
         if app:
             self.init_app(app)
 
@@ -42,16 +42,23 @@ class InvenioAdministration:
         """Load admin interface views from entry point group."""
         entrypoints = set(importlib_metadata.entry_points(group=self.entry_point_group))
         for ep in entrypoints:
-            admin_view = ep.load()
+            entry_point = self._load_entry_point(ep)
             entrypoint_path = ep.value
 
             extension_name_from_path = self._extract_extension_name(entrypoint_path)
-            extension_name_from_view = admin_view.extension_name
+            extension_name_from_view = entry_point.extension_name
             # fallback to extracted extension_name if property not set on view
             extension_name = extension_name_from_view or extension_name_from_path
 
-            self.register_view(admin_view, extension_name, app)
+            self.register_view(entry_point, extension_name, app)
         app.register_blueprint(self.administration.blueprint)
+
+    def _load_entry_point(self, entry_point):
+        """Loads one entry point. Validates whether its view is an AdminBaseView."""
+        ep = entry_point.load()
+        if not issubclass(ep, AdminBaseView):
+            raise TypeError(f"View class must be of type {AdminBaseView.__name__}")
+        return ep
 
     def register_view(self, view_class, extension_name, app, *args, **kwargs):
         """Register an admin view on this admin instance.
@@ -69,9 +76,8 @@ class InvenioAdministration:
             extension_name=extension_name,
             admin=self.administration,
             *args,
-            **kwargs
+            **kwargs,
         )
-        self._views.append(view_class)
         self.administration.add_view(view, view_instance, *args, **kwargs)
         self.register_resource(app, view_class, extension_name)
 

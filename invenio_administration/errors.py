@@ -33,8 +33,7 @@ class MissingResourceConfiguration(Exception):
     def __init__(self, name):
         """Initialise error."""
         super().__init__(
-            f"Cannot instantiate resource view {name} "
-            f"without a resource."
+            f"Cannot instantiate resource view {name} " f"without a resource."
         )
 
 

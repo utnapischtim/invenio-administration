@@ -39,9 +39,9 @@ class AdminBaseView(MethodView):
     extension_name = None
     name = None
     category = None
-    endpoint = None
     template = "invenio_administration/index.html"
     url = None
+    menu_label = None
 
     decorators = [roles_required("admin")]
 
@@ -49,7 +49,6 @@ class AdminBaseView(MethodView):
         self,
         name=__name__,
         category=None,
-        endpoint=None,
         url=None,
         extension_name=None,
         admin=None,
@@ -64,9 +63,11 @@ class AdminBaseView(MethodView):
         if self.category is None:
             self.category = category
 
+        if self.menu_label is None:
+            self.menu_label = self.name
+
         self.administration = admin
 
-        self.endpoint = self._get_endpoint(endpoint)
         self.url = url or self._get_view_url(self.url)
 
         # Default view
@@ -74,11 +75,11 @@ class AdminBaseView(MethodView):
             raise MissingDefaultGetView(self.__class__.__name__)
 
     @property
-    def endpoint_location_name(self):
+    def endpoint(self):
         """Get name for endpoint location e.g: 'administration.index'."""
         if self.administration is None:
-            return self.endpoint
-        return f"{self.administration.endpoint}.{self.endpoint}"
+            return self.name
+        return f"{self.administration.endpoint}.{self.name}"
 
     @classmethod
     def _get_view_extension(cls, extension_name=None):
@@ -90,29 +91,20 @@ class AdminBaseView(MethodView):
         except KeyError:
             raise InvalidExtensionName(extension_name)
 
-    def _get_endpoint(self, endpoint=None):
-        """Generate Flask endpoint name.
-
-        Defaults to class name if not provided.
-        """
-        if endpoint:
-            return endpoint
-
-        if not self.endpoint:
-            return f"{self.name.lower()}"
-
     def _get_view_url(self, url):
         """Generate URL for the view. Override to change default behavior."""
-        if url is None:
+        new_url = url
+        if new_url is None:
             if isinstance(self, self.administration.dashboard_view_class):
-                url = "/"
+                new_url = "/"
             else:
-                url = "/%s" % self.endpoint
+                new_url = "/%s" % self.name.lower()
         else:
             if not url.startswith("/"):
-                url = "%s/%s" % (self.administration.url, url)
-
-        return url
+                new_url = "/%s" % (url)
+        # Sanitize url
+        new_url = new_url.replace(" ", "_")
+        return new_url
 
     def _get_template(self):
         return self.template
@@ -141,13 +133,12 @@ class AdminResourceBaseView(AdminBaseView):
         self,
         name=__name__,
         category=None,
-        endpoint=None,
         url=None,
         extension_name=None,
         admin=None,
     ):
         """Constructor."""
-        super().__init__(name, category, endpoint, url, extension_name, admin)
+        super().__init__(name, category, url, extension_name, admin)
 
         if self.extension_name is None:
             raise MissingExtensionName(self.__class__.__name__)
