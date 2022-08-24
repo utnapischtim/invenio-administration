@@ -210,10 +210,17 @@ class AdminResourceDetailView(AdminResourceBaseView):
     def get(self, pid_value=None):
         """GET view method."""
         schema = self._get_service_schema()
-        serialize_schema = self._schema_to_json(schema)
+        serialized_schema = self._schema_to_json(schema)
+        fields = self.item_field_list
 
         # TODO context processor?
-        return self.render(**{"schema": serialize_schema})
+        return self.render(
+            ** {
+                "resource_schema": serialized_schema,
+                "fields": fields,
+                "exclude_fields": self.item_field_exclude_list,
+            }
+        )
 
 
 class AdminResourceListView(AdminResourceBaseView):
@@ -229,8 +236,8 @@ class AdminResourceListView(AdminResourceBaseView):
     search_sort_config_name = None
     sort_options = {}
     available_facets = {}
-    column_exclude_list = None
-    columns = None
+    item_field_exclude_list = None
+    item_field_list = None
     template = "invenio_administration/search.html"
     api_endpoint = None
     list_title = None
@@ -284,13 +291,14 @@ class AdminResourceListView(AdminResourceBaseView):
         """GET view method."""
         search_conf = self.init_search_config()
         schema = self._get_service_schema()
+        serialized_schema = self._schema_to_json(schema)
         return self.render(
             **{
                 "search_config": search_conf,
-                "resource_schema": schema,
-                "columns": self.columns,
                 "list_title": self.list_title,
-                "name": self.name
+                "name": self.name,
+                "resource_schema": serialized_schema,
+                "fields": self.item_field_list,
             }
         )
 

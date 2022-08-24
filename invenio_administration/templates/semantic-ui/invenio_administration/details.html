@@ -4,13 +4,17 @@
   Invenio App RDM is free software; you can redistribute it and/or modify it
   under the terms of the MIT License; see LICENSE file for more details.
 #}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-</head>
-<body>
+{% extends admin_base_template %}
 
-</body>
-</html>
+{% block admin_page_content %}
+  {%- block details %}
+    <div
+      id='invenio-details-config'
+      data-invenio-details-schema='{{ resource_schema | tojson }}'
+      data-fields='{{ fields | tojson }}'
+      data-exclude-fields='{{ exclude_fields | tojson }}'
+    >
+    </div>
+    {%- endblock details %}
+{% endblock admin_page_content %}
+

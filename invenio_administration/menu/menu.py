@@ -33,7 +33,6 @@ class AdminMenu:
             endpoint = menu_entry.endpoint
             order = menu_entry.order
             active_when = menu_entry.active_when
-
             if category:
                 category_menu = main_menu.submenu(category)
                 category_menu.register(text=category)
@@ -53,11 +52,8 @@ class AdminMenu:
 
     def add_menu_item(self, item, index=None):
         """Add menu item."""
-        menu_item = isinstance(item, MenuItem)
-        error_message = "item should be MenuItem instance"
-
-        if not menu_item:
-            return TypeError(error_message)
+        if not isinstance(item, MenuItem):
+            return TypeError("Item should be MenuItem instance.")
 
         if index:
             self._menu_items[index] = item
