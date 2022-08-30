@@ -19,3 +19,4 @@ class AdminDashboardView(AdminView):
     url = "/"
     icon = "home"
     title = "Dashboard"
+    menu_label = "Dashboard"

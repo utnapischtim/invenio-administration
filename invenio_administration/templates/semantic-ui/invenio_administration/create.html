@@ -9,14 +9,13 @@
 
 {% block admin_page_content %}
 
-
-  <div class="ui divider"></div>
   <div
     id="invenio-administration-create-root"
     data-api-endpoint='{{ api_endpoint }}'
     data-resource-schema='{{ resource_schema | tojson }}'
     data-form-fields='{{ form_fields | tojson }}'
     data-referrer="{{ request.referrer }}"
+    data-list-endpoint='{{ list_endpoint }}'
   >
   </div>
 {% endblock admin_page_content %}

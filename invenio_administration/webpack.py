@@ -26,7 +26,9 @@ theme = WebpackThemeBundle(
                 "invenio-administration-create":
                     "./js/invenio_administration/create/index.js",
                 "base-admin-theme":
-                    "./js/invenio_administration/theme.js"
+                    "./js/invenio_administration/theme.js",
+                "invenio-administration-details":
+                    "./js/invenio_administration/details/index.js"
             },
             dependencies={
                 "@babel/runtime": "^7.9.0",

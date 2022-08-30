@@ -234,6 +234,10 @@ class AdminResourceBaseView(AdminView):
 class AdminResourceDetailView(AdminResourceBaseView):
     """Details view based on given config."""
 
+    display_edit = True
+    display_delete = True
+
+    name = None
     item_field_exclude_list = None
     item_field_list = None
     template = "invenio_administration/details.html"
@@ -241,13 +245,14 @@ class AdminResourceDetailView(AdminResourceBaseView):
 
     def get(self, pid_value=None):
         """GET view method."""
+        name = self.name
         schema = self.get_service_schema()
         serialized_schema = self._schema_to_json(schema)
         fields = self.item_field_list
-
         # TODO context processor?
         return self.render(
-            **{
+            ** {
+                "name": name,
                 "resource_schema": serialized_schema,
                 "fields": fields,
                 "exclude_fields": self.item_field_exclude_list,
@@ -255,6 +260,14 @@ class AdminResourceDetailView(AdminResourceBaseView):
                 "api_endpoint": self.get_api_endpoint(),
                 "title": self.title,
                 "list_endpoint": self.get_list_view_endpoint(),
+                "actions": self.serialize_actions(),
+                "pid_path": self.pid_path,
+                "display_edit": self.display_edit,
+                "display_delete": self.display_delete,
+                "list_ui_endpoint": self.get_list_view_endpoint(),
+                "resource_name": self.resource_name
+                if self.resource_name
+                else self.pid_path,
             }
         )
 

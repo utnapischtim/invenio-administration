@@ -15,7 +15,7 @@
     <div class="ui container fluid pl-10 pr-10 pt-10 pb-10">
     <div class="ui grid">
       <div class="column twelve wide">
-        <h1>{{ title or name }}</h1>
+        <h1 class="ui header">{{ title or name }}</h1>
       </div>
       <div class="column four wide">
         {% if display_create %}
@@ -41,7 +41,7 @@
             data-resource-name='{{ resource_name | tojson }}'
             data-invenio-search-config='{{ search_config() | tojson }}'
             data-fields='{{ fields | tojson }}'
-            data-display-search="{{ display_search | tojson }}"
+            data-display-search='{{ display_search | tojson }}'
             data-display-read='{{ display_read | tojson }}'
             data-display-edit='{{ display_edit | tojson }}'
             data-display-delete='{{ display_delete | tojson }}'

@@ -1,21 +1,20 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { Grid, Loader } from "semantic-ui-react";
+import { Grid } from "semantic-ui-react";
 import { AdminForm } from "../formik/AdminForm";
 
 export class CreatePage extends Component {
   constructor(props) {
     super(props);
-    this.state = { loading: false };
   }
+
+  handleCreate = () => {
+    const { listUIEndpoint } = this.props;
+    window.location.replace(listUIEndpoint);
+  };
 
   render() {
     const { resourceSchema, apiEndpoint, formFields } = this.props;
-    const { loading } = this.state;
-
-    if (loading) {
-      return <Loader active={loading} />;
-    }
 
     return (
       <Grid>
@@ -25,6 +24,7 @@ export class CreatePage extends Component {
             apiEndpoint={apiEndpoint}
             formFields={formFields}
             create
+            successCallback={this.handleCreate}
           />
         </Grid.Column>
       </Grid>
@@ -36,6 +36,7 @@ CreatePage.propTypes = {
   resourceSchema: PropTypes.object.isRequired,
   apiEndpoint: PropTypes.string.isRequired,
   formFields: PropTypes.object,
+  listUIEndpoint: PropTypes.string.isRequired,
 };
 
 CreatePage.defaultProps = {

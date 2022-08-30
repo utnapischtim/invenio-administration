@@ -16,21 +16,29 @@ export class AdminForm extends Component {
 
     this.state = {
       error: undefined,
-      formData: resource,
+      formData: resource ? resource : {},
     };
   }
 
   static contextType = NotificationContext;
 
   onSubmit = async (values, actions) => {
-    const { apiEndpoint, pid } = this.props;
+    const { apiEndpoint, pid, successCallback, create } = this.props;
     const { addNotification } = this.context;
+    let response;
     try {
-      await InvenioAdministrationActionsApi.editResource(
-        apiEndpoint,
-        pid,
-        values
-      );
+      if (create) {
+        response = await InvenioAdministrationActionsApi.createResource(
+          apiEndpoint,
+          values
+        );
+      } else {
+        response = await InvenioAdministrationActionsApi.editResource(
+          apiEndpoint,
+          pid,
+          values
+        );
+      }
       actions.setSubmitting(false);
       actions.resetForm({ values: { ...values } });
       addNotification({
@@ -38,6 +46,7 @@ export class AdminForm extends Component {
         content: "Your changes were successfully submitted",
         type: "success",
       });
+      successCallback(response.data);
     } catch (e) {
       console.error(e);
       this.setState({
@@ -101,6 +110,7 @@ AdminForm.propTypes = {
   pid: PropTypes.string,
   create: PropTypes.bool,
   formFields: PropTypes.object,
+  successCallback: PropTypes.func,
 };
 
 AdminForm.defaultProps = {
@@ -108,4 +118,5 @@ AdminForm.defaultProps = {
   create: false,
   pid: undefined,
   formFields: undefined,
+  successCallback: () => {},
 };

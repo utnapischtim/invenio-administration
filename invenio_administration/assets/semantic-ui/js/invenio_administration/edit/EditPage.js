@@ -36,6 +36,11 @@ export class EditPage extends Component {
     }
   };
 
+  handleOnEditSuccess = () => {
+    const { listUIEndpoint } = this.props;
+    window.location.replace(listUIEndpoint);
+  };
+
   render() {
     const { resourceSchema, apiEndpoint, pid, formFields } = this.props;
     const { loading, resource, error } = this.state;
@@ -44,8 +49,8 @@ export class EditPage extends Component {
       <Loader isLoading={loading}>
         <ErrorPage
           error={!_isEmpty(error)}
-          errorCode={error.response.status}
-          errorMessage={error.response.data}
+          errorCode={error?.response.status}
+          errorMessage={error?.response.data}
         >
           <Grid>
             <Grid.Column width={12}>
@@ -55,6 +60,7 @@ export class EditPage extends Component {
                 apiEndpoint={apiEndpoint}
                 formFields={formFields}
                 pid={pid}
+                successCallback={this.handleOnEditSuccess}
               />
             </Grid.Column>
           </Grid>
@@ -69,6 +75,7 @@ EditPage.propTypes = {
   apiEndpoint: PropTypes.string.isRequired,
   pid: PropTypes.string.isRequired,
   formFields: PropTypes.object,
+  listUIEndpoint: PropTypes.string.isRequired,
 };
 
 EditPage.defaultProps = {

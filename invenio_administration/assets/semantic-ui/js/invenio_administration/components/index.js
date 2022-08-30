@@ -1,2 +1,2 @@
-export { Loader } from "./Loader";
-export { ErrorPage } from "./ErrorPage";
+export { default as Loader } from "./Loader";
+export { default as ErrorPage } from "./ErrorPage";

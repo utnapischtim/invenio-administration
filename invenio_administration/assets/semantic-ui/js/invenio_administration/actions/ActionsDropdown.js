@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { Dropdown } from "semantic-ui-react";
+import { Dropdown, Button } from "semantic-ui-react";
 import { DeleteModalTrigger } from "./DeleteModalTrigger";
 import { ResourceActions } from "./ResourceActions";
 import isEmpty from "lodash/isEmpty";
+import { i18next } from "../../../translations/invenio_administration/i18next";
 
 export class ActionsDropdown extends Component {
   render() {
@@ -28,6 +29,14 @@ export class ActionsDropdown extends Component {
             actions={actions}
             apiEndpoint={apiEndpoint}
             Element={Dropdown.Item}
+            trigger={
+              <Button
+                icon="cog"
+                size="tiny"
+                className="transparent rel-ml-1"
+                aria-label={i18next.t("Open list of actions")}
+              />
+            }
           />
         )}
         {displayEdit && <Dropdown.Item>Edit</Dropdown.Item>}

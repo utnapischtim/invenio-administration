@@ -24,9 +24,12 @@ export const SearchResultsContainer = ({
     <Table>
       <Table.Header>
         <Table.Row>
-          {columns.map(([property, { text, order }]) => {
+          {columns.map(([property, { text, order }], index) => {
+            const width = index === 0 ? undefined : index === 1 ? 4 : 3;
             return (
-              <Table.HeaderCell key={property + order}>{text}</Table.HeaderCell>
+              <Table.HeaderCell key={property + order} width={width}>
+                {text}
+              </Table.HeaderCell>
             );
           })}
           {resourceHasActions && <Table.HeaderCell>Actions</Table.HeaderCell>}

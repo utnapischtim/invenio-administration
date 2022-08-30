@@ -11,6 +11,7 @@ const resourceSchema = JSON.parse(domContainer.dataset.resourceSchema);
 const apiEndpoint = _get(domContainer.dataset, "apiEndpoint");
 const pid = JSON.parse(domContainer.dataset.pid);
 const formFields = JSON.parse(domContainer.dataset.formFields);
+const listUIEndpoint = domContainer.dataset.listEndpoint;
 
 ReactDOM.render(
   <NotificationController>
@@ -19,6 +20,7 @@ ReactDOM.render(
       apiEndpoint={apiEndpoint}
       formFields={formFields}
       pid={pid}
+      listUIEndpoint={listUIEndpoint}
     />
   </NotificationController>,
   domContainer

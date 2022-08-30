@@ -102,7 +102,6 @@ const mapFormFields = (obj, parentField, isCreate, formFields) => {
     }
 
     const Element = fieldsMap[fieldSchema.type];
-
     return <Element {...fieldProps} key={fieldProps.fieldPath} />;
   });
 
