@@ -33,5 +33,5 @@ class MockViewAlternate(AdminResourceListView):
 
     name = "mock alternate"
     category = "Test category"
-    url = "mocked_details_alternate_url"
     resource_config = "mocks"
+    # url is None to force the name to be used as url

@@ -40,14 +40,6 @@ def test_view_registration_from_entry_point(
     assert len(registered_view) == 1
     assert registered_view[0].view_class == MockViewAlternate
 
-    # Assert url is registered
-    custom_view_rule = [
-        x
-        for x in test_app.url_map.iter_rules()
-        if x.rule == f"{current_admin_core.url}/{MockViewAlternate.url}"
-    ]
-    assert len(custom_view_rule) == 1
-
 
 def test_view_registration_duplicated(current_admin_ext, test_app, mock_extension_name):
     """Test duplicated view registration."""
@@ -58,3 +50,44 @@ def test_view_registration_duplicated(current_admin_ext, test_app, mock_extensio
         current_admin_ext.register_view(
             MockView, extension_name=dup_cls.extension_name, app=test_app
         )
+
+
+def test_view_registration_url_naming(
+    test_app, current_admin_core
+):
+    """Test view registration urls with spaces."""
+    # Get registered url from app's url Map
+    view_filter = [
+        v
+        for v in current_admin_core.views
+        if v.view_class.name == MockViewAlternate.name
+    ]
+    assert len(view_filter) == 1
+
+    view = view_filter[0]
+
+    custom_view_rule = [
+        x
+        for x in test_app.url_map.iter_rules()
+        if x.endpoint == f"{current_admin_core.endpoint}.{view.view_class.name}"
+    ]
+
+    assert len(custom_view_rule) == 1
+
+    registered_url = custom_view_rule[0].rule
+
+    # Test that the registered url is the view's name without whitespaces, lower cased.
+    expected_url = "{}/{}".format(
+        current_admin_core.url, MockViewAlternate.name.replace(" ", "_").lower()
+    )
+    assert registered_url == expected_url
+
+
+def test_view_registration_url_explicit(test_app, current_admin_core):
+    """Test url registration for explicit set urls."""
+    custom_view_rule = [
+        x
+        for x in test_app.url_map.iter_rules()
+        if x.rule == f"{current_admin_core.url}/{MockView.url}"
+    ]
+    assert len(custom_view_rule) == 1
