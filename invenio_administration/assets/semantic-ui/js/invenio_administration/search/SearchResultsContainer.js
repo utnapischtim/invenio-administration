@@ -9,8 +9,17 @@
 import PropTypes from "prop-types";
 import React from "react";
 import { Table } from "semantic-ui-react";
+import isEmpty from "lodash/isEmpty";
 
-export const SearchResultsContainer = ({ results, columns }) => {
+export const SearchResultsContainer = ({
+  results,
+  columns,
+  displayEdit,
+  displayDelete,
+  actions,
+}) => {
+  const resourceHasActions = displayEdit || displayDelete || !isEmpty(actions);
+
   return (
     <Table>
       <Table.Header>
@@ -20,6 +29,7 @@ export const SearchResultsContainer = ({ results, columns }) => {
               <Table.HeaderCell key={property + order}>{text}</Table.HeaderCell>
             );
           })}
+          {resourceHasActions && <Table.HeaderCell>Actions</Table.HeaderCell>}
         </Table.Row>
       </Table.Header>
       <Table.Body>{results}</Table.Body>

@@ -33,7 +33,6 @@ export const SearchResultOptions = ({ sortOptions, sortOrderDisabled }) => {
               ariaLabel={i18next.t("Sort")}
               label={(cmp) => (
                 <>
-                  <label className="mr-10">{i18next.t("Sort by")}</label>
                   {cmp}
                 </>
               )}

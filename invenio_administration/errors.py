@@ -27,6 +27,14 @@ class InvalidExtensionName(KeyError):
         super().__init__(_(f"No extension found with name '{extension_name}' ."))
 
 
+class InvalidActionsConfiguration(KeyError):
+    """Exception for invalid extension names."""
+
+    def __init__(self):
+        """Initialise error."""
+        super().__init__(_("Invalid actions configuration, order or schema missing"))
+
+
 class MissingResourceConfiguration(Exception):
     """Exception for missing resource configurations."""
 

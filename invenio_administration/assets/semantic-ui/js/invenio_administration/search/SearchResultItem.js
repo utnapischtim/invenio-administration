@@ -9,10 +9,30 @@ import PropTypes from "prop-types";
 import React, { Component } from "react";
 import _get from "lodash/get";
 import { Table } from "semantic-ui-react";
+import isEmpty from "lodash/isEmpty";
+import { Actions } from "../actions/Actions";
+import { withState } from "react-searchkit";
 
-export class SearchResultItem extends Component {
+class SearchResultItemComponent extends Component {
+
+  refreshAfterAction = () => {
+    const { updateQueryState, currentQueryState } = this.props;
+    updateQueryState(currentQueryState);
+  };
+
   render() {
-    const { result, columns } = this.props;
+    const {
+      result,
+      columns,
+      displayEdit,
+      displayDelete,
+      actions,
+      apiEndpoint,
+      idKeyPath,
+    } = this.props;
+
+    const resourceHasActions =
+      displayEdit || displayDelete || !isEmpty(actions);
 
     return (
       <Table.Row>
@@ -23,12 +43,40 @@ export class SearchResultItem extends Component {
             </Table.Cell>
           );
         })}
+        {resourceHasActions && (
+          <Table.Cell>
+            <Actions
+              apiEndpoint={apiEndpoint}
+              displayEdit={displayEdit}
+              displayDelete={displayDelete}
+              actions={actions}
+              resource={result}
+              idKeyPath={idKeyPath}
+              successCallback={this.refreshAfterAction}
+            />
+          </Table.Cell>
+        )}
       </Table.Row>
     );
   }
 }
 
-SearchResultItem.propTypes = {
+SearchResultItemComponent.propTypes = {
   result: PropTypes.object.isRequired,
   columns: PropTypes.array.isRequired,
+  displayDelete: PropTypes.bool,
+  displayEdit: PropTypes.bool,
+  actions: PropTypes.object,
+  apiEndpoint: PropTypes.string,
+  updateQueryState: PropTypes.func.isRequired,
+  currentQueryState: PropTypes.object.isRequired,
+  idKeyPath: PropTypes.string.isRequired
 };
+
+SearchResultItemComponent.defaultProps = {
+  displayDelete: true,
+  displayEdit: true,
+  apiEndpoint: undefined,
+};
+
+export const SearchResultItem = withState(SearchResultItemComponent);

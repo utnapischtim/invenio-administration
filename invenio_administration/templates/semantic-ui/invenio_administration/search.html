@@ -8,8 +8,19 @@
 {% extends admin_base_template %}
 
 {% block admin_page_content %}
-  <div class="ui container fluid rel-pt-4 rel-pr-2 rel-pb-4 rel-pl-2 ">
-    <h1>{{ list_title or name }}</h1>
+
+  {% if display_create %}
+    <div class="ui grid fluid">
+      <div class="three wide column right floated ">
+        <button class="ui right floated icon left labeled button green">
+          <i aria-hidden="true"
+             class="plus icon"></i>Create new
+        </button>
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="ui divider"></div>
 
     {%- block search_app %}
       <div
@@ -17,7 +28,13 @@
         data-invenio-search-config='{{ search_config() | tojson }}'
         data-fields='{{ fields | tojson }}'
         data-display-search="{{ display_search | tojson }}"
-
+data-display-read='{{ display_read | tojson }}'
+      data-display-edit='{{ display_edit | tojson }}'
+      data-display-delete='{{ display_delete | tojson }}'
+      data-resource-schema='{{ resource_schema | tojson }}'
+      data-actions='{{ actions | tojson }}'
+      data-api-endpoint='{{ api_endpoint }}'
+      data-pid-path='{{ pid_path | tojson }}'
       >
       </div>
     {%- endblock search_app %}

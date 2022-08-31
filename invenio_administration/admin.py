@@ -103,7 +103,12 @@ class Administration:
             view_func=view,
         )
 
-        self._menu.add_view_to_menu(view_instance)
+        from invenio_administration.views.base import AdminResourceDetailView, \
+            AdminResourceEditView
+
+        if not isinstance(view_instance, AdminResourceDetailView) and not isinstance(
+                view_instance, AdminResourceEditView):
+            self._menu.add_view_to_menu(view_instance)
 
     def _add_dashboard_view(self):
         """Add the admin dashboard view."""

@@ -8,10 +8,10 @@
 
 """Invenio Administration dashboard view."""
 
-from invenio_administration.views.base import AdminBaseView
+from invenio_administration.views.base import AdminView
 
 
-class AdminDashboardView(AdminBaseView):
+class AdminDashboardView(AdminView):
     """Admin dashboard view."""
 
     template = "invenio_administration/index.html"

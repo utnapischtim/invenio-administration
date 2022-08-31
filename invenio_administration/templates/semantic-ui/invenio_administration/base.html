@@ -23,7 +23,7 @@
     {% block admin_side_column %}
       {% block admin_sidenav %}
 
-        <section id="admin-side-menu" aria-label="{{ _('Side menu')}}" class="six wide mobile four wide tablet three wide computer side-bar column ml-0 mr-0 pr-0">
+        <section id="admin-side-menu" aria-label="{{ _('Side menu')}}" class="six wide mobile four wide tablet three wide computer two wide widescreen side-bar column ml-0 mr-0 pr-0">
           {% block admin_sidenav_menu %}
             {% include "invenio_administration/sidebar/sidenav.html" %}
           {% endblock %}
@@ -33,13 +33,17 @@
     {% endblock %}
 
     {% block admin_main_column %}
-      <main id="admin-main-content" class="ten wide mobile twelve wide tablet thirteen wide computer column">
+      <main id="admin-main-content" class="ten wide mobile twelve wide tablet thirteen wide computer fourteen wide widescreen column">
 
-        {% block admin_page_content %}
-          <div class="pl-10 pr-10 pt-10 pb-10">
-          </div>
-        {% endblock admin_page_content %}
-      </main>
+        <div class="ui container fluid pl-10 pr-10 pt-10 pb-10">
+          <h1>{{ title or name }}</h1>
+
+          {% block admin_page_content %}
+
+          {% endblock admin_page_content %}
+
+        </div>
+      </div>
     {% endblock %}
 
   </div>
