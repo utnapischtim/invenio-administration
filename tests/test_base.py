@@ -1,10 +1,10 @@
 import pytest
 from mock_module.administration.mock import MockView, MockViewAlternate
 
-from invenio_administration.views.base import AdminBaseView
+from invenio_administration.views.base import AdminView
 
 
-class TestCustomView(AdminBaseView):
+class TestCustomView(AdminView):
     name = "Test Custom View"
     extension_name = "test-custom-view"
     category = "Test category"

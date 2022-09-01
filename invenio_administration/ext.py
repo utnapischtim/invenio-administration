@@ -12,7 +12,7 @@ import importlib_metadata
 
 from . import config
 from .admin import Administration
-from .views.base import AdminBaseView
+from .views.base import AdminView
 
 
 class InvenioAdministration:
@@ -54,10 +54,10 @@ class InvenioAdministration:
         app.register_blueprint(self.administration.blueprint)
 
     def _load_entry_point(self, entry_point):
-        """Loads one entry point. Validates whether its view is an AdminBaseView."""
+        """Loads one entry point. Validates whether its view is an AdminView."""
         ep = entry_point.load()
-        if not issubclass(ep, AdminBaseView):
-            raise TypeError(f"View class must be of type {AdminBaseView.__name__}")
+        if not issubclass(ep, AdminView):
+            raise TypeError(f"View class must be of type {AdminView.__name__}")
         return ep
 
     def register_view(self, view_class, extension_name, app, *args, **kwargs):

@@ -14,7 +14,7 @@ from werkzeug.utils import import_string
 
 from invenio_administration.menu import AdminMenu
 
-from .views.base import AdminBaseView
+from .views.base import AdminView
 
 
 class Administration:
@@ -91,8 +91,8 @@ class Administration:
     def add_view(self, view, view_instance, *args, **kwargs):
         """Add a view to admin views."""
         # Validate view's class and name's uniqueness.
-        if not issubclass(view.view_class, AdminBaseView):
-            raise TypeError(f"View class must be of type {AdminBaseView.__name__}")
+        if not issubclass(view.view_class, AdminView):
+            raise TypeError(f"View class must be of type {AdminView.__name__}")
         if any(v.view_class.name == view.view_class.name for v in self.views):
             raise ValueError(f"View name already registered: {view.view_class.name}")
 
