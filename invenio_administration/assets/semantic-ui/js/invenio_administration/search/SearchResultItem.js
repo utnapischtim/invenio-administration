@@ -14,7 +14,6 @@ import { Actions } from "../actions/Actions";
 import { withState } from "react-searchkit";
 
 class SearchResultItemComponent extends Component {
-
   refreshAfterAction = () => {
     const { updateQueryState, currentQueryState } = this.props;
     updateQueryState(currentQueryState);
@@ -70,13 +69,14 @@ SearchResultItemComponent.propTypes = {
   apiEndpoint: PropTypes.string,
   updateQueryState: PropTypes.func.isRequired,
   currentQueryState: PropTypes.object.isRequired,
-  idKeyPath: PropTypes.string.isRequired
+  idKeyPath: PropTypes.string.isRequired,
 };
 
 SearchResultItemComponent.defaultProps = {
   displayDelete: true,
   displayEdit: true,
   apiEndpoint: undefined,
+  actions: [],
 };
 
 export const SearchResultItem = withState(SearchResultItemComponent);

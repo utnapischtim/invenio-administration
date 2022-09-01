@@ -13,7 +13,7 @@ from invenio_administration.views.base import (
 )
 
 
-class MockView(AdminResourceDetailView):
+class MockView(AdminResourceListView):
     """Creates a mock AdminView for testing.
 
     resource_config must match the mock resource's name

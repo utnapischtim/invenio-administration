@@ -15,11 +15,12 @@ from flask_security import roles_required
 from invenio_search_ui.searchconfig import search_app_config
 
 from invenio_administration.errors import (
+    InvalidActionsConfiguration,
     InvalidExtensionName,
     InvalidResource,
     MissingDefaultGetView,
     MissingExtensionName,
-    MissingResourceConfiguration, InvalidActionsConfiguration,
+    MissingResourceConfiguration,
 )
 from invenio_administration.marshmallow_utils import jsonify_schema
 
@@ -165,8 +166,10 @@ class AdminResourceBaseView(AdminView):
         return cls.resource.service.schema.schema()
 
     def _schema_to_json(self, schema):
-        """Translate marshmallow schema to JSON to
-        provide action payload template for the frontend"""
+        """Translate marshmallow schema to JSON.
+
+        Provides action payload template for the frontend.
+        """
         return jsonify_schema(schema)
 
     def get_api_endpoint(self):
@@ -256,8 +259,6 @@ class AdminResourceListView(AdminResourceBaseView):
     item_field_list = None
     api_endpoint = None
     title = None
-
-
     search_request_headers = {"Accept": "application/vnd.inveniordm.v1+json"}
 
     def get_search_request_headers(self):

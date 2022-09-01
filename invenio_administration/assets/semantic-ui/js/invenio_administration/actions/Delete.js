@@ -6,13 +6,15 @@ import { InvenioAdministrationActionsApi } from "../api/actions";
 export class Delete extends Component {
   constructor(props) {
     super(props);
+    // TODO remove this rule when error is implemented.
+    // eslint-disable-next-line react/no-unused-state
     this.state = { loading: false, error: undefined };
   }
 
   handleOnButtonClick = async () => {
     const { successCallback, resource, apiEndpoint, idKeyPath } = this.props;
     try {
-      const response = await InvenioAdministrationActionsApi.deleteResource(
+      await InvenioAdministrationActionsApi.deleteResource(
         resource,
         apiEndpoint,
         idKeyPath
@@ -41,8 +43,8 @@ export class Delete extends Component {
 }
 
 Delete.propTypes = {
-  displayDelete: PropTypes.bool,
-  apiEndpoint: PropTypes.string,
+  apiEndpoint: PropTypes.string.isRequired,
   resource: PropTypes.object.isRequired,
   successCallback: PropTypes.func.isRequired,
+  idKeyPath: PropTypes.string.isRequired,
 };

@@ -31,11 +31,7 @@ export const SearchResultOptions = ({ sortOptions, sortOrderDisabled }) => {
               sortOrderDisabled={sortOrderDisabled}
               values={sortOptions}
               ariaLabel={i18next.t("Sort")}
-              label={(cmp) => (
-                <>
-                  {cmp}
-                </>
-              )}
+              label={(cmp) => <>{cmp}</>}
             />
           )}
         </Grid.Column>
@@ -50,5 +46,5 @@ SearchResultOptions.propTypes = {
 };
 
 SearchResultOptions.defaultProps = {
-  sortOrderDisabled: false
-}
+  sortOrderDisabled: false,
+};

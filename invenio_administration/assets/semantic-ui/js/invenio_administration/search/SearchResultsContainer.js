@@ -40,4 +40,7 @@ export const SearchResultsContainer = ({
 SearchResultsContainer.propTypes = {
   results: PropTypes.array.isRequired,
   columns: PropTypes.array.isRequired,
+  displayEdit: PropTypes.bool.isRequired,
+  displayDelete: PropTypes.bool.isRequired,
+  actions: PropTypes.bool.isRequired,
 };

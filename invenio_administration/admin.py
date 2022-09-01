@@ -103,8 +103,10 @@ class Administration:
             view_func=view,
         )
 
-        from invenio_administration.views.base import AdminResourceDetailView, \
-            AdminResourceEditView
+        from invenio_administration.views.base import (
+            AdminResourceDetailView,
+            AdminResourceEditView,
+        )
 
         if not isinstance(view_instance, AdminResourceDetailView) and not isinstance(
                 view_instance, AdminResourceEditView):

@@ -15,6 +15,8 @@ export class Actions extends Component {
     } = this.props;
 
     // if number of actions is greater than 3, we display all in a dropdown
+    // TODO remove this rule disabling when dropdown display is implemented.
+    // eslint-disable-next-line no-unused-vars
     const displayAsDropdown =
       displayEdit && displayDelete && Object.keys(actions).length > 1;
 
@@ -36,6 +38,7 @@ Actions.propTypes = {
   resource: PropTypes.object.isRequired,
   successCallback: PropTypes.func.isRequired,
   idKeyPath: PropTypes.string,
+  actions: PropTypes.array.isRequired,
 };
 
 Actions.defaultProps = {

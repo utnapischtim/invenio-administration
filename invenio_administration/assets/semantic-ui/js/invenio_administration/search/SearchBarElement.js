@@ -7,7 +7,6 @@
  */
 
 import React, { Component } from "react";
-import { i18next } from "@translations/invenio_administration/i18next";
 import { withState } from "react-searchkit";
 import { Input } from "semantic-ui-react";
 import PropTypes from "prop-types";
@@ -68,7 +67,7 @@ export class SearchBarComponent extends Component {
 }
 
 SearchBarComponent.propTypes = {
-  queryString: PropTypes.string,
+  queryString: PropTypes.string.isRequired,
   updateQueryState: PropTypes.func.isRequired,
   currentQueryState: PropTypes.object.isRequired,
   placeholder: PropTypes.string.isRequired,
@@ -77,7 +76,6 @@ SearchBarComponent.propTypes = {
 
 SearchBarComponent.defaultProps = {
   uiProps: undefined,
-  placeholder: i18next.t("Search ..."),
 };
 
 export const SearchBar = withState(SearchBarComponent);
