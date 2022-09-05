@@ -31,9 +31,7 @@ const displayRead = JSON.parse(domContainer.dataset.displayRead);
 const actions = JSON.parse(domContainer.dataset.actions);
 const apiEndpoint = _get(domContainer.dataset, "apiEndpoint");
 const idKeyPath = JSON.parse(_get(domContainer.dataset, "pidPath", "pid"));
-// TODO remove this rule disable when resourceSchema is used.
-// eslint-disable-next-line no-unused-vars
-const resourceSchema = JSON.parse(domContainer.dataset.resourceSchema);
+const listUIEndpoint = domContainer.dataset.listEndpoint;
 
 const ResultsContainerWithConfig = parametrize(SearchResultsContainer, {
   columns: sortedColumns,
@@ -54,6 +52,7 @@ const SearchResultItemWithConfig = parametrize(SearchResultItem, {
   actions: actions,
   apiEndpoint: apiEndpoint,
   idKeyPath: idKeyPath,
+  listUIEndpoint: listUIEndpoint,
 });
 
 const overwriteComponents = {

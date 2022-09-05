@@ -20,7 +20,7 @@ def jsonify_schema(schema):
     custom_mapping = {
         # marshmallow
         fields.Str: "string",
-        fields.Integer: "int",
+        fields.Integer: "integer",
         fields.List: "array",
         fields.Dict: "object",
         fields.Url: "string",
@@ -42,8 +42,9 @@ def jsonify_schema(schema):
         invenio_fields.sanitizedhtml.SanitizedHTML: "string",
     }
     for field, field_type in schema.fields.items():
-        if field_type.dump_only:
-            continue
+        is_read_only = field_type.dump_only
+        is_create_only = field_type.metadata["create_only"] \
+            if "create_only" in field_type.metadata else False
 
         field_type_name = field_type.__class__
         is_required = field_type.required
@@ -56,16 +57,25 @@ def jsonify_schema(schema):
                 schema_type = "vocabulary"
             else:
                 schema_type = "object"
+
             schema_dict[field] = {
                 "type": schema_type,
+                "title": field_type.metadata[
+                    "title"] if "title" in field_type.metadata else None,
                 "required": is_required,
                 "properties": jsonify_schema(field_type.schema),
+                "readOnly": is_read_only,
+                "createOnly": is_create_only
             }
         elif list_field and hasattr(field_type, "properties"):
             schema_dict[field] = {
                 "type": "array",
                 "properties": jsonify_schema(field_type.inner.schema),
                 "required": is_required,
+                "readOnly": is_read_only,
+                "createOnly": is_create_only,
+                "title": field_type.metadata[
+                    "title"] if "title" in field_type.metadata else None,
             }
 
         else:
@@ -73,8 +83,15 @@ def jsonify_schema(schema):
                 schema_dict[field] = {
                     "type": custom_mapping[field_type_name],
                     "required": is_required,
+                    "readOnly": is_read_only,
+                    "createOnly": is_create_only,
+                    "title": field_type.metadata[
+                        "title"] if "title" in field_type.metadata else None
                 }
             except KeyError:
                 raise Exception(f"Unrecognised schema field {field}: {field_type_name}")
 
-    return schema_dict
+    json_schema = {"$schema": "http://json-schema.org/draft-07/schema#",
+                   "properties": schema_dict,
+                   }
+    return json_schema

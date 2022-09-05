@@ -40,7 +40,12 @@ export const SearchResultsContainer = ({
 SearchResultsContainer.propTypes = {
   results: PropTypes.array.isRequired,
   columns: PropTypes.array.isRequired,
-  displayEdit: PropTypes.bool.isRequired,
-  displayDelete: PropTypes.bool.isRequired,
-  actions: PropTypes.bool.isRequired,
+  displayEdit: PropTypes.bool,
+  displayDelete: PropTypes.bool,
+  actions: PropTypes.object.isRequired,
+};
+
+SearchResultsContainer.defaultProps = {
+  displayDelete: true,
+  displayEdit: true,
 };

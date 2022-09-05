@@ -12,32 +12,35 @@
   {% if display_create %}
     <div class="ui grid fluid">
       <div class="three wide column right floated ">
-        <button class="ui right floated icon left labeled button green">
+        <a class="ui right floated icon left labeled button green"
+           href="{{ create_ui_endpoint }}">
           <i aria-hidden="true"
-             class="plus icon"></i>Create new
-        </button>
+             class="plus icon"></i>Create
+        </a>
       </div>
     </div>
   {% endif %}
 
   <div class="ui divider"></div>
 
-    {%- block search_app %}
-      <div
-        id="invenio-search-config"
-        data-invenio-search-config='{{ search_config() | tojson }}'
-        data-fields='{{ fields | tojson }}'
-        data-display-search="{{ display_search | tojson }}"
-data-display-read='{{ display_read | tojson }}'
+  {%- block search_app %}
+    <div
+      id="invenio-search-config"
+      data-invenio-search-config='{{ search_config() | tojson }}'
+      data-fields='{{ fields | tojson }}'
+      data-display-search="{{ display_search | tojson }}"
+      data-display-read='{{ display_read | tojson }}'
       data-display-edit='{{ display_edit | tojson }}'
       data-display-delete='{{ display_delete | tojson }}'
       data-resource-schema='{{ resource_schema | tojson }}'
       data-actions='{{ actions | tojson }}'
       data-api-endpoint='{{ api_endpoint }}'
       data-pid-path='{{ pid_path | tojson }}'
-      >
-      </div>
-    {%- endblock search_app %}
+      data-create-endpoint='{{ create_ui_endpoint }}'
+      data-list-endpoint='{{ list_ui_endpoint }}'
+    >
+    </div>
+  {%- endblock search_app %}
   </div>
 {% endblock admin_page_content %}
 

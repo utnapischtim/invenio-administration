@@ -10,6 +10,7 @@ import React, { Component } from "react";
 import { withState } from "react-searchkit";
 import { Input } from "semantic-ui-react";
 import PropTypes from "prop-types";
+import { i18next } from "@translations/invenio_administration/i18next";
 
 export class SearchBarComponent extends Component {
   constructor(props) {
@@ -67,15 +68,17 @@ export class SearchBarComponent extends Component {
 }
 
 SearchBarComponent.propTypes = {
-  queryString: PropTypes.string.isRequired,
+  queryString: PropTypes.string,
   updateQueryState: PropTypes.func.isRequired,
   currentQueryState: PropTypes.object.isRequired,
-  placeholder: PropTypes.string.isRequired,
+  placeholder: PropTypes.string,
   uiProps: PropTypes.object,
 };
 
 SearchBarComponent.defaultProps = {
   uiProps: undefined,
+  placeholder: i18next.t("Search ..."),
+  queryString: "",
 };
 
 export const SearchBar = withState(SearchBarComponent);

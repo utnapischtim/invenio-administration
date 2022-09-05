@@ -21,6 +21,10 @@ theme = WebpackThemeBundle(
             entry={
                 "invenio-administration-search":
                     "./js/invenio_administration/search/search.js",
+                "invenio-administration-edit":
+                    "./js/invenio_administration/edit/index.js",
+                "invenio-administration-create":
+                    "./js/invenio_administration/create/index.js",
                 "base-admin-theme":
                     "./js/invenio_administration/theme.js"
             },
@@ -36,6 +40,7 @@ theme = WebpackThemeBundle(
                 "react-invenio-forms": "^0.10.0",
                 "react-searchkit": "^2.0.0",
                 "yup": "^0.32.0",
+                "formik": "^2.2.9",
             },
             aliases={
                 # Define Semantic-UI theme configuration needed by

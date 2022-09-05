@@ -6,9 +6,7 @@ import { InvenioAdministrationActionsApi } from "../api/actions";
 export class Delete extends Component {
   constructor(props) {
     super(props);
-    // TODO remove this rule when error is implemented.
-    // eslint-disable-next-line react/no-unused-state
-    this.state = { loading: false, error: undefined };
+    this.state = { loading: false };
   }
 
   handleOnButtonClick = async () => {
@@ -27,8 +25,9 @@ export class Delete extends Component {
 
   render() {
     const { loading } = this.state;
+    const { Element } = this.props;
     return (
-      <Button
+      <Element
         labelPosition="left"
         icon
         negative
@@ -37,7 +36,7 @@ export class Delete extends Component {
       >
         <Icon name="trash alternate" />
         Delete
-      </Button>
+      </Element>
     );
   }
 }
@@ -46,5 +45,10 @@ Delete.propTypes = {
   apiEndpoint: PropTypes.string.isRequired,
   resource: PropTypes.object.isRequired,
   successCallback: PropTypes.func.isRequired,
+  Element: PropTypes.object,
   idKeyPath: PropTypes.string.isRequired,
+};
+
+Delete.defaultProps = {
+  Element: Button,
 };

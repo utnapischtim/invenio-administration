@@ -1,4 +1,14 @@
-// TODO remove this rule disable when this module is implemented. Otherwise eslint tests will fail.
-/* eslint-disable no-unused-vars */
-import React, { Component } from "react";
-import PropTypes from "prop-types";
+import _get from "lodash/get";
+
+const AdminUIRoutesGenerators = {
+  detailsView: (routePrefix, resource, idKeyPath = "pid") => {
+    return `${routePrefix}/${_get(resource, idKeyPath)}`;
+  },
+  editView: (routePrefix, resource, idKeyPath = "pid") => {
+    return `${routePrefix}/${_get(resource, idKeyPath)}/edit`;
+  },
+};
+
+export const AdminUIRoutes = {
+  ...AdminUIRoutesGenerators,
+};

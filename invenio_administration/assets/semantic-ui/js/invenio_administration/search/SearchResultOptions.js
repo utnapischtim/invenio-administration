@@ -1,6 +1,6 @@
 import React from "react";
 import { Grid } from "semantic-ui-react";
-import { i18next } from "@translations/invenio_search_ui/i18next";
+import { i18next } from "@translations/invenio_administration/i18next";
 import { Sort, SearchBar } from "react-searchkit";
 import PropTypes from "prop-types";
 
@@ -31,7 +31,7 @@ export const SearchResultOptions = ({ sortOptions, sortOrderDisabled }) => {
               sortOrderDisabled={sortOrderDisabled}
               values={sortOptions}
               ariaLabel={i18next.t("Sort")}
-              label={(cmp) => <>{cmp}</>}
+              label={(cmp) => <>{cmp}</>} // eslint-disable-line react/jsx-no-useless-fragment
             />
           )}
         </Grid.Column>

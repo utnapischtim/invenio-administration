@@ -134,6 +134,9 @@ class AdminResourceBaseView(AdminView):
     pid_path = "pid"
     title = None
 
+    create_view_name = None
+    list_view_name = None
+
     def __init__(
         self,
         name=__name__,
@@ -155,7 +158,7 @@ class AdminResourceBaseView(AdminView):
     @classmethod
     def set_schema(cls):
         """Set schema."""
-        cls.schema = cls._get_service_schema()
+        cls.schema = cls.get_service_schema()
 
     @classmethod
     def set_resource(cls, extension_name=None):
@@ -171,7 +174,7 @@ class AdminResourceBaseView(AdminView):
             raise InvalidResource(resource=cls.resource_config, view=cls.__name__)
 
     @classmethod
-    def _get_service_schema(cls):
+    def get_service_schema(cls):
         """Get marshmallow schema of the assigned service."""
         # schema.schema due to the schema wrapper imposed,
         # when the actual class needed
@@ -198,22 +201,33 @@ class AdminResourceBaseView(AdminView):
         """Serialize actions for the resource frontend view.
 
         {"action_name":
-            {"text": "BLA"
+            {"text": "Action"
              "payload_schema": schema in json
              "order": 1
              }
          }
         """
         serialized_actions = {}
-        for key, value in self.actions:
+        for key, value in self.actions.items():
             if "payload_schema" and "order" not in value:
                 raise InvalidActionsConfiguration
 
+            serialized_actions[key] = {"text": value["text"], "order": value["order"]}
             if value["payload_schema"] is not None:
                 serialized_actions[key]["payload_schema"] = \
-                    self._schema_to_json(value["payload_schema"])
+                    self._schema_to_json(value["payload_schema"]())
 
         return serialized_actions
+
+    def get_list_view_endpoint(self):
+        """Returns administration UI list view endpoint."""
+        if self.list_view_name:
+            return url_for(f"administration.{self.list_view_name}")
+
+    def get_create_view_endpoint(self):
+        """Returns administration UI list view endpoint."""
+        if self.create_view_name:
+            return url_for(f"administration.{self.create_view_name}")
 
 
 class AdminResourceDetailView(AdminResourceBaseView):
@@ -226,19 +240,20 @@ class AdminResourceDetailView(AdminResourceBaseView):
 
     def get(self, pid_value=None):
         """GET view method."""
-        schema = self._get_service_schema()
+        schema = self.get_service_schema()
         serialized_schema = self._schema_to_json(schema)
         fields = self.item_field_list
 
         # TODO context processor?
         return self.render(
-            ** {
+            **{
                 "resource_schema": serialized_schema,
                 "fields": fields,
                 "exclude_fields": self.item_field_exclude_list,
                 "pid": pid_value,
                 "api_endpoint": self.get_api_endpoint(),
-                "title": self.title
+                "title": self.title,
+                "list_endpoint": self.get_list_view_endpoint(),
             }
         )
 
@@ -248,6 +263,13 @@ class AdminResourceEditView(AdminResourceDetailView):
 
     template = "invenio_administration/edit.html"
     title = "Edit resource"
+
+
+class AdminResourceCreateView(AdminResourceDetailView):
+    """Admin resource edit view."""
+
+    template = "invenio_administration/create.html"
+    title = "Create resource"
 
 
 class AdminResourceListView(AdminResourceBaseView):
@@ -271,6 +293,7 @@ class AdminResourceListView(AdminResourceBaseView):
     item_field_list = None
     api_endpoint = None
     title = None
+
     search_request_headers = {"Accept": "application/vnd.inveniordm.v1+json"}
 
     def get_search_request_headers(self):
@@ -309,7 +332,7 @@ class AdminResourceListView(AdminResourceBaseView):
     def get(self):
         """GET view method."""
         search_conf = self.init_search_config()
-        schema = self._get_service_schema()
+        schema = self.get_service_schema()
         serialized_schema = self._schema_to_json(schema)
         return self.render(
             **{
@@ -325,7 +348,9 @@ class AdminResourceListView(AdminResourceBaseView):
                 "display_delete": self.display_delete,
                 "display_read": self.display_read,
                 "actions": self.serialize_actions(),
-                "pid_path": self.pid_path
+                "pid_path": self.pid_path,
+                "create_ui_endpoint": self.get_create_view_endpoint(),
+                "list_ui_endpoint": self.get_list_view_endpoint(),
             }
         )
 
@@ -336,26 +361,36 @@ class AdminResourceViewSet:
     Provides a list view and a details view given the provided configuration.
     """
 
-    resource = None
-    display_create = False
+    extension_name = None
+    name = None
+    category = None
+    template = "invenio_administration/index.html"
+    url = None
+    menu_label = None
 
-    # decides if there is a detail view
+    resource_config = None
+    resource = None
+
+    schema = None
+    api_endpoint = None
+    pid_path = "pid"
+    title = None
+    actions = None
+
+    create_view_name = None
+    edit_view_name = None
+    details_view_name = None
+    list_view_name = None
+
+    display_create = False
     display_read = True
     display_edit = False
     display_delete = False
 
-    actions = None
-
     sort_options = ()
     available_filters = None
-    column_exclude_list = None
-    column_list = None
-
     item_field_exclude_list = None
     item_field_list = None
-
-    list_view = None
-    details_view = None
 
     def list_view(self):
         """List view."""
@@ -366,5 +401,9 @@ class AdminResourceViewSet:
         pass
 
     def edit_view(self):
+        """Details view."""
+        pass
+
+    def create_view(self):
         """Details view."""
         pass

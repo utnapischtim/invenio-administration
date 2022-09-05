@@ -12,6 +12,7 @@ import { Table } from "semantic-ui-react";
 import isEmpty from "lodash/isEmpty";
 import { Actions } from "../actions/Actions";
 import { withState } from "react-searchkit";
+import { AdminUIRoutes } from "../routes";
 
 class SearchResultItemComponent extends Component {
   refreshAfterAction = () => {
@@ -28,6 +29,7 @@ class SearchResultItemComponent extends Component {
       actions,
       apiEndpoint,
       idKeyPath,
+      listUIEndpoint,
     } = this.props;
 
     const resourceHasActions =
@@ -35,10 +37,21 @@ class SearchResultItemComponent extends Component {
 
     return (
       <Table.Row>
-        {columns.map(([property, { text, order }]) => {
+        {columns.map(([property, { text, order }], index) => {
           return (
             <Table.Cell key={`${text}-${order}`} data-label={text}>
-              {_get(result, property)}
+              {index === 0 && (
+                <a
+                  href={AdminUIRoutes.detailsView(
+                    listUIEndpoint,
+                    result,
+                    idKeyPath
+                  )}
+                >
+                  {_get(result, property)}
+                </a>
+              )}
+              {index !== 0 && _get(result, property)}
             </Table.Cell>
           );
         })}
@@ -52,6 +65,7 @@ class SearchResultItemComponent extends Component {
               resource={result}
               idKeyPath={idKeyPath}
               successCallback={this.refreshAfterAction}
+              listUIEndpoint={listUIEndpoint}
             />
           </Table.Cell>
         )}
@@ -70,13 +84,14 @@ SearchResultItemComponent.propTypes = {
   updateQueryState: PropTypes.func.isRequired,
   currentQueryState: PropTypes.object.isRequired,
   idKeyPath: PropTypes.string.isRequired,
+  listUIEndpoint: PropTypes.string.isRequired,
 };
 
 SearchResultItemComponent.defaultProps = {
   displayDelete: true,
   displayEdit: true,
   apiEndpoint: undefined,
-  actions: [],
+  actions: {},
 };
 
 export const SearchResultItem = withState(SearchResultItemComponent);
