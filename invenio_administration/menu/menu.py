@@ -28,7 +28,13 @@ class AdminMenu:
         """Register all menu items to a flask menu instance."""
         main_menu = flask_menu_instance.submenu(menu_key)
 
-        for menu_entry in self._menu_items:
+        # items without category go first and the rest are sorted alphatebically
+        ordered_menu_items = sorted(
+            self._menu_items,
+            key=lambda menu_item: (menu_item.category is not None, menu_item.category),
+        )
+
+        for menu_entry in ordered_menu_items:
             category = menu_entry.category
             name = menu_entry.name
             endpoint = menu_entry.endpoint
