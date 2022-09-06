@@ -22,6 +22,8 @@ const domContainer = document.getElementById("invenio-search-config");
 
 const sortColumns = (columns) =>
   Object.entries(columns).sort((a, b) => a[1].order > b[1].order);
+const title = JSON.parse(domContainer.dataset.title);
+const resourceName = JSON.parse(domContainer.dataset.resourceName);
 const columns = JSON.parse(domContainer.dataset.fields);
 const sortedColumns = sortColumns(columns);
 const displaySearch = JSON.parse(domContainer.dataset.displaySearch);
@@ -45,6 +47,8 @@ const SearchResultsWithConfig = parametrize(SearchResults, {
 });
 
 const SearchResultItemWithConfig = parametrize(SearchResultItem, {
+  title: title,
+  resourceName: resourceName,
   columns: sortedColumns,
   displayRead: displayRead,
   displayEdit: displayEdit,

@@ -1,15 +1,17 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { Delete } from "./Delete";
 import isEmpty from "lodash/isEmpty";
 import { ResourceActions } from "./ResourceActions";
 import { ActionsDropdown } from "./ActionsDropdown";
 import { Button, Icon } from "semantic-ui-react";
 import { AdminUIRoutes } from "../routes";
+import { DeleteModalTrigger } from "./DeleteModalTrigger";
 
 export class Actions extends Component {
   render() {
     const {
+      title,
+      resourceName,
       displayEdit,
       displayDelete,
       actions,
@@ -27,6 +29,8 @@ export class Actions extends Component {
     if (displayAsDropdown) {
       return (
         <ActionsDropdown
+          title={title}
+          resourceName={resourceName}
           apiEndpoint={apiEndpoint}
           resource={resource}
           successCallback={successCallback}
@@ -60,7 +64,9 @@ export class Actions extends Component {
             </Button>
           )}
           {displayDelete && (
-            <Delete
+            <DeleteModalTrigger
+              title={title}
+              resourceName={resourceName}
               apiEndpoint={apiEndpoint}
               resource={resource}
               successCallback={successCallback}
@@ -74,6 +80,8 @@ export class Actions extends Component {
 }
 
 Actions.propTypes = {
+  title: PropTypes.string.isRequired,
+  resourceName: PropTypes.string.isRequired,
   displayEdit: PropTypes.bool,
   displayDelete: PropTypes.bool,
   apiEndpoint: PropTypes.string,

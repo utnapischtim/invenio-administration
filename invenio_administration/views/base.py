@@ -133,6 +133,7 @@ class AdminResourceBaseView(AdminView):
     api_endpoint = None
     pid_path = "pid"
     title = None
+    resource_name = None
 
     create_view_name = None
     list_view_name = None
@@ -376,6 +377,9 @@ class AdminResourceListView(AdminResourceBaseView):
                 "pid_path": self.pid_path,
                 "create_ui_endpoint": self.get_create_view_endpoint(),
                 "list_ui_endpoint": self.get_list_view_endpoint(),
+                "resource_name": self.resource_name
+                if self.resource_name
+                else self.pid_path,
             }
         )
 

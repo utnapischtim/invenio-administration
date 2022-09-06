@@ -22,6 +22,8 @@ class SearchResultItemComponent extends Component {
 
   render() {
     const {
+      title,
+      resourceName,
       result,
       columns,
       displayEdit,
@@ -58,6 +60,8 @@ class SearchResultItemComponent extends Component {
         {resourceHasActions && (
           <Table.Cell>
             <Actions
+              title={title}
+              resourceName={resourceName}
               apiEndpoint={apiEndpoint}
               displayEdit={displayEdit}
               displayDelete={displayDelete}
@@ -75,6 +79,8 @@ class SearchResultItemComponent extends Component {
 }
 
 SearchResultItemComponent.propTypes = {
+  title: PropTypes.string.isRequired,
+  resourceName: PropTypes.string.isRequired,
   result: PropTypes.object.isRequired,
   columns: PropTypes.array.isRequired,
   displayDelete: PropTypes.bool,

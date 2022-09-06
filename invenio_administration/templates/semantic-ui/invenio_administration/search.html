@@ -32,14 +32,13 @@
       </div>
     </div>
       {% block admin_page_content %}
-
-
-
         <div class="ui divider"></div>
 
         {%- block search_app %}
           <div
             id="invenio-search-config"
+            data-title='{{ title | tojson }}'
+            data-resource-name='{{ resource_name | tojson }}'
             data-invenio-search-config='{{ search_config() | tojson }}'
             data-fields='{{ fields | tojson }}'
             data-display-search="{{ display_search | tojson }}"

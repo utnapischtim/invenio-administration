@@ -1,13 +1,15 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Dropdown } from "semantic-ui-react";
-import { Delete } from "./Delete";
+import { DeleteModalTrigger } from "./DeleteModalTrigger";
 import { ResourceActions } from "./ResourceActions";
 import isEmpty from "lodash/isEmpty";
 
 export class ActionsDropdown extends Component {
   render() {
     const {
+      title,
+      resourceName,
       displayEdit,
       displayDelete,
       apiEndpoint,
@@ -30,7 +32,9 @@ export class ActionsDropdown extends Component {
         )}
         {displayEdit && <Dropdown.Item>Edit</Dropdown.Item>}
         {displayDelete && (
-          <Delete
+          <DeleteModalTrigger
+            title={title}
+            resourceName={resourceName}
             apiEndpoint={apiEndpoint}
             resource={resource}
             successCallback={successCallback}
@@ -44,6 +48,8 @@ export class ActionsDropdown extends Component {
 }
 
 ActionsDropdown.propTypes = {
+  title: PropTypes.string.isRequired,
+  resourceName: PropTypes.string.isRequired,
   displayEdit: PropTypes.bool,
   displayDelete: PropTypes.bool,
   apiEndpoint: PropTypes.string.isRequired,
