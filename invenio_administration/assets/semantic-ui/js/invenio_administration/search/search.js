@@ -7,7 +7,6 @@
  */
 
 import { createSearchAppInit } from "@js/invenio_search_ui";
-import { SearchFacets } from "./SearchFacets";
 import { SearchResultItem } from "./SearchResultItem";
 import SearchEmptyResults from "./SearchEmptyResults";
 import { SearchResultsContainer } from "./SearchResultsContainer";
@@ -18,6 +17,11 @@ import { SearchResultOptions } from "./SearchResultOptions";
 import { SearchBar } from "./SearchBarElement";
 import _get from "lodash/get";
 import { NotificationController } from "../ui_messages/context";
+import {
+  ContribSearchAppFacets,
+  ContribBucketAggregationElement,
+  ContribBucketAggregationValuesElement,
+} from "@js/invenio_search_ui/components";
 
 const domContainer = document.getElementById("invenio-search-config");
 
@@ -61,13 +65,15 @@ const SearchResultItemWithConfig = parametrize(SearchResultItem, {
 });
 
 const overwriteComponents = {
+  "BucketAggregation.element": ContribBucketAggregationElement,
+  "BucketAggregationValues.element": ContribBucketAggregationValuesElement,
   "ResultsList.item": SearchResultItemWithConfig,
   "ResultsGrid.item": () => {},
   "SearchApp.results": SearchResultsWithConfig,
   "ResultsList.container": ResultsContainerWithConfig,
   "EmptyResults.element": SearchEmptyResults,
   "Sort.element": DropdownSort,
-  "SearchApp.facets": SearchFacets,
+  "SearchApp.facets": ContribSearchAppFacets,
   "SearchApp.searchbarContainer": () => null,
   "SearchApp.resultOptions": SearchResultOptions,
   "SearchBar.element": displaySearch ? SearchBar : () => null,
