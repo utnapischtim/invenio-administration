@@ -65,7 +65,7 @@ const overwriteComponents = {
   "SearchApp.facets": SearchFacets,
   "SearchApp.searchbarContainer": () => null,
   "SearchApp.resultOptions": SearchResultOptions,
-  SearchBar: displaySearch ? SearchBar : () => null,
+  "SearchBar.element": displaySearch ? SearchBar : () => null,
 };
 
 createSearchAppInit(overwriteComponents);

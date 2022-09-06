@@ -6,79 +6,52 @@
  * under the terms of the MIT License; see LICENSE file for more details.
  */
 
-import React, { Component } from "react";
+import React from "react";
 import { withState } from "react-searchkit";
 import { Input } from "semantic-ui-react";
 import PropTypes from "prop-types";
 import { i18next } from "@translations/invenio_administration/i18next";
 
-export class SearchBarComponent extends Component {
-  constructor(props) {
-    super(props);
-
-    const { queryString } = props;
-
-    this.state = {
-      currentQuery: queryString || "",
+export const SearchBar = withState(
+  ({ updateQueryState, onInputChange, queryString, uiProps, placeholder }) => {
+    const onBtnSearchClick = () => {
+      updateQueryState({ queryString });
     };
-  }
-
-  onInputChange = (e, { value }) => {
-    this.setState({
-      currentQuery: value,
-    });
-  };
-
-  search = (query) => {
-    const { updateQueryState, currentQueryState } = this.props;
-    updateQueryState({ ...currentQueryState, queryString: query });
-  };
-
-  onBtnSearchClick = () => {
-    const { currentQuery } = this.state;
-    this.search(currentQuery);
-  };
-
-  onKeyPress = (event) => {
-    if (event.key === "Enter") {
-      const { currentQuery } = this.state;
-      this.search(currentQuery);
-    }
-  };
-
-  render() {
-    const { placeholder, queryString, uiProps } = this.props;
-
+    const onKeyPress = (event) => {
+      if (event.key === "Enter") {
+        updateQueryState({ queryString });
+      }
+    };
     return (
       <Input
         action={{
           icon: "search",
-          onClick: this.onBtnSearchClick,
+          onClick: onBtnSearchClick,
           className: "search",
         }}
         fluid
         placeholder={placeholder}
-        onChange={this.onInputChange}
+        onChange={(event, { value }) => {
+          onInputChange(value);
+        }}
         value={queryString}
-        onKeyPress={this.onKeyPress}
+        onKeyPress={onKeyPress}
         {...uiProps}
       />
     );
   }
-}
+);
 
-SearchBarComponent.propTypes = {
-  queryString: PropTypes.string,
+SearchBar.propTypes = {
+  queryString: PropTypes.string.isRequired,
   updateQueryState: PropTypes.func.isRequired,
-  currentQueryState: PropTypes.object.isRequired,
-  placeholder: PropTypes.string,
+  placeholder: PropTypes.string.isRequired,
+  onInputChange: PropTypes.func.isRequired,
   uiProps: PropTypes.object,
 };
 
-SearchBarComponent.defaultProps = {
+SearchBar.defaultProps = {
   uiProps: undefined,
   placeholder: i18next.t("Search ..."),
   queryString: "",
 };
-
-export const SearchBar = withState(SearchBarComponent);
