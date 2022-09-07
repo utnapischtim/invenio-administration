@@ -41,7 +41,7 @@ custom_mapping = {
     invenio_fields.SanitizedUnicode: "string",
     invenio_fields.links.Links: "array",
     invenio_fields.links.Link: "string",
-    invenio_fields.tzdatetime.TZDateTime: "string",
+    invenio_fields.tzdatetime.TZDateTime: "datetime",
     invenio_fields.sanitizedhtml.SanitizedHTML: "string",
 }
 

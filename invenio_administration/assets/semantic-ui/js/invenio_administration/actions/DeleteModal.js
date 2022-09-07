@@ -7,13 +7,13 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Button, Icon } from "semantic-ui-react";
-import { InvenioAdministrationActionsApi } from "../api/actions";
 import { i18next } from "@translations/invenio_administration/i18next";
 import { Modal } from "semantic-ui-react";
 import { Trans } from "react-i18next";
 import isEmpty from "lodash/isEmpty";
 import { ErrorMessage } from "../ui_messages/messages";
 import { NotificationContext } from "../ui_messages/context";
+import { InvenioAdministrationActionsApi } from "../src/api/actions";
 
 export class DeleteModal extends Component {
   constructor(props) {

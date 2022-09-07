@@ -19,12 +19,7 @@ export class Message extends Component {
     const { autoDismiss, id, removeNotification, ...props } = this.props;
 
     return (
-      <SemanticMessage
-        id={id}
-        floating
-        {...props}
-        onDismiss={this.handleDismiss}
-      />
+      <SemanticMessage id={id} floating {...props} onDismiss={this.handleDismiss} />
     );
   }
 }

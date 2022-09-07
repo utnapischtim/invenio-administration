@@ -5,9 +5,9 @@ import { InvenioAdministrationActionsApi } from "../api/actions";
 import { Button, Modal } from "semantic-ui-react";
 import { Form as SemanticForm } from "semantic-ui-react";
 import _get from "lodash/get";
-import { GenerateForm } from "./GenerateForm";
 import { ErrorMessage } from "../ui_messages/messages";
 import isEmpty from "lodash/isEmpty";
+import { GenerateForm } from "../../formik/GenerateForm";
 
 export class ActionForm extends Component {
   constructor(props) {

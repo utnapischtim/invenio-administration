@@ -6,9 +6,7 @@ const getResource = async (apiEndpoint, pid) => {
 };
 
 const deleteResource = async (resource, apiEndpoint, idKeyPath = "pid") => {
-  return await http.delete(
-    APIRoutes.detailsView(apiEndpoint, resource, idKeyPath)
-  );
+  return await http.delete(APIRoutes.detailsView(apiEndpoint, resource, idKeyPath));
 };
 
 const editResource = async (apiEndpoint, pid, payload) => {

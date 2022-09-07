@@ -5,14 +5,15 @@
  * Invenio is free software; you can redistribute it and/or modify it
  * under the terms of the MIT License; see LICENSE file for more details.
  */
+
 import PropTypes from "prop-types";
 import React, { Component } from "react";
-import _get from "lodash/get";
 import { Table } from "semantic-ui-react";
 import isEmpty from "lodash/isEmpty";
 import { Actions } from "../actions/Actions";
 import { withState } from "react-searchkit";
 import { AdminUIRoutes } from "../routes";
+import Formatter from "../components/Formatter";
 
 class SearchResultItemComponent extends Component {
   refreshAfterAction = () => {
@@ -31,29 +32,32 @@ class SearchResultItemComponent extends Component {
       actions,
       apiEndpoint,
       idKeyPath,
+      resourceSchema,
       listUIEndpoint,
     } = this.props;
 
-    const resourceHasActions =
-      displayEdit || displayDelete || !isEmpty(actions);
-
+    const resourceHasActions = displayEdit || displayDelete || !isEmpty(actions);
     return (
       <Table.Row>
         {columns.map(([property, { text, order }], index) => {
           return (
             <Table.Cell key={`${text}-${order}`} data-label={text}>
               {index === 0 && (
-                <a
-                  href={AdminUIRoutes.detailsView(
-                    listUIEndpoint,
-                    result,
-                    idKeyPath
-                  )}
-                >
-                  {_get(result, property)}
+                <a href={AdminUIRoutes.detailsView(listUIEndpoint, result, idKeyPath)}>
+                  <Formatter
+                    result={result}
+                    resourceSchema={resourceSchema}
+                    property={property}
+                  />
                 </a>
               )}
-              {index !== 0 && _get(result, property)}
+              {index !== 0 && (
+                <Formatter
+                  result={result}
+                  resourceSchema={resourceSchema}
+                  property={property}
+                />
+              )}
             </Table.Cell>
           );
         })}
@@ -90,6 +94,7 @@ SearchResultItemComponent.propTypes = {
   updateQueryState: PropTypes.func.isRequired,
   currentQueryState: PropTypes.object.isRequired,
   idKeyPath: PropTypes.string.isRequired,
+  resourceSchema: PropTypes.object.isRequired,
   listUIEndpoint: PropTypes.string.isRequired,
 };
 

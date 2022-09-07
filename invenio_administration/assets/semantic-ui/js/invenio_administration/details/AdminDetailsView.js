@@ -114,11 +114,7 @@ export default class AdminDetailsView extends Component {
             <Grid.Column verticalAlign="middle">
               <Header as="h1">{title}</Header>
             </Grid.Column>
-            <Grid.Column
-              verticalAlign="middle"
-              floated="right"
-              textAlign="right"
-            >
+            <Grid.Column verticalAlign="middle" floated="right" textAlign="right">
               <Actions
                 title={title}
                 resourceName={resourceName}

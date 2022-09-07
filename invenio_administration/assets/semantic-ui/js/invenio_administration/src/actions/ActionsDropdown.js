@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Dropdown, Button } from "semantic-ui-react";
-import { DeleteModalTrigger } from "./DeleteModalTrigger";
 import { ResourceActions } from "./ResourceActions";
 import isEmpty from "lodash/isEmpty";
 import { i18next } from "../../../translations/invenio_administration/i18next";
+import { DeleteModalTrigger } from "../../actions/DeleteModalTrigger";
 
 export class ActionsDropdown extends Component {
   render() {

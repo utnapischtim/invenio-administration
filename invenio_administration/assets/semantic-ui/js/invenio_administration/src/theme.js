@@ -67,9 +67,7 @@ const mainContentClassList = $mainContent[0].classList.value;
 
 $toggleButton.on("click", () => {
   if ($mainContent.hasClass(mainContentClassList)) {
-    $mainContent
-      .removeClass(mainContentClassList)
-      .addClass("sixteen wide column");
+    $mainContent.removeClass(mainContentClassList).addClass("sixteen wide column");
   } else {
     $mainContent[0].classList.value = mainContentClassList; // addClass() does not add multiple of the same class, needed for responsive "wide" classes
   }

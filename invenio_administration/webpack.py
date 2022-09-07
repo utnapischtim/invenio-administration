@@ -20,11 +20,11 @@ theme = WebpackThemeBundle(
         "semantic-ui": dict(
             entry={
                 "invenio-administration-search":
-                    "./js/invenio_administration/search/search.js",
+                    "./js/invenio_administration/src/search/search.js",
                 "invenio-administration-edit":
-                    "./js/invenio_administration/edit/index.js",
+                    "./js/invenio_administration/src/edit/index.js",
                 "invenio-administration-create":
-                    "./js/invenio_administration/create/index.js",
+                    "./js/invenio_administration/src/create/index.js",
                 "base-admin-theme":
                     "./js/invenio_administration/theme.js",
                 "invenio-administration-details":

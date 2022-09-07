@@ -4,10 +4,10 @@ import { Form, Formik } from "formik";
 import { Form as SemanticForm } from "semantic-ui-react";
 import { InvenioAdministrationActionsApi } from "../api/actions";
 import { Button } from "semantic-ui-react";
-import { GenerateForm } from "./GenerateForm";
 import { NotificationContext } from "../ui_messages/context";
 import { ErrorMessage } from "../ui_messages/messages";
 import _isEmpty from "lodash/isEmpty";
+import { GenerateForm } from "../../formik/GenerateForm";
 
 export class AdminForm extends Component {
   constructor(props) {
