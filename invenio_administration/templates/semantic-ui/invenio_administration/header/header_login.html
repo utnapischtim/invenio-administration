@@ -24,7 +24,23 @@
         </form>
     {%- else %}
 
+        <div role="menuitem" class="ui dropdown floating rel-p-1 pr-15 computer only">
+            <i class="fitted plus icon inverted"></i>
+            <i class="fitted dropdown icon inverted"></i>
+            <div class="menu">
+              <a class="item"
+                  href="{{ url_for('administration.oaipmh_create') }}">{{ _('New OAI-PMH set') }}
+              </a>
+            </div>
+        </div>
 
+        <div class="sub-menu mobile tablet only">
+          <h2 class="ui small header">{{ _('Actions') }}</h2>
+            <a role="menuitem" class="item" href="{{ url_for('administration.oaipmh_create') }}">
+              <i class="plus icon"></i>
+              {{ _('New OAI-PMH set') }}
+            </a>
+        </div>
 
         {%- if config.USERPROFILES %}
           <div role="menuitem" id="user-profile-dropdown" class="ui floating dropdown computer only">
@@ -95,7 +111,7 @@
               <div class="ui divider"></div>
             {% endif %}  
 
-            <a role="menuitem" class="item" style="color:black;" href="{{ url_for_security('logout') }}">
+            <a role="menuitem" class="item" href="{{ url_for_security('logout') }}">
                 <i class="sign-out icon"></i>
                 {{ _('Log out') }}
             </a>
