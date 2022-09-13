@@ -9,7 +9,10 @@
 """Invenio Administration menu module."""
 
 from flask import request
+from flask_babelex import lazy_gettext as _
+from flask_login import current_user
 from invenio_theme.proxies import current_theme_icons
+from speaklater import make_lazy_string
 
 
 class AdminMenu:
@@ -61,6 +64,20 @@ class AdminMenu:
                     active_when=active_when or self.default_active_when,
                     icon=icon,
                 )
+
+    def register_admin_entry(self, current_menu, endpoint):
+        """Register administration entry as the last one."""
+        current_menu.submenu("profile-admin.administration").register(
+            f"{endpoint}.dashboard",
+            _(
+                "%(icon)s Administration",
+                icon=make_lazy_string(
+                    lambda: f'<i class="{current_theme_icons.cogs}"></i>'
+                ),
+            ),
+            order=1,
+            visible_when=lambda: current_user.has_role("admin"),
+        )
 
     def add_menu_item(self, item, index=None):
         """Add menu item."""

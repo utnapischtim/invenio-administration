@@ -65,6 +65,7 @@ class Administration:
         @app.before_first_request
         def init_menu():
             self._menu.register_menu_entries(current_menu, self._menu_key)
+            self._menu.register_admin_entry(current_menu, self.endpoint)
 
     def load_admin_dashboard(self, app):
         """Load dashboard view configuration."""
