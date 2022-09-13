@@ -4,7 +4,7 @@ import { Form, Formik } from "formik";
 import { Form as SemanticForm, Loader } from "semantic-ui-react";
 import { InvenioAdministrationActionsApi } from "../api/actions";
 import { Button } from "semantic-ui-react";
-import { Json2Formik } from "./utils";
+import { GenerateForm } from "./GenerateForm";
 
 export class AdminForm extends Component {
   constructor(props) {
@@ -40,7 +40,7 @@ export class AdminForm extends Component {
   };
 
   render() {
-    const { resourceSchema, create } = this.props;
+    const { resourceSchema, create, formFields } = this.props;
     const { formData, loading } = this.state;
     if (loading) {
       return <Loader active={loading} />;
@@ -50,9 +50,9 @@ export class AdminForm extends Component {
       <Formik initialValues={formData} onSubmit={this.onSubmit}>
         {(props) => (
           <SemanticForm as={Form} onSubmit={props.handleSubmit}>
-            <Json2Formik
+            <GenerateForm
+              formFields={formFields}
               jsonSchema={resourceSchema}
-              formikProps={props}
               create={create}
             />
             <Button type="button" onClick={this.onCancel} loading={loading}>
@@ -74,10 +74,12 @@ AdminForm.propTypes = {
   apiEndpoint: PropTypes.string.isRequired,
   pid: PropTypes.string,
   create: PropTypes.bool,
+  formFields: PropTypes.object,
 };
 
 AdminForm.defaultProps = {
   resource: undefined,
   create: false,
   pid: undefined,
+  formFields: undefined,
 };

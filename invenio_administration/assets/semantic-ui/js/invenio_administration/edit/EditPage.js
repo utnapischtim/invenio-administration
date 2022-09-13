@@ -34,7 +34,7 @@ export class EditPage extends Component {
   };
 
   render() {
-    const { resourceSchema, apiEndpoint, pid } = this.props;
+    const { resourceSchema, apiEndpoint, pid, formFields } = this.props;
     const { loading, resource } = this.state;
 
     if (loading) {
@@ -48,6 +48,7 @@ export class EditPage extends Component {
             resourceSchema={resourceSchema}
             resource={resource}
             apiEndpoint={apiEndpoint}
+            formFields={formFields}
             pid={pid}
           />
         </Grid.Column>
@@ -60,4 +61,9 @@ EditPage.propTypes = {
   resourceSchema: PropTypes.object.isRequired,
   apiEndpoint: PropTypes.string.isRequired,
   pid: PropTypes.string.isRequired,
+  formFields: PropTypes.object,
+};
+
+EditPage.defaultProps = {
+  formFields: undefined,
 };

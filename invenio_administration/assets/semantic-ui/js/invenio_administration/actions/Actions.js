@@ -38,7 +38,7 @@ export class Actions extends Component {
       );
     } else {
       return (
-        <>
+        <Button.Group size="tiny" className="relaxed">
           {!isEmpty(actions) && (
             <ResourceActions
               resource={resource}
@@ -54,7 +54,6 @@ export class Actions extends Component {
               href={AdminUIRoutes.editView(listUIEndpoint, resource, idKeyPath)}
               icon
               labelPosition="left"
-              className="warning"
             >
               <Icon name="pencil" />
               Edit
@@ -68,7 +67,7 @@ export class Actions extends Component {
               idKeyPath={idKeyPath}
             />
           )}
-        </>
+        </Button.Group>
       );
     }
   }

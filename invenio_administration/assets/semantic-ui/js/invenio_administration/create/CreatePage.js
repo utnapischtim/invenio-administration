@@ -10,7 +10,7 @@ export class CreatePage extends Component {
   }
 
   render() {
-    const { resourceSchema, apiEndpoint } = this.props;
+    const { resourceSchema, apiEndpoint, formFields } = this.props;
     const { loading } = this.state;
 
     if (loading) {
@@ -23,6 +23,7 @@ export class CreatePage extends Component {
           <AdminForm
             resourceSchema={resourceSchema}
             apiEndpoint={apiEndpoint}
+            formFields={formFields}
             create
           />
         </Grid.Column>
@@ -34,4 +35,9 @@ export class CreatePage extends Component {
 CreatePage.propTypes = {
   resourceSchema: PropTypes.object.isRequired,
   apiEndpoint: PropTypes.string.isRequired,
+  formFields: PropTypes.object,
+};
+
+CreatePage.defaultProps = {
+  formFields: undefined,
 };

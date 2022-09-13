@@ -9,11 +9,13 @@ const domContainer = document.getElementById(
 const resourceSchema = JSON.parse(domContainer.dataset.resourceSchema);
 const apiEndpoint = _get(domContainer.dataset, "apiEndpoint");
 const pid = JSON.parse(domContainer.dataset.pid);
+const formFields = JSON.parse(domContainer.dataset.formFields);
 
 ReactDOM.render(
   <EditPage
     resourceSchema={resourceSchema}
     apiEndpoint={apiEndpoint}
+    formFields={formFields}
     pid={pid}
   />,
   domContainer

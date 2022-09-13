@@ -28,14 +28,12 @@ export class Delete extends Component {
     const { Element } = this.props;
     return (
       <Element
-        labelPosition="left"
         icon
         negative
         onClick={this.handleOnButtonClick}
         loading={loading}
       >
         <Icon name="trash alternate" />
-        Delete
       </Element>
     );
   }

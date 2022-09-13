@@ -4,7 +4,8 @@ import { Form, Formik } from "formik";
 import { InvenioAdministrationActionsApi } from "../api/actions";
 import { Button, Modal } from "semantic-ui-react";
 import { Form as SemanticForm } from "semantic-ui-react";
-import { Json2Formik } from "./utils";
+import _get from "lodash/get";
+import { GenerateForm } from "./GenerateForm";
 
 export class ActionForm extends Component {
   constructor(props) {
@@ -24,7 +25,7 @@ export class ActionForm extends Component {
     const actionEndpoint = this.getEndpoint(actionKey);
 
     try {
-      const response = InvenioAdministrationActionsApi.resourceAction(
+      const response = await InvenioAdministrationActionsApi.resourceAction(
         actionEndpoint,
         formData
       );
@@ -44,8 +45,19 @@ export class ActionForm extends Component {
 
   getEndpoint = (actionKey) => {
     const { resource } = this.props;
+    let endpoint;
     // get the action endpoint from the current resource links
-    return resource.links.actions[actionKey];
+    endpoint = _get(resource.links.actions[actionKey]);
+
+    // endpoint can be also within links, not links.action
+    // TODO: handle it in a nicer way
+    if (!endpoint) {
+      endpoint = _get(resource.links[actionKey]);
+    }
+    if (!endpoint) {
+      console.error("Action endpoint not found in the resource!");
+    }
+    return endpoint;
   };
 
   render() {
@@ -55,7 +67,7 @@ export class ActionForm extends Component {
       <Formik initialValues={formData} onSubmit={this.onSubmit}>
         {(props) => (
           <SemanticForm as={Form} onSubmit={props.handleSubmit}>
-            <Json2Formik jsonSchema={actionSchema} formikProps={props} />
+            <GenerateForm jsonSchema={actionSchema} formikProps={props} />
             <Modal.Actions>
               <Button type="button" onClick={this.onCancel}>
                 Cancel

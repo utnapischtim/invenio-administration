@@ -258,14 +258,39 @@ class AdminResourceDetailView(AdminResourceBaseView):
         )
 
 
-class AdminResourceEditView(AdminResourceDetailView):
+class AdminFormView(AdminResourceBaseView):
+    """Basic form view."""
+
+    form_fields = None
+    display_read_only = True
+
+    def get(self, pid_value=None):
+        """GET view method."""
+        schema = self.get_service_schema()
+        serialized_schema = self._schema_to_json(schema)
+        form_fields = self.form_fields
+
+        # TODO context processor?
+        return self.render(
+            **{
+                "resource_schema": serialized_schema,
+                "form_fields": form_fields,
+                "pid": pid_value,
+                "api_endpoint": self.get_api_endpoint(),
+                "title": self.title,
+                "list_endpoint": self.get_list_view_endpoint(),
+            }
+        )
+
+
+class AdminResourceEditView(AdminFormView):
     """Admin resource edit view."""
 
     template = "invenio_administration/edit.html"
     title = "Edit resource"
 
 
-class AdminResourceCreateView(AdminResourceDetailView):
+class AdminResourceCreateView(AdminFormView):
     """Admin resource edit view."""
 
     template = "invenio_administration/create.html"
