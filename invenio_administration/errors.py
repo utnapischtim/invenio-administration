@@ -16,7 +16,13 @@ class InvalidResource(Exception):
 
     def __init__(self, resource, view):
         """Initialise error."""
-        super().__init__(_(f"Invalid resource {resource} configured for view {view}."))
+        super().__init__(
+            _(
+                "Invalid resource {resource} configured for view {view}.".format(
+                    resource=resource, view=view
+                )
+            )
+        )
 
 
 class InvalidExtensionName(KeyError):
@@ -24,7 +30,13 @@ class InvalidExtensionName(KeyError):
 
     def __init__(self, extension_name):
         """Initialise error."""
-        super().__init__(_(f"No extension found with name '{extension_name}' ."))
+        super().__init__(
+            _(
+                "No extension found with name '{extension_name}' .".format(
+                    extension_name=extension_name
+                )
+            )
+        )
 
 
 class InvalidActionsConfiguration(KeyError):
@@ -41,7 +53,11 @@ class MissingResourceConfiguration(Exception):
     def __init__(self, name):
         """Initialise error."""
         super().__init__(
-            f"Cannot instantiate resource view {name} " f"without a resource."
+            _(
+                "Cannot instantiate resource view {name} without a resource.".format(
+                    name=name
+                )
+            )
         )
 
 
@@ -51,8 +67,12 @@ class MissingExtensionName(Exception):
     def __init__(self, name):
         """Initialise error."""
         super().__init__(
-            f"Cannot instantiate resource view {name} "
-            f"without an associated flask extension."
+            _(
+                "Cannot instantiate resource view {name} without an "
+                "associated flask extension.".format(
+                    name=name
+                )
+            )
         )
 
 
@@ -62,7 +82,10 @@ class MissingDefaultGetView(Exception):
     def __init__(self, name):
         """Initialise error."""
         super().__init__(
-            "Cannot instantiate administration view"
-            f" {name} "
-            "without a default GET view"
+            _(
+                "Cannot instantiate administration view {name} without a "
+                "default GET view".format(
+                    name=name
+                )
+            )
         )

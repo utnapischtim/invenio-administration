@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2022-08-15T08:46:20.265Z\n"
-"PO-Revision-Date: 2022-08-15T08:46:20.265Z\n"
+"POT-Creation-Date: 2022-09-19T07:40:07.799Z\n"
+"PO-Revision-Date: 2022-09-19T07:40:07.799Z\n"
 "Language: en\n"
 
 msgid "Search ..."
@@ -23,3 +23,12 @@ msgstr "results per page"
 
 msgid "result(s) found"
 msgstr "result(s) found"
+
+msgid "Add"
+msgstr "Add"
+
+msgid "Remove field"
+msgstr "Remove field"
+
+msgid "Sort"
+msgstr "Sort"
