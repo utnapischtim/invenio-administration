@@ -5,10 +5,17 @@
   under the terms of the MIT License; see LICENSE file for more details.
 #}
 
+{%- from "invenio_administration/macros.html" import go_back %}
+
 {% extends admin_base_template %}
 
-{% block admin_page_content %}
+{% block page_title %}
+  {{ go_back() }}
+  <h1>{{ title or name }}</h1>
+  <div class="ui divider"></div>
+{% endblock page_title %}
 
+{% block admin_page_content %}
   <div
     id="invenio-administration-create-root"
     data-api-endpoint='{{ api_endpoint }}'
