@@ -17,6 +17,7 @@ import { DropdownSort } from "@js/invenio_search_ui/components";
 import { SearchResultOptions } from "./SearchResultOptions";
 import { SearchBar } from "./SearchBarElement";
 import _get from "lodash/get";
+import { NotificationController } from "../ui_messages/context";
 
 const domContainer = document.getElementById("invenio-search-config");
 
@@ -72,4 +73,10 @@ const overwriteComponents = {
   "SearchBar.element": displaySearch ? SearchBar : () => null,
 };
 
-createSearchAppInit(overwriteComponents);
+createSearchAppInit(
+  overwriteComponents,
+  true,
+  "invenio-search-config",
+  false,
+  NotificationController
+);

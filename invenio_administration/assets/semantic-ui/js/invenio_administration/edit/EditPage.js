@@ -1,14 +1,17 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { InvenioAdministrationActionsApi } from "../api/actions";
-import { Grid, Loader } from "semantic-ui-react";
+import { Grid } from "semantic-ui-react";
 
 import { AdminForm } from "../formik/AdminForm";
+import Loader from "../components/Loader";
+import { ErrorPage } from "../components/ErrorPage";
+import _isEmpty from "lodash/isEmpty";
 
 export class EditPage extends Component {
   constructor(props) {
     super(props);
-    this.state = { loading: true, resource: undefined };
+    this.state = { loading: true, resource: undefined, error: undefined };
   }
 
   componentDidMount() {
@@ -25,34 +28,38 @@ export class EditPage extends Component {
       this.setState({
         loading: false,
         resource: response.data,
-        // error: undefined,
+        error: undefined,
       });
     } catch (e) {
       console.error(e);
-      //TODO
+      this.setState({ error: e });
     }
   };
 
   render() {
     const { resourceSchema, apiEndpoint, pid, formFields } = this.props;
-    const { loading, resource } = this.state;
-
-    if (loading) {
-      return <Loader active={loading} />;
-    }
+    const { loading, resource, error } = this.state;
 
     return (
-      <Grid>
-        <Grid.Column width={12}>
-          <AdminForm
-            resourceSchema={resourceSchema}
-            resource={resource}
-            apiEndpoint={apiEndpoint}
-            formFields={formFields}
-            pid={pid}
-          />
-        </Grid.Column>
-      </Grid>
+      <Loader isLoading={loading}>
+        <ErrorPage
+          error={!_isEmpty(error)}
+          errorCode={error.response.status}
+          errorMessage={error.response.data}
+        >
+          <Grid>
+            <Grid.Column width={12}>
+              <AdminForm
+                resourceSchema={resourceSchema}
+                resource={resource}
+                apiEndpoint={apiEndpoint}
+                formFields={formFields}
+                pid={pid}
+              />
+            </Grid.Column>
+          </Grid>
+        </ErrorPage>
+      </Loader>
     );
   }
 }

@@ -1,10 +1,13 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Form, Formik } from "formik";
-import { Form as SemanticForm, Loader } from "semantic-ui-react";
+import { Form as SemanticForm } from "semantic-ui-react";
 import { InvenioAdministrationActionsApi } from "../api/actions";
 import { Button } from "semantic-ui-react";
 import { GenerateForm } from "./GenerateForm";
+import { NotificationContext } from "../ui_messages/context";
+import { ErrorMessage } from "../ui_messages/messages";
+import _isEmpty from "lodash/isEmpty";
 
 export class AdminForm extends Component {
   constructor(props) {
@@ -12,25 +15,34 @@ export class AdminForm extends Component {
     const { resource } = props;
 
     this.state = {
-      loading: false,
-      // error: undefined,
+      error: undefined,
       formData: resource,
     };
   }
 
-  onSubmit = async (values) => {
+  static contextType = NotificationContext;
+
+  onSubmit = async (values, actions) => {
     const { apiEndpoint, pid } = this.props;
-    this.setState({ loading: true });
+    const { addNotification } = this.context;
     try {
       await InvenioAdministrationActionsApi.editResource(
         apiEndpoint,
         pid,
         values
       );
-      this.setState({ loading: false });
+      actions.setSubmitting(false);
+      actions.resetForm({ values: { ...values } });
+      addNotification({
+        title: "Success",
+        content: "Your changes were successfully submitted",
+        type: "success",
+      });
     } catch (e) {
       console.error(e);
-      //TODO
+      this.setState({
+        error: { header: "Form error", content: e, id: e.code },
+      });
     }
   };
 
@@ -41,24 +53,38 @@ export class AdminForm extends Component {
 
   render() {
     const { resourceSchema, create, formFields } = this.props;
-    const { formData, loading } = this.state;
-    if (loading) {
-      return <Loader active={loading} />;
-    }
+    const { formData, error } = this.state;
 
     return (
       <Formik initialValues={formData} onSubmit={this.onSubmit}>
         {(props) => (
-          <SemanticForm as={Form} onSubmit={props.handleSubmit}>
+          <SemanticForm
+            as={Form}
+            onSubmit={(e) => {
+              e.preventDefault();
+              props.handleSubmit();
+            }}
+          >
             <GenerateForm
               formFields={formFields}
               jsonSchema={resourceSchema}
               create={create}
             />
-            <Button type="button" onClick={this.onCancel} loading={loading}>
+            {!_isEmpty(error) && <ErrorMessage {...error} />}
+            <Button
+              type="button"
+              onClick={this.onCancel}
+              loading={props.isSubmitting}
+              disabled={props.isSubmitting}
+            >
               Cancel
             </Button>
-            <Button type="submit" primary loading={loading}>
+            <Button
+              type="submit"
+              primary
+              loading={props.isSubmitting}
+              disabled={props.isSubmitting}
+            >
               Save
             </Button>
           </SemanticForm>

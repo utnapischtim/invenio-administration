@@ -11,12 +11,17 @@ import { InvenioAdministrationActionsApi } from "../api/actions";
 import { i18next } from "@translations/invenio_administration/i18next";
 import { Modal } from "semantic-ui-react";
 import { Trans } from "react-i18next";
+import isEmpty from "lodash/isEmpty";
+import { ErrorMessage } from "../ui_messages/messages";
+import { NotificationContext } from "../ui_messages/context";
 
 export class DeleteModal extends Component {
   constructor(props) {
     super(props);
-    this.state = { loading: false };
+    this.state = { loading: false, error: undefined };
   }
+
+  static contextType = NotificationContext;
 
   cleanError = () => {
     this.setState({ error: undefined });
@@ -25,6 +30,7 @@ export class DeleteModal extends Component {
   handleOnButtonClick = async () => {
     const { successCallback, resource, apiEndpoint, idKeyPath, toggleModal } =
       this.props;
+    const { addNotification } = this.context;
     try {
       await InvenioAdministrationActionsApi.deleteResource(
         resource,
@@ -32,9 +38,16 @@ export class DeleteModal extends Component {
         idKeyPath
       );
       toggleModal(false);
+      addNotification({
+        title: "Success",
+        content: "Resource was successfully deleted.",
+        type: "success",
+      });
       successCallback();
     } catch (e) {
-      // TODO
+      this.setState({
+        error: { header: "Action error", content: e, id: e.code },
+      });
     }
   };
 
@@ -48,8 +61,8 @@ export class DeleteModal extends Component {
         </Modal.Header>
         <Modal.Content>
           <Modal.Description>
-            {error && error.message}
             {children}
+            {!isEmpty(error) && <ErrorMessage {...error} />}
           </Modal.Description>
         </Modal.Content>
         <Modal.Actions>

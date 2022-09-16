@@ -6,6 +6,8 @@ import { Button, Modal } from "semantic-ui-react";
 import { Form as SemanticForm } from "semantic-ui-react";
 import _get from "lodash/get";
 import { GenerateForm } from "./GenerateForm";
+import { ErrorMessage } from "../ui_messages/messages";
+import isEmpty from "lodash/isEmpty";
 
 export class ActionForm extends Component {
   constructor(props) {
@@ -14,7 +16,7 @@ export class ActionForm extends Component {
 
     this.state = {
       loading: false,
-      // error: undefined,
+      error: undefined,
       formData: resource,
     };
   }
@@ -33,7 +35,9 @@ export class ActionForm extends Component {
       actionSuccessCallback(response.data);
     } catch (e) {
       console.error(e);
-      //TODO
+      this.setState({
+        error: { header: "Action error", content: e, id: e.code },
+      });
     }
   };
 
@@ -62,12 +66,13 @@ export class ActionForm extends Component {
 
   render() {
     const { actionSchema } = this.props;
-    const { loading, formData } = this.state;
+    const { loading, formData, error } = this.state;
     return (
       <Formik initialValues={formData} onSubmit={this.onSubmit}>
         {(props) => (
           <SemanticForm as={Form} onSubmit={props.handleSubmit}>
-            <GenerateForm jsonSchema={actionSchema} formikProps={props} />
+            <GenerateForm jsonSchema={actionSchema} />
+            {!isEmpty(error) && <ErrorMessage {...error} />}
             <Modal.Actions>
               <Button type="button" onClick={this.onCancel}>
                 Cancel

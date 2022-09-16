@@ -10,6 +10,7 @@ import { Button, Icon } from "semantic-ui-react";
 import { DeleteModal } from "./DeleteModal";
 import { Modal } from "semantic-ui-react";
 import { Trans } from "react-i18next";
+import _get from "lodash/get";
 
 export class DeleteModalTrigger extends Component {
   constructor(props) {
@@ -50,7 +51,7 @@ export class DeleteModalTrigger extends Component {
             <Modal.Description>
               <Trans
                 defaults="Are you sure you want to delete {{resourceName}}? "
-                values={{ resourceName: resource[resourceName] }}
+                values={{ resourceName: _get(resource, resourceName) }}
               />
             </Modal.Description>
           </Modal.Content>
