@@ -31,11 +31,17 @@ export class DeleteModalTrigger extends Component {
       successCallback,
       idKeyPath,
       Element,
+      disabled,
     } = this.props;
     const { modalOpen } = this.state;
     return (
       <>
-        <Element icon negative onClick={() => this.toggleModal(true)}>
+        <Element
+          disabled={disabled}
+          icon
+          negative
+          onClick={() => this.toggleModal(true)}
+        >
           <Icon name="trash alternate" />
         </Element>
         <DeleteModal
@@ -69,8 +75,10 @@ DeleteModalTrigger.propTypes = {
   successCallback: PropTypes.func.isRequired,
   Element: PropTypes.object,
   idKeyPath: PropTypes.string.isRequired,
+  disabled: PropTypes.bool,
 };
 
 DeleteModalTrigger.defaultProps = {
   Element: Button,
+  disabled: false,
 };

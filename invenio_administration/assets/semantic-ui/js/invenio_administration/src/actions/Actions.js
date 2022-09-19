@@ -20,6 +20,8 @@ export class Actions extends Component {
       successCallback,
       idKeyPath,
       listUIEndpoint,
+      disableDelete,
+      disableEdit,
     } = this.props;
 
     // if number of actions is greater than 3, we display all in a dropdown
@@ -55,6 +57,7 @@ export class Actions extends Component {
           {displayEdit && (
             <Button
               as="a"
+              disabled={disableEdit}
               href={AdminUIRoutes.editView(listUIEndpoint, resource, idKeyPath)}
               icon
               labelPosition="left"
@@ -71,6 +74,7 @@ export class Actions extends Component {
               resource={resource}
               successCallback={successCallback}
               idKeyPath={idKeyPath}
+              disabled={disableDelete}
             />
           )}
         </Button.Group>
@@ -84,6 +88,8 @@ Actions.propTypes = {
   resourceName: PropTypes.string.isRequired,
   displayEdit: PropTypes.bool,
   displayDelete: PropTypes.bool,
+  disableDelete: PropTypes.bool,
+  disableEdit: PropTypes.bool,
   apiEndpoint: PropTypes.string,
   resource: PropTypes.object.isRequired,
   successCallback: PropTypes.func.isRequired,
@@ -95,6 +101,8 @@ Actions.propTypes = {
 Actions.defaultProps = {
   displayEdit: true,
   displayDelete: true,
+  disableDelete: false,
+  disableEdit: false,
   apiEndpoint: undefined,
   idKeyPath: "pid",
 };

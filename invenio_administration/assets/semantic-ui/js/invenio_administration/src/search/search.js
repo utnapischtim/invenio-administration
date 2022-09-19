@@ -66,10 +66,10 @@ const SearchResultItemWithConfig = parametrize(SearchResultItem, {
   resourceSchema: resourceSchema,
 });
 
-const overwriteComponents = {
+const defaultComponents = {
+  "ResultsList.item": SearchResultItemWithConfig,
   "BucketAggregation.element": ContribBucketAggregationElement,
   "BucketAggregationValues.element": ContribBucketAggregationValuesElement,
-  "ResultsList.item": SearchResultItemWithConfig,
   "ResultsGrid.item": () => {},
   "SearchApp.results": SearchResultsWithConfig,
   "ResultsList.container": ResultsContainerWithConfig,
@@ -80,9 +80,10 @@ const overwriteComponents = {
   "SearchApp.resultOptions": SearchResultOptions,
   "SearchBar.element": displaySearch ? SearchBar : () => null,
 };
+export default defaultComponents;
 
 createSearchAppInit(
-  overwriteComponents,
+  defaultComponents,
   true,
   "invenio-search-config",
   false,
