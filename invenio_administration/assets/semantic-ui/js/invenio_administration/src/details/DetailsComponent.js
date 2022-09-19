@@ -8,33 +8,26 @@ import PropTypes from "prop-types";
 import React, { Component } from "react";
 import Overridable from "react-overridable";
 import { Table } from "semantic-ui-react";
+import Formatter from "../components/Formatter";
 
 class DetailsTable extends Component {
-  generateTableRow(key, pair) {
-    return (
-      <Table.Row key={key}>
-        <Table.Cell>
-          <b>{key}</b>
-        </Table.Cell>
-        <Table.Cell>{pair}</Table.Cell>
-      </Table.Row>
-    );
-  }
-
   render() {
-    const { columns, data } = this.props;
+    const { schema, data } = this.props;
 
-    const tableRows = columns.map((col) => {
-      const { key, text } = col;
-      let value = data[key];
+    const tableRows = Object.entries(schema).map(([field, fieldSchema]) => {
+      const text = fieldSchema.ui?.text || field;
 
-      if (text && value && typeof value === "object") {
-        // TODO use formatters
-      }
-
-      if (text && value) {
-        return this.generateTableRow(text, value);
-      }
+      return (
+        <Table.Row key={text}>
+          <Table.Cell width={3}>
+            <b>{text}</b>
+          </Table.Cell>
+          <Table.Cell>
+            {" "}
+            <Formatter result={data} resourceSchema={schema} property={field} />
+          </Table.Cell>
+        </Table.Row>
+      );
     });
 
     return (
@@ -49,7 +42,7 @@ class DetailsTable extends Component {
 
 DetailsTable.propTypes = {
   data: PropTypes.object.isRequired,
-  columns: PropTypes.array.isRequired,
+  schema: PropTypes.object.isRequired,
 };
 
 export default Overridable.component("DetailsTable", DetailsTable);

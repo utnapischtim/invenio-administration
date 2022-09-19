@@ -13,7 +13,7 @@ import { Trans } from "react-i18next";
 import isEmpty from "lodash/isEmpty";
 import { ErrorMessage } from "../ui_messages/messages";
 import { NotificationContext } from "../ui_messages/context";
-import { InvenioAdministrationActionsApi } from "../src/api/actions";
+import { InvenioAdministrationActionsApi } from "../api/actions";
 
 export class DeleteModal extends Component {
   constructor(props) {

@@ -7,7 +7,7 @@ import { Form as SemanticForm } from "semantic-ui-react";
 import _get from "lodash/get";
 import { ErrorMessage } from "../ui_messages/messages";
 import isEmpty from "lodash/isEmpty";
-import { GenerateForm } from "../../formik/GenerateForm";
+import { GenerateForm } from "./GenerateForm";
 
 export class ActionForm extends Component {
   constructor(props) {

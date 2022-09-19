@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Container, Header, Icon } from "semantic-ui-react";
 import Overridable from "react-overridable";
 import PropTypes from "prop-types";
-import { i18next } from "../../../translations/invenio_administration/i18next";
+import { i18next } from "@translations/invenio_administration/i18next";
 
 export class ErrorPage extends Component {
   render() {

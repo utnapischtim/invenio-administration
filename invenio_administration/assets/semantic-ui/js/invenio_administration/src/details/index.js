@@ -21,6 +21,7 @@ const actions = JSON.parse(domContainer.dataset.actions);
 const apiEndpoint = _get(domContainer.dataset, "apiEndpoint");
 const idKeyPath = JSON.parse(_get(domContainer.dataset, "pidPath", "pid"));
 const listUIEndpoint = domContainer.dataset.listEndpoint;
+const resourceSchema = JSON.parse(domContainer.dataset.resourceSchema);
 
 domContainer &&
   ReactDOM.render(
@@ -35,6 +36,7 @@ domContainer &&
       idKeyPath={idKeyPath}
       resourceName={resourceName}
       listUIEndpoint={listUIEndpoint}
+      resourceSchema={resourceSchema}
     />,
     domContainer
   );

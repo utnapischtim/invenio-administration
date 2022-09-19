@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 import { Form, Segment, Header } from "semantic-ui-react";
 import { AdminArrayField } from "./array";
 import _isEmpty from "lodash/isEmpty";
+import { sortFields } from "../components/utils";
 
 const fieldsMap = {
   string: Input,
@@ -40,7 +41,9 @@ const mapFormFields = (obj, parentField, isCreate, formFields) => {
     return null;
   }
 
-  const elements = Object.entries(obj).map(([fieldName, fieldSchema]) => {
+  const sortedFields = sortFields(obj);
+
+  const elements = Object.entries(sortedFields).map(([fieldName, fieldSchema]) => {
     const fieldProps = generateFieldProps(
       fieldName,
       fieldSchema,
@@ -83,7 +86,7 @@ const mapFormFields = (obj, parentField, isCreate, formFields) => {
     if (fieldSchema.type === "object") {
       // nested fields
       return (
-        <>
+        <React.Fragment key={fieldProps.fieldPath}>
           <Header attached="top" as="h5">
             {fieldProps.label}
           </Header>
@@ -97,7 +100,7 @@ const mapFormFields = (obj, parentField, isCreate, formFields) => {
               )}
             </Form.Group>
           </Segment>
-        </>
+        </React.Fragment>
       );
     }
 

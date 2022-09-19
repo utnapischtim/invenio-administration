@@ -7,7 +7,7 @@ import { Button } from "semantic-ui-react";
 import { NotificationContext } from "../ui_messages/context";
 import { ErrorMessage } from "../ui_messages/messages";
 import _isEmpty from "lodash/isEmpty";
-import { GenerateForm } from "../../formik/GenerateForm";
+import { GenerateForm } from "./GenerateForm";
 
 export class AdminForm extends Component {
   constructor(props) {

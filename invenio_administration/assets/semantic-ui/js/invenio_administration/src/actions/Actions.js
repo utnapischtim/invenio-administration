@@ -5,7 +5,7 @@ import { ResourceActions } from "./ResourceActions";
 import { ActionsDropdown } from "./ActionsDropdown";
 import { Button, Icon } from "semantic-ui-react";
 import { AdminUIRoutes } from "../routes";
-import { DeleteModalTrigger } from "../../actions/DeleteModalTrigger";
+import { DeleteModalTrigger } from "./DeleteModalTrigger";
 
 export class Actions extends Component {
   render() {
