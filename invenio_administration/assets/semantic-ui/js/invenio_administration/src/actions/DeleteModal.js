@@ -13,6 +13,7 @@ import { Trans } from "react-i18next";
 import isEmpty from "lodash/isEmpty";
 import { ErrorMessage } from "../ui_messages/messages";
 import { NotificationContext } from "../ui_messages/context";
+import Overridable from "react-overridable";
 import { InvenioAdministrationActionsApi } from "../api/actions";
 
 export class DeleteModal extends Component {
@@ -59,36 +60,44 @@ export class DeleteModal extends Component {
     const { loading, error } = this.state;
     const { modalOpen, toggleModal, children, title } = this.props;
     return (
-      <Modal role="dialog" open={modalOpen}>
-        <Modal.Header as="h2">
-          <Trans defaults="Delete {{title}}" values={{ title: title }} />
-        </Modal.Header>
-        <Modal.Content>
-          <Modal.Description>
-            {children}
-            {!isEmpty(error) && (
-              <ErrorMessage {...error} removeNotification={this.resetErrorState} />
-            )}
-          </Modal.Description>
-        </Modal.Content>
-        <Modal.Actions>
-          <Button
-            icon="cancel"
-            onClick={() => {
-              this.cleanError();
-              toggleModal(false);
-            }}
-            loading={loading}
-            content={i18next.t("Cancel")}
-            floated="left"
-            size="medium"
-          />
-          <Button negative onClick={this.handleOnButtonClick} loading={loading}>
-            <Icon name="trash alternate" />
-            {i18next.t("Delete")}
-          </Button>
-        </Modal.Actions>
-      </Modal>
+      <Overridable
+        id="DeleteModal.layout"
+        {...this.props}
+        handleOnButtonClick={this.handleOnButtonClick}
+        cleanError={this.cleanError}
+        resetErrorState={this.resetErrorState}
+      >
+        <Modal role="dialog" open={modalOpen}>
+          <Modal.Header as="h2">
+            <Trans defaults="Delete {{title}}" values={{ title: title }} />
+          </Modal.Header>
+          <Modal.Content>
+            <Modal.Description>
+              {children}
+              {!isEmpty(error) && (
+                <ErrorMessage {...error} removeNotification={this.resetErrorState} />
+              )}
+            </Modal.Description>
+          </Modal.Content>
+          <Modal.Actions>
+            <Button
+              icon="cancel"
+              onClick={() => {
+                this.cleanError();
+                toggleModal(false);
+              }}
+              loading={loading}
+              content={i18next.t("Cancel")}
+              floated="left"
+              size="medium"
+            />
+            <Button negative onClick={this.handleOnButtonClick} loading={loading}>
+              <Icon name="trash alternate" />
+              {i18next.t("Delete")}
+            </Button>
+          </Modal.Actions>
+        </Modal>
+      </Overridable>
     );
   }
 }
@@ -107,3 +116,5 @@ DeleteModal.propTypes = {
 DeleteModal.defaultProps = {
   children: null,
 };
+
+export default Overridable.component("DeleteModal", DeleteModal);
