@@ -9,7 +9,12 @@ export const sortFields = (schema) => {
   return (
     Object.entries(schema)
       // sort by order
-      .sort((a, b) => a[1].ui.order > b[1].ui.order)
+      .sort((a, b) => {
+        if (a[1]?.ui && b[1].ui) {
+          return a[1].ui.order > b[1].ui.order;
+        }
+        return true;
+      })
       // build object with sorted attributes
       .reduce((sorted, entry) => {
         const key = entry[0];

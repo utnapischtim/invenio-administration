@@ -18,8 +18,10 @@ const elementTypeMap = {
 class Formatter extends React.Component {
   render() {
     const { resourceSchema, result, property } = this.props;
+
     const resourceSchemaProperty = property.replace(/\./g, ".properties.");
     const typePath = `${resourceSchemaProperty}.type`;
+
     const type = _get(resourceSchema, typePath);
     const Element = _get(elementTypeMap, type);
     const value = _get(result, property, null);
