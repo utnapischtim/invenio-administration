@@ -8,6 +8,7 @@ import _get from "lodash/get";
 import { ErrorMessage } from "../ui_messages/messages";
 import isEmpty from "lodash/isEmpty";
 import { GenerateForm } from "./GenerateForm";
+import { deserializeFieldErrors } from "../components/utils";
 
 export class ActionForm extends Component {
   constructor(props) {
@@ -21,7 +22,7 @@ export class ActionForm extends Component {
     };
   }
 
-  onSubmit = async ({ formData }, e) => {
+  onSubmit = async (formData, actions) => {
     this.setState({ loading: true });
     const { actionKey, actionSuccessCallback } = this.props;
     const actionEndpoint = this.getEndpoint(actionKey);
@@ -35,8 +36,19 @@ export class ActionForm extends Component {
       actionSuccessCallback(response.data);
     } catch (e) {
       console.error(e);
+      let errorMessage = e.message;
+
+      // API errors need to be deserialised to highlight fields.
+      const apiResponse = e?.response?.data;
+      if (apiResponse) {
+        const apiErrors = apiResponse.errors || [];
+        const deserializedErrors = deserializeFieldErrors(apiErrors);
+        actions.setErrors(deserializedErrors);
+        errorMessage = apiResponse.message || errorMessage;
+      }
+
       this.setState({
-        error: { header: "Action error", content: e.message, id: e.code },
+        error: { header: "Action error", content: errorMessage, id: e.code },
       });
     }
   };
@@ -77,10 +89,7 @@ export class ActionForm extends Component {
           <SemanticForm as={Form} onSubmit={props.handleSubmit}>
             <GenerateForm jsonSchema={actionSchema} />
             {!isEmpty(error) && (
-              <ErrorMessage
-                {...error}
-                removeNotification={this.resetErrorState}
-              />
+              <ErrorMessage {...error} removeNotification={this.resetErrorState} />
             )}
             <Modal.Actions>
               <Button type="button" onClick={this.onCancel}>

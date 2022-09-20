@@ -1,5 +1,4 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
+import _set from "lodash/set";
 
 export const sortFields = (schema) => {
   /**
@@ -25,4 +24,23 @@ export const sortFields = (schema) => {
         return sorted;
       }, {})
   );
+};
+
+export const deserializeFieldErrors = (errors) => {
+  /**
+   * Deserialises field errors from the API to be consumed by the front-end.
+   * The output's format works with Formik.
+   */
+  let deserializedErrors = {};
+  if (Array.isArray(errors)) {
+    for (const e of errors) {
+      if (
+        Object.prototype.hasOwnProperty.call(e, "field") &&
+        Object.prototype.hasOwnProperty.call(e, "messages")
+      ) {
+        _set(deserializedErrors, e.field, e.messages.join(" "));
+      }
+    }
+  }
+  return deserializedErrors;
 };

@@ -67,10 +67,7 @@ export class DeleteModal extends Component {
           <Modal.Description>
             {children}
             {!isEmpty(error) && (
-              <ErrorMessage
-                {...error}
-                removeNotification={this.resetErrorState}
-              />
+              <ErrorMessage {...error} removeNotification={this.resetErrorState} />
             )}
           </Modal.Description>
         </Modal.Content>

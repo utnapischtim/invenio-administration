@@ -8,6 +8,7 @@ import { NotificationContext } from "../ui_messages/context";
 import { ErrorMessage } from "../ui_messages/messages";
 import isEmpty from "lodash/isEmpty";
 import { GenerateForm } from "./GenerateForm";
+import { deserializeFieldErrors } from "../components/utils";
 
 export class AdminForm extends Component {
   constructor(props) {
@@ -49,8 +50,19 @@ export class AdminForm extends Component {
       successCallback(response.data);
     } catch (e) {
       console.error(e);
+      let errorMessage = e.message;
+
+      // API errors need to be deserialised to highlight fields.
+      const apiResponse = e?.response?.data;
+      if (apiResponse) {
+        const apiErrors = apiResponse.errors || [];
+        const deserializedErrors = deserializeFieldErrors(apiErrors);
+        actions.setErrors(deserializedErrors);
+        errorMessage = apiResponse.message || errorMessage;
+      }
+
       this.setState({
-        error: { header: "Form error", content: e.message, id: e.code },
+        error: { header: "Form error", content: errorMessage, id: e.code },
       });
     }
   };
@@ -84,10 +96,7 @@ export class AdminForm extends Component {
               create={create}
             />
             {!isEmpty(error) && (
-              <ErrorMessage
-                {...error}
-                removeNotification={this.resetErrorState}
-              />
+              <ErrorMessage {...error} removeNotification={this.resetErrorState} />
             )}
             <Button
               type="button"
