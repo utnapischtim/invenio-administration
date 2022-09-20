@@ -36,7 +36,7 @@ export class ActionForm extends Component {
     } catch (e) {
       console.error(e);
       this.setState({
-        error: { header: "Action error", content: e, id: e.code },
+        error: { header: "Action error", content: e.message, id: e.code },
       });
     }
   };
@@ -64,6 +64,10 @@ export class ActionForm extends Component {
     return endpoint;
   };
 
+  resetErrorState = () => {
+    this.setState({ error: undefined });
+  };
+
   render() {
     const { actionSchema } = this.props;
     const { loading, formData, error } = this.state;
@@ -72,7 +76,12 @@ export class ActionForm extends Component {
         {(props) => (
           <SemanticForm as={Form} onSubmit={props.handleSubmit}>
             <GenerateForm jsonSchema={actionSchema} />
-            {!isEmpty(error) && <ErrorMessage {...error} />}
+            {!isEmpty(error) && (
+              <ErrorMessage
+                {...error}
+                removeNotification={this.resetErrorState}
+              />
+            )}
             <Modal.Actions>
               <Button type="button" onClick={this.onCancel}>
                 Cancel

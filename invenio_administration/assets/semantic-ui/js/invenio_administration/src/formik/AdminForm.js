@@ -6,7 +6,7 @@ import { InvenioAdministrationActionsApi } from "../api/actions";
 import { Button } from "semantic-ui-react";
 import { NotificationContext } from "../ui_messages/context";
 import { ErrorMessage } from "../ui_messages/messages";
-import _isEmpty from "lodash/isEmpty";
+import isEmpty from "lodash/isEmpty";
 import { GenerateForm } from "./GenerateForm";
 
 export class AdminForm extends Component {
@@ -50,7 +50,7 @@ export class AdminForm extends Component {
     } catch (e) {
       console.error(e);
       this.setState({
-        error: { header: "Form error", content: e, id: e.code },
+        error: { header: "Form error", content: e.message, id: e.code },
       });
     }
   };
@@ -58,6 +58,10 @@ export class AdminForm extends Component {
   onCancel = () => {
     const { resource } = this.props;
     this.setState({ formData: resource });
+  };
+
+  resetErrorState = () => {
+    this.setState({ error: undefined });
   };
 
   render() {
@@ -79,7 +83,12 @@ export class AdminForm extends Component {
               jsonSchema={resourceSchema}
               create={create}
             />
-            {!_isEmpty(error) && <ErrorMessage {...error} />}
+            {!isEmpty(error) && (
+              <ErrorMessage
+                {...error}
+                removeNotification={this.resetErrorState}
+              />
+            )}
             <Button
               type="button"
               onClick={this.onCancel}

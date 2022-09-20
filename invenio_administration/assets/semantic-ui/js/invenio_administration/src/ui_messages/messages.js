@@ -16,7 +16,7 @@ export class Message extends Component {
   };
 
   render() {
-    const { autoDismiss, id, removeNotification, ...props } = this.props;
+    const { id, ...props } = this.props;
 
     return (
       <SemanticMessage id={id} floating {...props} onDismiss={this.handleDismiss} />

@@ -46,9 +46,13 @@ export class DeleteModal extends Component {
       successCallback();
     } catch (e) {
       this.setState({
-        error: { header: "Action error", content: e, id: e.code },
+        error: { header: "Action error", content: e.message, id: e.code },
       });
     }
+  };
+
+  resetErrorState = () => {
+    this.setState({ error: undefined });
   };
 
   render() {
@@ -62,7 +66,12 @@ export class DeleteModal extends Component {
         <Modal.Content>
           <Modal.Description>
             {children}
-            {!isEmpty(error) && <ErrorMessage {...error} />}
+            {!isEmpty(error) && (
+              <ErrorMessage
+                {...error}
+                removeNotification={this.resetErrorState}
+              />
+            )}
           </Modal.Description>
         </Modal.Content>
         <Modal.Actions>
