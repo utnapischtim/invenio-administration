@@ -53,7 +53,7 @@ class AdminMenu:
                     endpoint=endpoint,
                     text=label,
                     order=order,
-                    active_when=active_when or self.default_active_when,
+                    active_when=active_when or self.sub_content_active_when,
                     icon=icon,
                 )
             else:
@@ -100,12 +100,21 @@ class AdminMenu:
             order=view.order,
             icon_key=view.icon,
         )
+
         self.add_menu_item(menu_item, index)
 
     @staticmethod
     def default_active_when(self):
         """Default condition for the menu item active state."""
         return request.endpoint == self._endpoint
+
+    @staticmethod
+    def sub_content_active_when(self):
+        """Condition for menu items with sub content.
+
+        Makes all pages with derivative URL hightlight the parent menu.
+        """
+        return self.url in request.url_rule.rule
 
 
 class MenuItem:
