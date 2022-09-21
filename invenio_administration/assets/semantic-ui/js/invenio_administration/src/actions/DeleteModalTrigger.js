@@ -6,6 +6,7 @@
 
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import { i18next } from "@translations/invenio_administration/i18next";
 import { Button, Icon } from "semantic-ui-react";
 import { DeleteModal } from "./DeleteModal";
 import { Modal } from "semantic-ui-react";
@@ -34,17 +35,25 @@ export class DeleteModalTrigger extends Component {
       disabled,
     } = this.props;
     const { modalOpen } = this.state;
+    const triggerId = `delete-modal-trigger-${resource.id}`;
     return (
       <>
         <Element
+          id={triggerId}
           disabled={disabled}
           icon
           negative
           onClick={() => this.toggleModal(true)}
+          aria-label={i18next.t("Delete")}
+          aria-controls="delete-modal"
+          aria-expanded="false"
+          aria-haspopup="dialog"
         >
           <Icon name="trash alternate" />
         </Element>
         <DeleteModal
+          id="delete-modal"
+          aria-labelledby={triggerId}
           title={title}
           apiEndpoint={apiEndpoint}
           resource={resource}

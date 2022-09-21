@@ -32,9 +32,10 @@ export const SearchBar = withState(
     return (
       <Input
         action={{
-          icon: "search",
-          onClick: onBtnSearchClick,
-          className: "search",
+          "icon": "search",
+          "onClick": onBtnSearchClick,
+          "className": "search",
+          "aria-label": i18next.t("Search"),
         }}
         fluid
         placeholder={placeholder}
@@ -43,6 +44,7 @@ export const SearchBar = withState(
         }}
         value={queryString}
         onKeyPress={onKeyPress}
+        aria-label={i18next.t("Search")}
         {...uiProps}
       />
     );

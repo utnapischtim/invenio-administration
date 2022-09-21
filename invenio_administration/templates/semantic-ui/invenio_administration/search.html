@@ -19,11 +19,11 @@
       <div class="column four wide">
         {% if display_create %}
           <div class="ui grid fluid">
-            <div class="three wide column right floated ">
+            <div class="three wide column right floated">
               <a class="ui right floated icon left labeled button green"
                  href="{{ create_ui_endpoint }}">
                 <i aria-hidden="true"
-                   class="plus icon"></i>Create
+                   class="plus icon"></i>{{ _("Create") }}
               </a>
             </div>
           </div>
@@ -31,7 +31,7 @@
       </div>
     </div>
       {% block admin_page_content %}
-        <div class="ui divider"></div>
+        <div class="ui divider" aria-hidden="true"></div>
 
         {%- block search_app %}
           <div

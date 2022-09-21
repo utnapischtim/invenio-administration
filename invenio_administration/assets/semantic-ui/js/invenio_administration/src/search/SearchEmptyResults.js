@@ -37,7 +37,7 @@ class SearchEmptyResults extends Component {
         <br />
         {isEmptyPageAfterSearch && (
           <Button primary onClick={() => resetQuery()}>
-            Clear query
+            {i18next.t("Clear query")}
           </Button>
         )}
         {extraContent}

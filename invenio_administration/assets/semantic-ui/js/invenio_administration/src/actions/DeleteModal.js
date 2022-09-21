@@ -20,6 +20,11 @@ export class DeleteModal extends Component {
   constructor(props) {
     super(props);
     this.state = { loading: false, error: undefined };
+    this.cancelButton = React.createRef();
+  }
+
+  componentDidUpdate() {
+    this.cancelButton.current?.focus();
   }
 
   static contextType = NotificationContext;
@@ -81,6 +86,7 @@ export class DeleteModal extends Component {
           </Modal.Content>
           <Modal.Actions>
             <Button
+              ref={this.cancelButton}
               icon="cancel"
               onClick={() => {
                 this.cleanError();
