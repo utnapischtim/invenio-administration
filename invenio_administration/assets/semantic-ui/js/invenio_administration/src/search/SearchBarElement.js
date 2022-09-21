@@ -13,13 +13,20 @@ import PropTypes from "prop-types";
 import { i18next } from "@translations/invenio_administration/i18next";
 
 export const SearchBar = withState(
-  ({ updateQueryState, onInputChange, queryString, uiProps, placeholder }) => {
+  ({
+    updateQueryState,
+    currentQueryState,
+    onInputChange,
+    queryString,
+    uiProps,
+    placeholder,
+  }) => {
     const onBtnSearchClick = () => {
-      updateQueryState({ queryString });
+      updateQueryState({ ...currentQueryState, queryString });
     };
     const onKeyPress = (event) => {
       if (event.key === "Enter") {
-        updateQueryState({ queryString });
+        updateQueryState({ ...currentQueryState, queryString });
       }
     };
     return (
