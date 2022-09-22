@@ -40,3 +40,7 @@ domContainer &&
     />,
     domContainer
   );
+
+export { default as ActionModal } from "./ActionModal";
+export { default as AdminDetailsView } from "./AdminDetailsView";
+export { default as DetailsComponent } from "./DetailsComponent";
