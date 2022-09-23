@@ -30,8 +30,14 @@ domContainer &&
       actions={actions}
       apiEndpoint={apiEndpoint}
       columns={fields}
-      displayDelete={displayDelete}
-      displayEdit={displayEdit}
+      editAction={{
+        display: displayEdit,
+        disable: () => false,
+      }}
+      deleteAction={{
+        display: displayDelete,
+        disable: () => false,
+      }}
       pid={pidValue}
       idKeyPath={idKeyPath}
       resourceName={resourceName}

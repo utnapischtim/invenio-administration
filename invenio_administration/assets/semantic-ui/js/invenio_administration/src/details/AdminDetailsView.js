@@ -64,8 +64,16 @@ export default class AdminDetailsView extends Component {
       title,
       columns,
       actions,
-      displayEdit,
-      displayDelete,
+      editAction: {
+        display: displayEdit,
+        disable: disableEdit,
+        disabledMessage: disabledEditMessage,
+      },
+      deleteAction: {
+        display: displayDelete,
+        disable: disableDelete,
+        disabledMessage: disabledDeleteMessage,
+      },
       apiEndpoint,
       idKeyPath,
       listUIEndpoint,
@@ -75,7 +83,6 @@ export default class AdminDetailsView extends Component {
     const { loading, data, error } = this.state;
 
     const sortedColumns = sortFields(resourceSchema);
-
     return (
       <Loader isLoading={loading}>
         <ErrorPage
@@ -93,8 +100,16 @@ export default class AdminDetailsView extends Component {
                   title={title}
                   resourceName={resourceName}
                   apiEndpoint={apiEndpoint}
-                  editAction={{ display: displayEdit }}
-                  deleteAction={{ display: displayDelete }}
+                  editAction={{
+                    display: displayEdit,
+                    disabled: disableEdit(data),
+                    disabledMessage: disabledEditMessage,
+                  }}
+                  deleteAction={{
+                    display: displayDelete,
+                    disabled: disableDelete(data),
+                    disabledMessage: disabledDeleteMessage,
+                  }}
                   actions={actions}
                   resource={data}
                   idKeyPath={idKeyPath}
@@ -119,8 +134,16 @@ AdminDetailsView.propTypes = {
   actions: PropTypes.object,
   apiEndpoint: PropTypes.string.isRequired,
   columns: PropTypes.object.isRequired,
-  displayDelete: PropTypes.bool.isRequired,
-  displayEdit: PropTypes.bool.isRequired,
+  editAction: PropTypes.shape({
+    display: PropTypes.bool.isRequired,
+    disable: PropTypes.func.isRequired,
+    disabledMessage: PropTypes.string,
+  }).isRequired,
+  deleteAction: PropTypes.shape({
+    display: PropTypes.bool.isRequired,
+    disable: PropTypes.func.isRequired,
+    disabledMessage: PropTypes.string,
+  }).isRequired,
   pid: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   children: PropTypes.object,
