@@ -46,7 +46,7 @@ export class DeleteModalTrigger extends Component {
           onClick={() => this.toggleModal(true)}
           aria-label={i18next.t("Delete")}
           aria-controls="delete-modal"
-          aria-expanded="false"
+          aria-expanded={modalOpen}
           aria-haspopup="dialog"
         >
           <Icon name="trash alternate" />
