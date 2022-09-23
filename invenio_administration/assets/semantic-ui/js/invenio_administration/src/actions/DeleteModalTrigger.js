@@ -33,6 +33,7 @@ export class DeleteModalTrigger extends Component {
       idKeyPath,
       Element,
       disabled,
+      disabledDeleteMessage,
     } = this.props;
     const { modalOpen } = this.state;
     const triggerId = `delete-modal-trigger-${resource.id}`;
@@ -48,6 +49,7 @@ export class DeleteModalTrigger extends Component {
           aria-controls="delete-modal"
           aria-expanded={modalOpen}
           aria-haspopup="dialog"
+          title={disabledDeleteMessage}
         >
           <Icon name="trash alternate" />
         </Element>
@@ -85,9 +87,11 @@ DeleteModalTrigger.propTypes = {
   Element: PropTypes.object,
   idKeyPath: PropTypes.string.isRequired,
   disabled: PropTypes.bool,
+  disabledDeleteMessage: PropTypes.string,
 };
 
 DeleteModalTrigger.defaultProps = {
   Element: Button,
   disabled: false,
+  disabledDeleteMessage: "",
 };

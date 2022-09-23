@@ -71,8 +71,8 @@ class SearchResultItemComponent extends Component {
               title={title}
               resourceName={resourceName}
               apiEndpoint={apiEndpoint}
-              displayEdit={displayEdit}
-              displayDelete={displayDelete}
+              editAction={{ display: displayEdit }}
+              deleteAction={{ display: displayDelete }}
               actions={actions}
               resource={result}
               idKeyPath={idKeyPath}
