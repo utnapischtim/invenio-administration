@@ -9,6 +9,7 @@ import { ErrorMessage } from "../ui_messages/messages";
 import isEmpty from "lodash/isEmpty";
 import { GenerateForm } from "./GenerateForm";
 import { deserializeFieldErrors } from "../components/utils";
+import { i18next } from "@translations/invenio_administration/i18next";
 
 export class ActionForm extends Component {
   constructor(props) {
@@ -53,12 +54,6 @@ export class ActionForm extends Component {
     }
   };
 
-  onCancel = () => {
-    const { resource, actionCancelCallback } = this.props;
-    this.setState({ formData: resource });
-    actionCancelCallback();
-  };
-
   getEndpoint = (actionKey) => {
     const { resource } = this.props;
     let endpoint;
@@ -92,11 +87,8 @@ export class ActionForm extends Component {
               <ErrorMessage {...error} removeNotification={this.resetErrorState} />
             )}
             <Modal.Actions>
-              <Button type="button" onClick={this.onCancel}>
-                Cancel
-              </Button>
               <Button type="submit" primary loading={loading}>
-                Save
+                {i18next.t("Save")}
               </Button>
             </Modal.Actions>
           </SemanticForm>

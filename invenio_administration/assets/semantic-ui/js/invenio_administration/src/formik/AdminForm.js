@@ -9,15 +9,21 @@ import { ErrorMessage } from "../ui_messages/messages";
 import isEmpty from "lodash/isEmpty";
 import { GenerateForm } from "./GenerateForm";
 import { deserializeFieldErrors } from "../components/utils";
+import { i18next } from "@translations/invenio_administration/i18next";
+import mapValues from "lodash/mapValues";
 
 export class AdminForm extends Component {
   constructor(props) {
     super(props);
-    const { resource } = props;
+    const { resource, formFields } = props;
 
     this.state = {
       error: undefined,
-      formData: resource ? resource : {},
+      formData: resource
+        ? resource
+        : mapValues(formFields, function (value) {
+            return "";
+          }),
     };
   }
 
@@ -67,11 +73,6 @@ export class AdminForm extends Component {
     }
   };
 
-  onCancel = () => {
-    const { resource } = this.props;
-    this.setState({ formData: resource });
-  };
-
   resetErrorState = () => {
     this.setState({ error: undefined });
   };
@@ -82,40 +83,34 @@ export class AdminForm extends Component {
 
     return (
       <Formik initialValues={formData} onSubmit={this.onSubmit}>
-        {(props) => (
-          <SemanticForm
-            as={Form}
-            onSubmit={(e) => {
-              e.preventDefault();
-              props.handleSubmit();
-            }}
-          >
-            <GenerateForm
-              formFields={formFields}
-              jsonSchema={resourceSchema}
-              create={create}
-            />
-            {!isEmpty(error) && (
-              <ErrorMessage {...error} removeNotification={this.resetErrorState} />
-            )}
-            <Button
-              type="button"
-              onClick={this.onCancel}
-              loading={props.isSubmitting}
-              disabled={props.isSubmitting}
+        {(props) => {
+          return (
+            <SemanticForm
+              as={Form}
+              onSubmit={(e) => {
+                e.preventDefault();
+                props.handleSubmit();
+              }}
             >
-              Cancel
-            </Button>
-            <Button
-              type="submit"
-              primary
-              loading={props.isSubmitting}
-              disabled={props.isSubmitting}
-            >
-              Save
-            </Button>
-          </SemanticForm>
-        )}
+              <GenerateForm
+                formFields={formFields}
+                jsonSchema={resourceSchema}
+                create={create}
+              />
+              {!isEmpty(error) && (
+                <ErrorMessage {...error} removeNotification={this.resetErrorState} />
+              )}
+              <Button
+                type="submit"
+                primary
+                loading={props.isSubmitting}
+                disabled={props.isSubmitting}
+              >
+                {i18next.t("Save")}
+              </Button>
+            </SemanticForm>
+          );
+        }}
       </Formik>
     );
   }
