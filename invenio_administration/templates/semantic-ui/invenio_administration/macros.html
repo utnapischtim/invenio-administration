@@ -8,7 +8,7 @@
 
 {% macro go_back() %}
   {% if request.referrer %}
-    <div class="mb-10">
+    <div class="rel-mb-2">
       <a href="{{ request.referrer }}" class="ui mini button labeled icon rel-mr-1">
           <i class="ui icon left arrow" aria-hidden="true"></i>
           {{ _('Back')}}
