@@ -13,8 +13,7 @@ import { SearchResultsContainer } from "./SearchResultsContainer";
 import { SearchResults } from "./SearchResults";
 import { parametrize } from "react-overridable";
 import { DropdownSort } from "@js/invenio_search_ui/components";
-import { SearchResultOptions } from "./SearchResultOptions";
-import { SearchBar } from "./SearchBarElement";
+import { SearchBarElement } from "./SearchBarElement";
 import _get from "lodash/get";
 import { NotificationController } from "../ui_messages/context";
 import {
@@ -22,6 +21,7 @@ import {
   ContribBucketAggregationElement,
   ContribBucketAggregationValuesElement,
 } from "@js/invenio_search_ui/components";
+import { SearchBar } from "./SearchBar";
 
 const domContainer = document.getElementById("invenio-search-config");
 
@@ -76,9 +76,9 @@ const defaultComponents = {
   "EmptyResults.element": SearchEmptyResults,
   "Sort.element": DropdownSort,
   "SearchApp.facets": ContribSearchAppFacets,
-  "SearchApp.searchbarContainer": () => null,
-  "SearchApp.resultOptions": SearchResultOptions,
-  "SearchBar.element": displaySearch ? SearchBar : () => null,
+  "SearchApp.searchbarContainer": SearchBar,
+  "SearchApp.resultOptions": () => null,
+  "SearchBar.element": displaySearch ? SearchBarElement : () => null,
 };
 export default defaultComponents;
 

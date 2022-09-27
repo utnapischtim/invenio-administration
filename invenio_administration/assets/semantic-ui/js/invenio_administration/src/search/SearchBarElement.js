@@ -12,7 +12,7 @@ import { Input } from "semantic-ui-react";
 import PropTypes from "prop-types";
 import { i18next } from "@translations/invenio_administration/i18next";
 
-export const SearchBar = withState(
+export const SearchBarElement = withState(
   ({
     updateQueryState,
     currentQueryState,
@@ -51,7 +51,7 @@ export const SearchBar = withState(
   }
 );
 
-SearchBar.propTypes = {
+SearchBarElement.propTypes = {
   queryString: PropTypes.string.isRequired,
   updateQueryState: PropTypes.func.isRequired,
   placeholder: PropTypes.string.isRequired,
@@ -59,7 +59,7 @@ SearchBar.propTypes = {
   uiProps: PropTypes.object,
 };
 
-SearchBar.defaultProps = {
+SearchBarElement.defaultProps = {
   uiProps: undefined,
   placeholder: i18next.t("Search ..."),
   queryString: "",
