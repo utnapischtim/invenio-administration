@@ -31,7 +31,7 @@ jobs:
           python-version: [3.7, 3.8, 3.9]
           requirements-level: [pypi]
           db-service: [postgresql13]
-          search-service: [elasticsearch7]
+          search-service: [opensearch1,elasticsearch7]
           include:
           - db-service: postgresql13
             DB_EXTRAS: "postgresql"
@@ -53,7 +53,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Run eslint test
         run: ./run-js-linter.sh -i
-      
+
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
@@ -79,13 +79,13 @@ jobs:
           docker-compose --version
 
       - name: Run backend tests
-        # You must change the ignore command for the manifest check.
-        # Remove `.travis-*` and add `.*-requirements.txt`
         run: |
           ./run-tests.sh
 
+      - name: Install deps for frontend tests
+        working-directory: ./invenio_administration/assets/semantic-ui/js/invenio_administration
+        run: npm install
+
       - name: Run frontend tests
-        run: |
-          cd ./invenio_administration/assets/semantic-ui/js/invenio_administration
-          npm install
-          npm test
+        working-directory: ./invenio_administration/assets/semantic-ui/js/invenio_administration
+        run: npm test
