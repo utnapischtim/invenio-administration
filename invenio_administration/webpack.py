@@ -22,13 +22,13 @@ theme = WebpackThemeBundle(
                 "invenio-administration-search":
                     "./js/invenio_administration/src/search/search.js",
                 "invenio-administration-edit":
-                    "./js/invenio_administration/src/edit/index.js",
+                    "./js/invenio_administration/src/edit/edit.js",
                 "invenio-administration-create":
-                    "./js/invenio_administration/src/create/index.js",
+                    "./js/invenio_administration/src/create/create.js",
                 "base-admin-theme":
                     "./js/invenio_administration/src/theme.js",
                 "invenio-administration-details":
-                    "./js/invenio_administration/src/details/index.js"
+                    "./js/invenio_administration/src/details/details.js"
             },
             dependencies={
                 "@babel/runtime": "^7.9.0",
