@@ -11,7 +11,6 @@ from functools import partial
 
 from flask import current_app, render_template, url_for
 from flask.views import MethodView
-from flask_security import roles_required
 from invenio_search_ui.searchconfig import search_app_config
 
 from invenio_administration.errors import (
@@ -26,6 +25,7 @@ from invenio_administration.marshmallow_utils import (
     jsonify_schema,
     set_ui_field_property,
 )
+from invenio_administration.permissions import administration_permission
 
 
 class AdminView(MethodView):
@@ -40,7 +40,7 @@ class AdminView(MethodView):
     order = None
     icon = None
 
-    decorators = [roles_required("admin")]
+    decorators = [administration_permission.require(http_exception=403)]
 
     def __init__(
         self,
@@ -50,7 +50,7 @@ class AdminView(MethodView):
         extension_name=None,
         admin=None,
         order=0,
-        icon=None
+        icon=None,
     ):
         """Constructor."""
         if self.extension_name is None:
@@ -149,7 +149,7 @@ class AdminResourceBaseView(AdminView):
         extension_name=None,
         admin=None,
         order=0,
-        icon=None
+        icon=None,
     ):
         """Constructor."""
         super().__init__(name, category, url, extension_name, admin, order, icon)
@@ -218,8 +218,9 @@ class AdminResourceBaseView(AdminView):
 
             serialized_actions[key] = {"text": value["text"], "order": value["order"]}
             if value["payload_schema"] is not None:
-                serialized_actions[key]["payload_schema"] = \
-                    self._schema_to_json(value["payload_schema"]())
+                serialized_actions[key]["payload_schema"] = self._schema_to_json(
+                    value["payload_schema"]()
+                )
 
         return serialized_actions
 
