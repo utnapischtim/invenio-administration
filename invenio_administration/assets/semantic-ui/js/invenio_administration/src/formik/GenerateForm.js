@@ -14,12 +14,23 @@ const fieldsMap = {
   datetime: Input,
 };
 
-const generateFieldProps = (fieldName, fieldSchema, parentField, isCreate) => {
+const generateFieldProps = (
+  fieldName,
+  fieldSchema,
+  parentField,
+  isCreate,
+  formField
+) => {
   let currentFieldName;
+  let fieldLabel;
 
-  const fieldLabel = fieldSchema.title
-    ? _capitalize(fieldSchema.title)
-    : _capitalize(fieldName);
+  if (formField.text) {
+    fieldLabel = formField.text;
+  } else {
+    fieldLabel = fieldSchema.title
+      ? _capitalize(fieldSchema.title)
+      : _capitalize(fieldName);
+  }
 
   if (parentField) {
     currentFieldName = `${parentField}.${fieldName}`;
@@ -27,10 +38,19 @@ const generateFieldProps = (fieldName, fieldSchema, parentField, isCreate) => {
     currentFieldName = fieldName;
   }
 
+  const htmlDescription = (
+    <div
+      dangerouslySetInnerHTML={{
+        __html: formField.description,
+      }}
+    />
+  );
+
   return {
     fieldPath: currentFieldName,
     key: currentFieldName,
     label: fieldLabel,
+    description: htmlDescription,
     required: fieldSchema.required,
     disabled: fieldSchema.readOnly || (fieldSchema.createOnly && !isCreate),
   };
@@ -48,7 +68,8 @@ const mapFormFields = (obj, parentField, isCreate, formFields) => {
       fieldName,
       fieldSchema,
       parentField,
-      isCreate
+      isCreate,
+      formFields[fieldName]
     );
 
     const showField =
