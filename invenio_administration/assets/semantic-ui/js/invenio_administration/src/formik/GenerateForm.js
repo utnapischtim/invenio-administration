@@ -19,18 +19,11 @@ const generateFieldProps = (
   fieldSchema,
   parentField,
   isCreate,
-  formField
+  formFieldConfig
 ) => {
   let currentFieldName;
-  let fieldLabel;
 
-  if (formField.text) {
-    fieldLabel = formField.text;
-  } else {
-    fieldLabel = fieldSchema.title
-      ? _capitalize(fieldSchema.title)
-      : _capitalize(fieldName);
-  }
+  const fieldLabel = formFieldConfig.text || fieldSchema.title || fieldName;
 
   if (parentField) {
     currentFieldName = `${parentField}.${fieldName}`;
@@ -41,7 +34,7 @@ const generateFieldProps = (
   const htmlDescription = (
     <div
       dangerouslySetInnerHTML={{
-        __html: formField.description,
+        __html: formFieldConfig.description,
       }}
     />
   );
@@ -49,14 +42,14 @@ const generateFieldProps = (
   return {
     fieldPath: currentFieldName,
     key: currentFieldName,
-    label: fieldLabel,
+    label: _capitalize(fieldLabel),
     description: htmlDescription,
     required: fieldSchema.required,
     disabled: fieldSchema.readOnly || (fieldSchema.createOnly && !isCreate),
   };
 };
 
-const mapFormFields = (obj, parentField, isCreate, formFields) => {
+const mapFormFields = (obj, parentField, isCreate, formFieldsConfig) => {
   if (!obj) {
     return null;
   }
@@ -69,12 +62,12 @@ const mapFormFields = (obj, parentField, isCreate, formFields) => {
       fieldSchema,
       parentField,
       isCreate,
-      formFields[fieldName]
+      formFieldsConfig[fieldName]
     );
 
     const showField =
-      _isEmpty(formFields) ||
-      Object.prototype.hasOwnProperty.call(formFields, fieldProps.fieldPath);
+      _isEmpty(formFieldsConfig) ||
+      Object.prototype.hasOwnProperty.call(formFieldsConfig, fieldProps.fieldPath);
 
     if (!showField) {
       return null;
@@ -87,7 +80,7 @@ const mapFormFields = (obj, parentField, isCreate, formFields) => {
           fieldSchema={fieldSchema}
           isCreate={isCreate}
           mapFormFields={mapFormFields}
-          formFields={formFields}
+          formFields={formFieldsConfig}
           {...fieldProps}
         />
       );
@@ -117,7 +110,7 @@ const mapFormFields = (obj, parentField, isCreate, formFields) => {
                 fieldSchema.properties,
                 fieldProps.fieldPath,
                 isCreate,
-                formFields
+                formFieldsConfig
               )}
             </Form.Group>
           </Segment>

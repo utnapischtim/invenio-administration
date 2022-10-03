@@ -17,10 +17,7 @@ export const sortFields = (schema) => {
       // build object with sorted attributes
       .reduce((sorted, entry) => {
         const key = entry[0];
-        const fieldConfiguration = entry[1];
         sorted[key] = schema[key];
-
-        sorted[key]["title"] = fieldConfiguration["text"] || schema[key].title;
         return sorted;
       }, {})
   );
