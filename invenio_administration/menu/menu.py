@@ -10,9 +10,10 @@
 
 from flask import request
 from flask_babelex import lazy_gettext as _
-from flask_login import current_user
 from invenio_theme.proxies import current_theme_icons
 from speaklater import make_lazy_string
+
+from invenio_administration.permissions import administration_permission
 
 
 class AdminMenu:
@@ -31,7 +32,7 @@ class AdminMenu:
         """Register all menu items to a flask menu instance."""
         main_menu = flask_menu_instance.submenu(menu_key)
 
-        # items without category go first and the rest are sorted alphatebically
+        # items without category go first and the rest are sorted alphabetically
         ordered_menu_items = sorted(
             self._menu_items,
             key=lambda menu_item: (menu_item.category is not None, menu_item.category),
@@ -76,7 +77,7 @@ class AdminMenu:
                 ),
             ),
             order=1,
-            visible_when=lambda: current_user.has_role("admin"),
+            visible_when=lambda: administration_permission.can(),
         )
 
     def add_menu_item(self, item, index=None):
@@ -112,7 +113,7 @@ class AdminMenu:
     def sub_content_active_when(self):
         """Condition for menu items with sub content.
 
-        Makes all pages with derivative URL hightlight the parent menu.
+        Makes all pages with derivative URL highlight the parent menu.
         """
         return self.url in request.url_rule.rule
 
