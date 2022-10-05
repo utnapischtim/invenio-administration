@@ -12,7 +12,7 @@ import importlib_metadata
 
 from . import config
 from .admin import Administration
-from .views.base import AdminView
+from .views.base import AdminResourceBaseView, AdminView
 
 
 class InvenioAdministration:
@@ -79,7 +79,8 @@ class InvenioAdministration:
             **kwargs,
         )
         self.administration.add_view(view, view_instance, *args, **kwargs)
-        self.register_resource(app, view_class, extension_name)
+        if issubclass(view_class, AdminResourceBaseView):
+            self.register_resource(app, view_class, extension_name)
 
     @staticmethod
     def register_resource(app, view_class, extension_name):
