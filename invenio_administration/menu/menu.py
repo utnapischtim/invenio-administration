@@ -8,6 +8,8 @@
 
 """Invenio Administration menu module."""
 
+import urllib.parse
+
 from flask import request
 from flask_babelex import lazy_gettext as _
 from invenio_theme.proxies import current_theme_icons
@@ -115,7 +117,12 @@ class AdminMenu:
 
         Makes all pages with derivative URL highlight the parent menu.
         """
-        return self.url in request.url_rule.rule
+        menu_url = urllib.parse.urlparse(self.url)
+        request_url = urllib.parse.urlparse(request.url_rule.rule)
+
+        return request_url.path == menu_url.path or request_url.path.startswith(
+            f"{menu_url.path}/"
+        )
 
 
 class MenuItem:
