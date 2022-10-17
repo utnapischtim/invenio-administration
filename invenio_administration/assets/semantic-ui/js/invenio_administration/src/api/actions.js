@@ -1,5 +1,5 @@
 import { APIRoutes } from "./routes";
-import { http } from "./config";
+import { http } from "react-invenio-forms";
 
 const getResource = async (apiEndpoint, pid) => {
   return await http.get(APIRoutes.get(apiEndpoint, pid));
