@@ -1,12 +1,13 @@
+import Edit from "./Edit";
+import Delete from "./Delete";
+import { DeleteModalTrigger } from "./DeleteModalTrigger";
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import isEmpty from "lodash/isEmpty";
 import { ResourceActions } from "./ResourceActions";
-import { ActionsDropdown } from "./ActionsDropdown";
-import { Button, Icon, Popup } from "semantic-ui-react";
-import { AdminUIRoutes } from "../routes";
-import { DeleteModalTrigger } from "./DeleteModalTrigger";
+import { Button, Dropdown } from "semantic-ui-react";
 import { i18next } from "@translations/invenio_administration/i18next";
+import _get from "lodash/get";
 
 export class Actions extends Component {
   render() {
@@ -14,21 +15,12 @@ export class Actions extends Component {
       title,
       resourceName,
       actions,
-      apiEndpoint,
       resource,
       successCallback,
       idKeyPath,
-      listUIEndpoint,
-      editAction: {
-        display: displayEdit,
-        disabled: disableEdit,
-        disabledMessage: disabledEditMessage,
-      },
-      deleteAction: {
-        display: displayDelete,
-        disabled: disableDelete,
-        disabledMessage: disabledDeleteMessage,
-      },
+      editUrl,
+      displayEdit,
+      displayDelete,
     } = this.props;
 
     // if number of actions is greater than 3, we display all in a dropdown
@@ -37,17 +29,37 @@ export class Actions extends Component {
 
     if (displayAsDropdown) {
       return (
-        <ActionsDropdown
-          title={title}
-          resourceName={resourceName}
-          apiEndpoint={apiEndpoint}
-          resource={resource}
-          successCallback={successCallback}
-          idKeyPath={idKeyPath}
-          actions={actions}
-          displayEdit={displayEdit}
-          displayDelete={displayDelete}
-        />
+        <Dropdown>
+          {!isEmpty(actions) && (
+            <ResourceActions
+              resource={resource}
+              successCallback={successCallback}
+              idKeyPath={idKeyPath}
+              actions={actions}
+              Element={Dropdown.Item}
+              trigger={
+                <Button
+                  icon="cog"
+                  size="tiny"
+                  className="transparent rel-ml-1"
+                  aria-label={i18next.t("Open list of actions")}
+                />
+              }
+            />
+          )}
+          {displayEdit && <Edit editUrl={editUrl} resource={resource} />}
+          {displayDelete && (
+            <DeleteModalTrigger
+              title={title}
+              resourceName={resourceName}
+              apiEndpoint={_get(resource, "links.self")}
+              resource={resource}
+              successCallback={successCallback}
+              idKeyPath={idKeyPath}
+              Element={Dropdown.Item}
+            />
+          )}
+        </Dropdown>
       );
     } else {
       return (
@@ -58,58 +70,15 @@ export class Actions extends Component {
               successCallback={successCallback}
               idKeyPath={idKeyPath}
               actions={actions}
-              apiEndpoint={apiEndpoint}
             />
           )}
-          {displayEdit && (
-            <Popup
-              content={
-                disabledEditMessage
-                  ? disabledEditMessage
-                  : i18next.t("Resource is not editable.")
-              }
-              disabled={!disableEdit}
-              trigger={
-                <span className="mr-5">
-                  <Button
-                    as="a"
-                    disabled={disableEdit}
-                    href={AdminUIRoutes.editView(listUIEndpoint, resource, idKeyPath)}
-                    icon
-                    labelPosition="left"
-                    title={disabledEditMessage ? disabledEditMessage : ""}
-                  >
-                    <Icon name="pencil" />
-                    {i18next.t("Edit")}
-                  </Button>
-                </span>
-              }
-            />
-          )}
+          {displayEdit && <Edit editUrl={editUrl} resource={resource} />}
           {displayDelete && (
-            <Popup
-              content={
-                disabledDeleteMessage
-                  ? disabledDeleteMessage
-                  : i18next.t("Resource is not deletable.")
-              }
-              disabled={!disableDelete}
-              trigger={
-                <span>
-                  <DeleteModalTrigger
-                    title={title}
-                    resourceName={resourceName}
-                    apiEndpoint={apiEndpoint}
-                    resource={resource}
-                    successCallback={successCallback}
-                    idKeyPath={idKeyPath}
-                    disabled={disableDelete}
-                    disabledDeleteMessage={
-                      disabledEditMessage ? disabledEditMessage : ""
-                    }
-                  />
-                </span>
-              }
+            <Delete
+              successCallback={successCallback}
+              resource={resource}
+              resourceName={resourceName}
+              title={title}
             />
           )}
         </Button.Group>
@@ -121,35 +90,17 @@ export class Actions extends Component {
 Actions.propTypes = {
   title: PropTypes.string.isRequired,
   resourceName: PropTypes.string.isRequired,
-  editAction: PropTypes.shape({
-    display: PropTypes.bool,
-    disabled: PropTypes.bool,
-    disabledMessage: PropTypes.string,
-  }),
-  deleteAction: PropTypes.shape({
-    display: PropTypes.bool,
-    disabled: PropTypes.bool,
-    disabledMessage: PropTypes.string,
-  }),
-  apiEndpoint: PropTypes.string,
+  displayEdit: PropTypes.bool,
+  displayDelete: PropTypes.bool,
   resource: PropTypes.object.isRequired,
   successCallback: PropTypes.func.isRequired,
   idKeyPath: PropTypes.string,
   actions: PropTypes.object.isRequired,
-  listUIEndpoint: PropTypes.string.isRequired,
+  editUrl: PropTypes.string.isRequired,
 };
 
 Actions.defaultProps = {
-  editAction: {
-    display: true,
-    disabled: false,
-    disabledMessage: i18next.t("Resource is not editable."),
-  },
-  deleteAction: {
-    display: true,
-    disabled: false,
-    disabledMessage: i18next.t("Resource is not deletable."),
-  },
-  apiEndpoint: undefined,
+  displayEdit: true,
+  displayDelete: true,
   idKeyPath: "pid",
 };

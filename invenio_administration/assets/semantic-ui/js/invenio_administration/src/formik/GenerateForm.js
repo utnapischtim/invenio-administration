@@ -23,7 +23,7 @@ const generateFieldProps = (
 ) => {
   let currentFieldName;
 
-  const fieldLabel = formFieldConfig.text || fieldSchema.title || fieldName;
+  const fieldLabel = formFieldConfig?.text || fieldSchema?.title || fieldName;
 
   if (parentField) {
     currentFieldName = `${parentField}.${fieldName}`;
@@ -34,7 +34,7 @@ const generateFieldProps = (
   const htmlDescription = (
     <div
       dangerouslySetInnerHTML={{
-        __html: formFieldConfig.description,
+        __html: formFieldConfig?.description,
       }}
     />
   );
@@ -49,7 +49,7 @@ const generateFieldProps = (
   };
 };
 
-const mapFormFields = (obj, parentField, isCreate, formFieldsConfig) => {
+const mapFormFields = (obj, parentField, isCreate, formFieldsConfig, dropDumpOnly) => {
   if (!obj) {
     return null;
   }
@@ -57,6 +57,10 @@ const mapFormFields = (obj, parentField, isCreate, formFieldsConfig) => {
   const sortedFields = sortFields(obj);
 
   const elements = Object.entries(sortedFields).map(([fieldName, fieldSchema]) => {
+    if (fieldSchema.readOnly && dropDumpOnly) {
+      return null;
+    }
+
     const fieldProps = generateFieldProps(
       fieldName,
       fieldSchema,
@@ -125,18 +129,20 @@ const mapFormFields = (obj, parentField, isCreate, formFieldsConfig) => {
   return elements;
 };
 
-export const GenerateForm = ({ jsonSchema, create, formFields }) => {
+export const GenerateForm = ({ jsonSchema, create, formFields, dropDumpOnly }) => {
   const properties = jsonSchema;
-  return <>{mapFormFields(properties, undefined, create, formFields)}</>;
+  return <>{mapFormFields(properties, undefined, create, formFields, dropDumpOnly)}</>;
 };
 
 GenerateForm.propTypes = {
   jsonSchema: PropTypes.object.isRequired,
   create: PropTypes.bool,
   formFields: PropTypes.object,
+  dropDumpOnly: PropTypes.bool,
 };
 
 GenerateForm.defaultProps = {
   create: false,
   formFields: undefined,
+  dropDumpOnly: false,
 };

@@ -30,13 +30,12 @@ class SearchResultItemComponent extends Component {
       displayEdit,
       displayDelete,
       actions,
-      apiEndpoint,
       idKeyPath,
       resourceSchema,
       listUIEndpoint,
     } = this.props;
-
     const resourceHasActions = displayEdit || displayDelete || !isEmpty(actions);
+
     return (
       <Table.Row>
         {columns.map(([property, { text, order }], index) => {
@@ -66,13 +65,13 @@ class SearchResultItemComponent extends Component {
           );
         })}
         {resourceHasActions && (
-          <Table.Cell>
+          <Table.Cell collapsing>
             <Actions
               title={title}
               resourceName={resourceName}
-              apiEndpoint={apiEndpoint}
-              editAction={{ display: displayEdit }}
-              deleteAction={{ display: displayDelete }}
+              editUrl={AdminUIRoutes.editView(listUIEndpoint, result, idKeyPath)}
+              displayEdit={displayEdit}
+              displayDelete={displayDelete}
               actions={actions}
               resource={result}
               idKeyPath={idKeyPath}
@@ -94,7 +93,6 @@ SearchResultItemComponent.propTypes = {
   displayDelete: PropTypes.bool,
   displayEdit: PropTypes.bool,
   actions: PropTypes.object,
-  apiEndpoint: PropTypes.string,
   updateQueryState: PropTypes.func.isRequired,
   currentQueryState: PropTypes.object.isRequired,
   idKeyPath: PropTypes.string.isRequired,
@@ -105,7 +103,6 @@ SearchResultItemComponent.propTypes = {
 SearchResultItemComponent.defaultProps = {
   displayDelete: true,
   displayEdit: true,
-  apiEndpoint: undefined,
   actions: {},
 };
 

@@ -5,7 +5,7 @@ import { InvenioAdministrationActionsApi } from "../api/actions";
 import { Button, Modal } from "semantic-ui-react";
 import { Form as SemanticForm } from "semantic-ui-react";
 import _get from "lodash/get";
-import { ErrorMessage } from "../ui_messages/messages";
+import { ErrorMessage } from "../ui_messages";
 import isEmpty from "lodash/isEmpty";
 import { GenerateForm } from "./GenerateForm";
 import { deserializeFieldErrors } from "../components/utils";
@@ -14,12 +14,11 @@ import { i18next } from "@translations/invenio_administration/i18next";
 export class ActionForm extends Component {
   constructor(props) {
     super(props);
-    const { resource } = props;
 
     this.state = {
       loading: false,
       error: undefined,
-      formData: resource,
+      formData: {},
     };
   }
 
@@ -37,9 +36,10 @@ export class ActionForm extends Component {
       actionSuccessCallback(response.data);
     } catch (e) {
       console.error(e);
+      this.setState({ loading: false });
       let errorMessage = e.message;
 
-      // API errors need to be deserialised to highlight fields.
+      // API errors need to be de-serialised to highlight fields.
       const apiResponse = e?.response?.data;
       if (apiResponse) {
         const apiErrors = apiResponse.errors || [];
@@ -58,12 +58,12 @@ export class ActionForm extends Component {
     const { resource } = this.props;
     let endpoint;
     // get the action endpoint from the current resource links
-    endpoint = _get(resource.links.actions[actionKey]);
+    endpoint = _get(resource, `links.actions[${actionKey}]`);
 
     // endpoint can be also within links, not links.action
     // TODO: handle it in a nicer way
-    if (!endpoint) {
-      endpoint = _get(resource.links[actionKey]);
+    if (isEmpty(endpoint)) {
+      endpoint = _get(resource, `links[${actionKey}]`);
     }
     if (!endpoint) {
       console.error("Action endpoint not found in the resource!");
@@ -76,13 +76,18 @@ export class ActionForm extends Component {
   };
 
   render() {
-    const { actionSchema } = this.props;
+    const { actionSchema, formFields, actionCancelCallback } = this.props;
     const { loading, formData, error } = this.state;
     return (
       <Formik initialValues={formData} onSubmit={this.onSubmit}>
         {(props) => (
           <SemanticForm as={Form} onSubmit={props.handleSubmit}>
-            <GenerateForm jsonSchema={actionSchema} />
+            <GenerateForm
+              jsonSchema={actionSchema}
+              formFields={formFields}
+              create
+              dropDumpOnly
+            />
             {!isEmpty(error) && (
               <ErrorMessage {...error} removeNotification={this.resetErrorState} />
             )}
@@ -90,6 +95,13 @@ export class ActionForm extends Component {
               <Button type="submit" primary loading={loading}>
                 {i18next.t("Save")}
               </Button>
+              <Button
+                onClick={actionCancelCallback}
+                floated="left"
+                icon="cancel"
+                labelPosition="left"
+                content={i18next.t("Cancel")}
+              />
             </Modal.Actions>
           </SemanticForm>
         )}
@@ -104,4 +116,9 @@ ActionForm.propTypes = {
   actionKey: PropTypes.string.isRequired,
   actionSuccessCallback: PropTypes.func.isRequired,
   actionCancelCallback: PropTypes.func.isRequired,
+  formFields: PropTypes.object,
+};
+
+ActionForm.defaultProps = {
+  formFields: {},
 };

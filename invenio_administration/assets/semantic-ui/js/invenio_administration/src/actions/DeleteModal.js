@@ -34,15 +34,10 @@ export class DeleteModal extends Component {
   };
 
   handleOnButtonClick = async () => {
-    const { successCallback, resource, apiEndpoint, idKeyPath, toggleModal } =
-      this.props;
+    const { successCallback, apiEndpoint, toggleModal } = this.props;
     const { addNotification } = this.context;
     try {
-      await InvenioAdministrationActionsApi.deleteResource(
-        resource,
-        apiEndpoint,
-        idKeyPath
-      );
+      await InvenioAdministrationActionsApi.deleteResource(apiEndpoint);
       toggleModal(false);
       addNotification({
         title: "Success",
@@ -111,9 +106,7 @@ export class DeleteModal extends Component {
 DeleteModal.propTypes = {
   title: PropTypes.string.isRequired,
   apiEndpoint: PropTypes.string.isRequired,
-  resource: PropTypes.object.isRequired,
   successCallback: PropTypes.func.isRequired,
-  idKeyPath: PropTypes.string.isRequired,
   toggleModal: PropTypes.func.isRequired,
   modalOpen: PropTypes.bool.isRequired,
   children: PropTypes.node,

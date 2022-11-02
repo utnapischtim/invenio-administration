@@ -1,12 +1,12 @@
 import { APIRoutes } from "./routes";
 import { http } from "react-invenio-forms";
 
-const getResource = async (apiEndpoint, pid) => {
-  return await http.get(APIRoutes.get(apiEndpoint, pid));
+const getResource = async (apiEndpoint, pid, requestHeaders) => {
+  return await http.get(APIRoutes.get(apiEndpoint, pid), { headers: requestHeaders });
 };
 
-const deleteResource = async (resource, apiEndpoint, idKeyPath = "pid") => {
-  return await http.delete(APIRoutes.detailsView(apiEndpoint, resource, idKeyPath));
+const deleteResource = async (apiEndpoint) => {
+  return await http.delete(apiEndpoint);
 };
 
 const editResource = async (apiEndpoint, pid, payload) => {

@@ -12,10 +12,11 @@ import Formatter from "../components/Formatter";
 
 class DetailsTable extends Component {
   render() {
-    const { schema, data } = this.props;
+    const { schema, data, uiSchema } = this.props;
+    let fields = uiSchema ? uiSchema : schema;
 
-    const tableRows = Object.entries(schema).map(([field, fieldSchema]) => {
-      const text = fieldSchema.ui?.text || field;
+    const tableRows = Object.entries(fields).map(([field, fieldSchema]) => {
+      const text = fieldSchema.text || field;
 
       return (
         <Table.Row key={text}>
@@ -43,6 +44,7 @@ class DetailsTable extends Component {
 DetailsTable.propTypes = {
   data: PropTypes.object.isRequired,
   schema: PropTypes.object.isRequired,
+  uiSchema: PropTypes.object.isRequired,
 };
 
 export default Overridable.component("DetailsTable", DetailsTable);

@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Button, Modal } from "semantic-ui-react";
-import { ActionForm } from "../formik/ActionForm";
+import { ActionForm } from "../formik";
+import { ActionModal } from "./ActionModal";
 
 export class ResourceActions extends Component {
   constructor(props) {
@@ -23,10 +24,18 @@ export class ResourceActions extends Component {
           actionKey={dataActionKey}
           actionSchema={payloadSchema}
           actionSuccessCallback={this.onModalClose}
-          actionCancelCallback={this.onModalClose}
+          actionCancelCallback={this.closeModal}
           resource={resource}
         />
       ),
+    });
+  };
+
+  closeModal = () => {
+    this.setState({
+      modalOpen: false,
+      modalHeader: undefined,
+      modalBody: undefined,
     });
   };
 
@@ -41,7 +50,7 @@ export class ResourceActions extends Component {
   };
 
   render() {
-    const { actions, Element } = this.props;
+    const { actions, Element, resource } = this.props;
     const { modalOpen, modalHeader, modalBody } = this.state;
     return (
       <>
@@ -58,10 +67,10 @@ export class ResourceActions extends Component {
             </Element>
           );
         })}
-        <Modal open={modalOpen}>
+        <ActionModal modalOpen={modalOpen} resource={resource}>
           {modalHeader && <Modal.Header>{modalHeader}</Modal.Header>}
           {modalBody && <Modal.Content>{modalBody}</Modal.Content>}
-        </Modal>
+        </ActionModal>
       </>
     );
   }

@@ -7,13 +7,11 @@
 # under the terms of the MIT License; see LICENSE file for more details.
 
 """Invenio administration marshmallow utils module."""
-from copy import deepcopy
 
 from invenio_vocabularies.services.schema import (
     BaseVocabularySchema,
     ContribVocabularyRelationSchema,
     VocabularyRelationSchema,
-    VocabularySchema,
 )
 from marshmallow import fields
 from marshmallow_utils import fields as invenio_fields
@@ -107,29 +105,3 @@ def jsonify_schema(schema):
             except KeyError:
                 raise Exception(f"Unrecognised schema field {field}: {field_type_name}")
     return schema_dict
-
-
-def set_ui_field_property(schema, field_path, field_property, ui_schema):
-    """Add UI properties to schema under given path."""
-    if "." in field_path:
-        nested_path = field_path.split(".")
-        first_level = nested_path.pop(0)
-
-        # copy all the jsonschema props to ui schema
-        if first_level not in ui_schema:
-            ui_schema[first_level] = deepcopy(schema[first_level])
-            ui_schema[first_level]["properties"] = {}
-        # process nested fields
-        set_ui_field_property(schema[first_level]["properties"],
-                              ".".join(nested_path),
-                              field_property,
-                              ui_schema[first_level]["properties"])
-    else:
-        # copy all the jsonschema props to ui schema
-        ui_schema[field_path] = deepcopy(schema[field_path])
-        # clean up nested properties (add only if configured)
-        if "properties" in ui_schema[field_path]:
-            ui_schema[field_path]["properties"] = {}
-        if "ui" not in schema[field_path]:
-            ui_schema[field_path]["ui"] = {}
-        ui_schema[field_path]["ui"].update(field_property)

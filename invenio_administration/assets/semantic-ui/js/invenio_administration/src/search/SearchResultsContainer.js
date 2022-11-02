@@ -32,7 +32,9 @@ export const SearchResultsContainer = ({
               </Table.HeaderCell>
             );
           })}
-          {resourceHasActions && <Table.HeaderCell>Actions</Table.HeaderCell>}
+          {resourceHasActions && (
+            <Table.HeaderCell collapsing>Actions</Table.HeaderCell>
+          )}
         </Table.Row>
       </Table.Header>
       <Table.Body>{results}</Table.Body>

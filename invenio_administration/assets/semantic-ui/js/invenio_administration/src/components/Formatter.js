@@ -8,16 +8,18 @@
 import React from "react";
 import PropTypes from "prop-types";
 import _get from "lodash/get";
-import DateFormatter from "./DateFormatter";
+import { DateFormatter } from ".";
+import BoolFormatter from "./BoolFormatter";
 
 const elementTypeMap = {
   datetime: DateFormatter,
   date: DateFormatter,
+  bool: BoolFormatter,
 };
 
 class Formatter extends React.Component {
   render() {
-    const { resourceSchema, result, property } = this.props;
+    const { resourceSchema, result, property, ...uiProps } = this.props;
 
     const resourceSchemaProperty = property.replace(/\./g, ".properties.");
     const typePath = `${resourceSchemaProperty}.type`;
@@ -26,7 +28,7 @@ class Formatter extends React.Component {
     const Element = _get(elementTypeMap, type);
     const value = _get(result, property, null);
     if (Element) {
-      return <Element value={value} />;
+      return <Element value={value} {...uiProps} />;
     } else {
       return value;
     }

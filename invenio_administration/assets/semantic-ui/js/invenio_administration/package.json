@@ -19,7 +19,8 @@
     "luxon": "^1.23.0",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
-    "react-scripts": "^5.0.1"
+    "react-scripts": "^5.0.1",
+    "semantic-ui-react": "^2.1.0"
   },
   "jest": {
     "snapshotSerializers": [

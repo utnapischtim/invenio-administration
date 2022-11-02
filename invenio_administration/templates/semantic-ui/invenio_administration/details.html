@@ -25,10 +25,12 @@
     data-fields='{{ fields | tojson }}'
     data-pid='{{ pid | tojson }}'
     data-resource-schema='{{ resource_schema | tojson }}'
+    data-ui-config='{{ ui_config | tojson }}'
     data-title='{{ title or name | tojson }}'
     data-list-endpoint='{{ list_ui_endpoint }}'
     data-resource-name='{{ resource_name | tojson }}'
     data-pid-path='{{ pid_path | tojson }}'
+    data-request-headers='{{ request_headers | tojson }}'
   >
   </div>
 {% endblock admin_page_content %}

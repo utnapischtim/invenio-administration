@@ -22,6 +22,8 @@ const apiEndpoint = _get(domContainer.dataset, "apiEndpoint");
 const idKeyPath = JSON.parse(_get(domContainer.dataset, "pidPath", "pid"));
 const listUIEndpoint = domContainer.dataset.listEndpoint;
 const resourceSchema = JSON.parse(domContainer.dataset?.resourceSchema);
+const requestHeaders = JSON.parse(domContainer.dataset?.requestHeaders);
+const uiSchema = JSON.parse(domContainer.dataset?.uiConfig);
 
 domContainer &&
   ReactDOM.render(
@@ -30,19 +32,15 @@ domContainer &&
       actions={actions}
       apiEndpoint={apiEndpoint}
       columns={fields}
-      editAction={{
-        display: displayEdit,
-        disable: () => false,
-      }}
-      deleteAction={{
-        display: displayDelete,
-        disable: () => false,
-      }}
       pid={pidValue}
+      displayEdit={displayEdit}
+      displayDelete={displayDelete}
       idKeyPath={idKeyPath}
       resourceName={resourceName}
       listUIEndpoint={listUIEndpoint}
       resourceSchema={resourceSchema}
+      requestHeaders={requestHeaders}
+      uiSchema={uiSchema}
     />,
     domContainer
   );

@@ -4,10 +4,6 @@ import { Grid } from "semantic-ui-react";
 import { AdminForm } from "../formik/AdminForm";
 
 export class CreatePage extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   handleCreate = () => {
     const { listUIEndpoint } = this.props;
     window.location.replace(listUIEndpoint);

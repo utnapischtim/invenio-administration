@@ -21,10 +21,7 @@ from invenio_administration.errors import (
     MissingExtensionName,
     MissingResourceConfiguration,
 )
-from invenio_administration.marshmallow_utils import (
-    jsonify_schema,
-    set_ui_field_property,
-)
+from invenio_administration.marshmallow_utils import jsonify_schema
 from invenio_administration.permissions import administration_permission
 
 
@@ -140,6 +137,7 @@ class AdminResourceBaseView(AdminView):
 
     create_view_name = None
     list_view_name = None
+    request_headers = {"Accept": "application/json"}
 
     def __init__(
         self,
@@ -236,16 +234,6 @@ class AdminResourceBaseView(AdminView):
         if self.create_view_name:
             return url_for(f"administration.{self.create_view_name}")
 
-    def set_ui_schema_params(self, jsonschema, config):
-        """Add UI properties to resource schema."""
-        if not config:
-            return jsonschema
-
-        ui_schema = {}
-        for field_path, field_properties in config.items():
-            set_ui_field_property(jsonschema, field_path, field_properties, ui_schema)
-        return ui_schema
-
 
 class AdminResourceDetailView(AdminResourceBaseView):
     """Details view based on given config."""
@@ -259,34 +247,37 @@ class AdminResourceDetailView(AdminResourceBaseView):
     template = "invenio_administration/details.html"
     title = "Resource details"
 
-    def get(self, pid_value=None):
-        """GET view method."""
+    def get_context(self, pid_value=None):
+        """Create details view context."""
         name = self.name
         schema = self.get_service_schema()
         serialized_schema = self._schema_to_json(schema)
         fields = self.item_field_list
-        schema = self.set_ui_schema_params(serialized_schema, self.item_field_list)
-        # TODO context processor?
-        return self.render(
-            **{
-                "name": name,
-                "resource_schema": schema,
-                "fields": fields,
-                "exclude_fields": self.item_field_exclude_list,
-                "pid": pid_value,
-                "api_endpoint": self.get_api_endpoint(),
-                "title": self.title,
-                "list_endpoint": self.get_list_view_endpoint(),
-                "actions": self.serialize_actions(),
-                "pid_path": self.pid_path,
-                "display_edit": self.display_edit,
-                "display_delete": self.display_delete,
-                "list_ui_endpoint": self.get_list_view_endpoint(),
-                "resource_name": self.resource_name
-                if self.resource_name
-                else self.pid_path,
-            }
-        )
+        return {
+            "request_headers"
+            "name": name,
+            "resource_schema": serialized_schema,
+            "fields": fields,
+            "exclude_fields": self.item_field_exclude_list,
+            "ui_config": self.item_field_list,
+            "pid": pid_value,
+            "api_endpoint": self.get_api_endpoint(),
+            "title": self.title,
+            "list_endpoint": self.get_list_view_endpoint(),
+            "actions": self.serialize_actions(),
+            "pid_path": self.pid_path,
+            "display_edit": self.display_edit,
+            "display_delete": self.display_delete,
+            "list_ui_endpoint": self.get_list_view_endpoint(),
+            "resource_name": self.resource_name
+            if self.resource_name
+            else self.pid_path,
+            "request_headers": self.request_headers,
+        }
+
+    def get(self, pid_value=None):
+        """GET view method."""
+        return self.render(**self.get_context(pid_value=pid_value))
 
 
 class AdminFormView(AdminResourceBaseView):
@@ -300,16 +291,15 @@ class AdminFormView(AdminResourceBaseView):
         schema = self.get_service_schema()
         serialized_schema = self._schema_to_json(schema)
         form_fields = self.form_fields
-        ui_schema = self.set_ui_schema_params(serialized_schema, self.form_fields)
-        # TODO context processor?
         return self.render(
             **{
-                "resource_schema": ui_schema,
+                "resource_schema": serialized_schema,
                 "form_fields": form_fields,
                 "pid": pid_value,
                 "api_endpoint": self.get_api_endpoint(),
                 "title": self.title,
                 "list_endpoint": self.get_list_view_endpoint(),
+                "ui_config": self.form_fields,
             }
         )
 
@@ -348,6 +338,7 @@ class AdminResourceListView(AdminResourceBaseView):
     item_field_exclude_list = None
     item_field_list = None
     api_endpoint = None
+    item_api_endpoint = None
     title = None
 
     search_request_headers = {"Accept": "application/json"}

@@ -1,3 +1,4 @@
+import { AdminUIRoutes } from "@js/invenio_administration/src/routes";
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { Grid, Header, Divider, Container } from "semantic-ui-react";
@@ -25,11 +26,12 @@ export default class AdminDetailsView extends Component {
 
   fetchData = async () => {
     this.setState({ loading: true });
-    const { apiEndpoint, pid } = this.props;
+    const { apiEndpoint, pid, requestHeaders } = this.props;
     try {
       const response = await InvenioAdministrationActionsApi.getResource(
         apiEndpoint,
-        pid
+        pid,
+        requestHeaders
       );
 
       this.setState({
@@ -64,24 +66,16 @@ export default class AdminDetailsView extends Component {
       title,
       columns,
       actions,
-      editAction: {
-        display: displayEdit,
-        disable: disableEdit,
-        disabledMessage: disabledEditMessage,
-      },
-      deleteAction: {
-        display: displayDelete,
-        disable: disableDelete,
-        disabledMessage: disabledDeleteMessage,
-      },
       apiEndpoint,
       idKeyPath,
       listUIEndpoint,
       resourceSchema,
       resourceName,
+      displayDelete,
+      displayEdit,
+      uiSchema,
     } = this.props;
     const { loading, data, error } = this.state;
-
     const sortedColumns = sortFields(resourceSchema);
     return (
       <Loader isLoading={loading}>
@@ -100,17 +94,10 @@ export default class AdminDetailsView extends Component {
                   title={title}
                   resourceName={resourceName}
                   apiEndpoint={apiEndpoint}
-                  editAction={{
-                    display: displayEdit,
-                    disabled: disableEdit(data),
-                    disabledMessage: disabledEditMessage,
-                  }}
-                  deleteAction={{
-                    display: displayDelete,
-                    disabled: disableDelete(data),
-                    disabledMessage: disabledDeleteMessage,
-                  }}
+                  editUrl={AdminUIRoutes.editView(listUIEndpoint, data, idKeyPath)}
                   actions={actions}
+                  displayEdit={displayEdit}
+                  displayDelete={displayDelete}
                   resource={data}
                   idKeyPath={idKeyPath}
                   successCallback={this.handleDelete}
@@ -121,7 +108,7 @@ export default class AdminDetailsView extends Component {
           </Grid>
           <Divider />
           <Container fluid>
-            <DetailsTable data={data} schema={sortedColumns} />
+            <DetailsTable data={data} schema={sortedColumns} uiSchema={uiSchema} />
             {this.childrenWithData(data, columns)}
           </Container>
         </ErrorPage>
@@ -134,16 +121,8 @@ AdminDetailsView.propTypes = {
   actions: PropTypes.object,
   apiEndpoint: PropTypes.string.isRequired,
   columns: PropTypes.object.isRequired,
-  editAction: PropTypes.shape({
-    display: PropTypes.bool.isRequired,
-    disable: PropTypes.func.isRequired,
-    disabledMessage: PropTypes.string,
-  }).isRequired,
-  deleteAction: PropTypes.shape({
-    display: PropTypes.bool.isRequired,
-    disable: PropTypes.func.isRequired,
-    disabledMessage: PropTypes.string,
-  }).isRequired,
+  displayEdit: PropTypes.bool.isRequired,
+  displayDelete: PropTypes.bool.isRequired,
   pid: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   children: PropTypes.object,
@@ -151,6 +130,8 @@ AdminDetailsView.propTypes = {
   idKeyPath: PropTypes.string.isRequired,
   listUIEndpoint: PropTypes.string.isRequired,
   resourceSchema: PropTypes.object.isRequired,
+  requestHeaders: PropTypes.object.isRequired,
+  uiSchema: PropTypes.object.isRequired,
 };
 
 AdminDetailsView.defaultProps = {

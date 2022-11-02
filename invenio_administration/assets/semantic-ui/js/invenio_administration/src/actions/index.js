@@ -5,9 +5,9 @@
 // under the terms of the MIT License; see LICENSE file for more details.
 
 export { Actions } from "./Actions";
-export { ActionsDropdown } from "./ActionsDropdown";
-export { Delete } from "./Delete";
+export { default as Delete } from "./Delete";
 export { DeleteModal } from "./DeleteModal";
 export { DeleteModalTrigger } from "./DeleteModalTrigger";
-export { Edit } from "./Edit";
+export { default as Edit } from "./Edit";
 export { ResourceActions } from "./ResourceActions";
+export { ActionModal } from "./ActionModal";
