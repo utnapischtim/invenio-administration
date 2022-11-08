@@ -20,11 +20,26 @@
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-scripts": "^5.0.1",
-    "semantic-ui-react": "^2.1.0"
+    "semantic-ui-react": "^2.1.0",
+    "react-overridable": "^0.0.3",
+    "@babel/runtime": "^7.9.0",
+    "i18next": "^20.3.0",
+    "i18next-browser-languagedetector": "^6.1.0",
+    "path": "^0.12.7",
+    "prop-types": "^15.7.2",
+    "react-copy-to-clipboard": "^5.0.0",
+    "react-i18next": "^11.11.0",
+    "react-invenio-forms": "^1.0.0",
+    "react-searchkit": "^2.0.0",
+    "yup": "^0.32.0",
+    "formik": "^2.2.9"
   },
   "jest": {
     "snapshotSerializers": [
       "enzyme-to-json/serializer"
     ]
+  },
+  "dependencies": {
+    "@translations/invenio_administration": "../../translations/invenio_administration"
   }
 }

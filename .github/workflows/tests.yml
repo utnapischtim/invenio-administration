@@ -91,6 +91,10 @@ jobs:
         working-directory: ./invenio_administration/assets/semantic-ui/js/invenio_administration
         run: npm install
 
+      - name: Install deps for frontend tests - translations
+        working-directory: ./invenio_administration/assets/semantic-ui/translations/invenio_administration
+        run: npm install
+
       - name: Run frontend tests
         working-directory: ./invenio_administration/assets/semantic-ui/js/invenio_administration
         run: npm test
