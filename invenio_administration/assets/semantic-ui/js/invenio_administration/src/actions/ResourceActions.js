@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Button, Modal } from "semantic-ui-react";
 import { ActionForm } from "../formik";
-import { ActionModal } from "./ActionModal";
+import ActionModal from "./ActionModal";
 
 export class ResourceActions extends Component {
   constructor(props) {

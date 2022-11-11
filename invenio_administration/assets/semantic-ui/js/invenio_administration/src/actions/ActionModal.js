@@ -9,13 +9,13 @@ import React, { Component } from "react";
 import { Modal } from "semantic-ui-react";
 import Overridable from "react-overridable";
 
-export class ActionModal extends Component {
+class ActionModal extends Component {
   render() {
     const { children, modalOpen, resource } = this.props;
 
     return (
       <Overridable
-        id="ActionModal.layout"
+        id="InvenioAdministration.ActionModal.layout"
         modalOpen={modalOpen}
         // eslint-disable-next-line react/no-children-prop
         children={children}
@@ -39,3 +39,5 @@ ActionModal.defaultProps = {
   modalOpen: false,
   children: null,
 };
+
+export default Overridable.component("InvenioAdministration.ActionModal", ActionModal);

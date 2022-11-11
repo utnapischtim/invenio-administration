@@ -6,9 +6,8 @@ import { InvenioAdministrationActionsApi } from "../api/actions";
 import DetailsTable from "./DetailsComponent";
 import { Actions } from "../actions/Actions";
 import _isEmpty from "lodash/isEmpty";
-import { ErrorPage } from "../components/ErrorPage";
 import { sortFields } from "../components/utils";
-import { Loader } from "../components";
+import { Loader, ErrorPage } from "../components";
 
 export default class AdminDetailsView extends Component {
   constructor(props) {

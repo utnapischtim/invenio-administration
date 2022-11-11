@@ -16,7 +16,7 @@ import { NotificationContext } from "../ui_messages/context";
 import Overridable from "react-overridable";
 import { InvenioAdministrationActionsApi } from "../api/actions";
 
-export class DeleteModal extends Component {
+class DeleteModal extends Component {
   constructor(props) {
     super(props);
     this.state = { loading: false, error: undefined };

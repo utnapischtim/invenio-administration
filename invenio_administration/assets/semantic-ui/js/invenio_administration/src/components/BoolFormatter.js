@@ -32,4 +32,7 @@ BoolFormatter.defaultProps = {
   color: "green",
 };
 
-export default Overridable.component("BoolFormatter", BoolFormatter);
+export default Overridable.component(
+  "InvenioAdministration.BoolFormatter",
+  BoolFormatter
+);

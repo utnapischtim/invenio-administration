@@ -6,8 +6,8 @@
 
 export { Actions } from "./Actions";
 export { default as Delete } from "./Delete";
-export { DeleteModal } from "./DeleteModal";
+export { default as DeleteModal } from "./DeleteModal";
 export { DeleteModalTrigger } from "./DeleteModalTrigger";
 export { default as Edit } from "./Edit";
 export { ResourceActions } from "./ResourceActions";
-export { ActionModal } from "./ActionModal";
+export { default as ActionModal } from "./ActionModal";

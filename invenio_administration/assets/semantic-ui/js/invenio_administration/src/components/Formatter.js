@@ -8,7 +8,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import _get from "lodash/get";
-import { DateFormatter } from ".";
+import DateFormatter from "./DateFormatter";
 import BoolFormatter from "./BoolFormatter";
 
 const elementTypeMap = {

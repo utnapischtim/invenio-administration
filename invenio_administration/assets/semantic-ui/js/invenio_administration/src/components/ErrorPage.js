@@ -4,7 +4,7 @@ import Overridable from "react-overridable";
 import PropTypes from "prop-types";
 import { i18next } from "@translations/invenio_administration/i18next";
 
-export class ErrorPage extends Component {
+class ErrorPage extends Component {
   render() {
     const { errorCode, errorMessage, error, children } = this.props;
     return (

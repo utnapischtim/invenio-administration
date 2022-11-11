@@ -8,7 +8,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { i18next } from "@translations/invenio_administration/i18next";
 import { Button, Icon } from "semantic-ui-react";
-import { DeleteModal } from "./DeleteModal";
+import DeleteModal from "./DeleteModal";
 import { Modal } from "semantic-ui-react";
 import { Trans } from "react-i18next";
 import _get from "lodash/get";

@@ -6,7 +6,7 @@ import { i18next } from "@translations/invenio_administration/i18next";
 import _get from "lodash/get";
 import Overridable from "react-overridable";
 
-export class DeleteCmp extends Component {
+class DeleteCmp extends Component {
   render() {
     const {
       disabledMessage,
@@ -56,4 +56,4 @@ DeleteCmp.defaultProps = {
   disable: () => false,
 };
 
-export default Overridable.component("DeleteAction", DeleteCmp);
+export default Overridable.component("InvenioAdministration.DeleteAction", DeleteCmp);

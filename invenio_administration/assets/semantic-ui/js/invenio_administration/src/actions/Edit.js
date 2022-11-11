@@ -44,4 +44,4 @@ EditCmp.defaultProps = {
   resource: undefined,
 };
 
-export default Overridable.component("EditAction", EditCmp);
+export default Overridable.component("InvenioAdministration.EditAction", EditCmp);

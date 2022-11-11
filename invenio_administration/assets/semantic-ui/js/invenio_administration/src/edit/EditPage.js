@@ -5,7 +5,7 @@ import { Grid } from "semantic-ui-react";
 
 import { AdminForm } from "../formik/AdminForm";
 import Loader from "../components/Loader";
-import { ErrorPage } from "../components/ErrorPage";
+import { ErrorPage } from "../components";
 import _isEmpty from "lodash/isEmpty";
 
 export class EditPage extends Component {

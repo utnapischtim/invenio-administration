@@ -10,6 +10,7 @@ import PropTypes from "prop-types";
 import React from "react";
 import { Table } from "semantic-ui-react";
 import isEmpty from "lodash/isEmpty";
+import { i18next } from "@translations/invenio_administration/i18next";
 
 export const SearchResultsContainer = ({
   results,
@@ -33,7 +34,7 @@ export const SearchResultsContainer = ({
             );
           })}
           {resourceHasActions && (
-            <Table.HeaderCell collapsing>Actions</Table.HeaderCell>
+            <Table.HeaderCell collapsing>{i18next.t("Actions")}</Table.HeaderCell>
           )}
         </Table.Row>
       </Table.Header>
