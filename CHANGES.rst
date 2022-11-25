@@ -8,6 +8,12 @@
 Changes
 =======
 
+Version 1.0.2 (released 2022-11-25)
+
+- use centralized axios configuration
+- add i18n translations
+- refactor actions buttons
+
 Version 1.0.1 (released 2022-11-04)
 
 - upgrade invenio-records-resources
