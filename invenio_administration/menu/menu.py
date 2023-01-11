@@ -2,6 +2,7 @@
 #
 # This file is part of Invenio.
 # Copyright (C) 2022 CERN.
+# Copyright (C) 2023 Graz University of Technology.
 #
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
@@ -11,7 +12,7 @@
 import urllib.parse
 
 from flask import request
-from flask_babelex import lazy_gettext as _
+from invenio_i18n import lazy_gettext as _
 from invenio_theme.proxies import current_theme_icons
 from speaklater import make_lazy_string
 
