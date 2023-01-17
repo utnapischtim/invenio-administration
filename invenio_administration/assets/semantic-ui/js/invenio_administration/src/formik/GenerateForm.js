@@ -24,6 +24,8 @@ const generateFieldProps = (
   let currentFieldName;
 
   const fieldLabel = formFieldConfig?.text || fieldSchema?.title || fieldName;
+  const placeholder =
+    formFieldConfig?.placeholder || fieldSchema?.metadata?.placeholder;
 
   if (parentField) {
     currentFieldName = `${parentField}.${fieldName}`;
@@ -34,7 +36,7 @@ const generateFieldProps = (
   const htmlDescription = (
     <div
       dangerouslySetInnerHTML={{
-        __html: formFieldConfig?.description,
+        __html: formFieldConfig?.description || fieldSchema?.metadata?.description,
       }}
     />
   );
@@ -46,6 +48,7 @@ const generateFieldProps = (
     description: htmlDescription,
     required: fieldSchema.required,
     disabled: fieldSchema.readOnly || (fieldSchema.createOnly && !isCreate),
+    placeholder,
   };
 };
 

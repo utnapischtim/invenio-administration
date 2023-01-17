@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Form, Formik } from "formik";
-import { Form as SemanticForm } from "semantic-ui-react";
+import { Form as SemanticForm, Modal } from "semantic-ui-react";
 import { InvenioAdministrationActionsApi } from "../api/actions";
 import { Button } from "semantic-ui-react";
 import { NotificationContext } from "../ui_messages";
@@ -85,30 +85,42 @@ export class AdminForm extends Component {
       <Formik initialValues={formData} onSubmit={this.onSubmit}>
         {(props) => {
           return (
-            <SemanticForm
-              as={Form}
-              onSubmit={(e) => {
-                e.preventDefault();
-                props.handleSubmit();
-              }}
-            >
-              <GenerateForm
-                formFields={formFields}
-                jsonSchema={resourceSchema}
-                create={create}
-              />
-              {!isEmpty(error) && (
-                <ErrorMessage {...error} removeNotification={this.resetErrorState} />
-              )}
-              <Button
-                type="submit"
-                primary
-                loading={props.isSubmitting}
-                disabled={props.isSubmitting}
-              >
-                {i18next.t("Save")}
-              </Button>
-            </SemanticForm>
+            <>
+              <Modal.Content>
+                <SemanticForm
+                  id="admin-form"
+                  as={Form}
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    props.handleSubmit();
+                  }}
+                >
+                  <GenerateForm
+                    formFields={formFields}
+                    jsonSchema={resourceSchema}
+                    create={create}
+                  />
+                  {!isEmpty(error) && (
+                    <ErrorMessage
+                      {...error}
+                      removeNotification={this.resetErrorState}
+                    />
+                  )}
+                </SemanticForm>
+              </Modal.Content>
+
+              <Modal.Actions>
+                <Button
+                  form="admin-form"
+                  type="submit"
+                  primary
+                  loading={props.isSubmitting}
+                  disabled={props.isSubmitting}
+                >
+                  {i18next.t("Save")}
+                </Button>
+              </Modal.Actions>
+            </>
           );
         }}
       </Formik>

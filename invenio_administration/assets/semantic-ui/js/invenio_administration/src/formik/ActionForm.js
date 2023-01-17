@@ -81,18 +81,23 @@ export class ActionForm extends Component {
     return (
       <Formik initialValues={formData} onSubmit={this.onSubmit}>
         {(props) => (
-          <SemanticForm as={Form} onSubmit={props.handleSubmit}>
-            <GenerateForm
-              jsonSchema={actionSchema}
-              formFields={formFields}
-              create
-              dropDumpOnly
-            />
-            {!isEmpty(error) && (
-              <ErrorMessage {...error} removeNotification={this.resetErrorState} />
-            )}
+          <>
+            <Modal.Content>
+              <SemanticForm as={Form} id="action-form" onSubmit={props.handleSubmit}>
+                <GenerateForm
+                  jsonSchema={actionSchema}
+                  formFields={formFields}
+                  create
+                  dropDumpOnly
+                />
+                {!isEmpty(error) && (
+                  <ErrorMessage {...error} removeNotification={this.resetErrorState} />
+                )}
+              </SemanticForm>
+            </Modal.Content>
+
             <Modal.Actions>
-              <Button type="submit" primary loading={loading}>
+              <Button type="submit" primary form="action-form" loading={loading}>
                 {i18next.t("Save")}
               </Button>
               <Button
@@ -103,7 +108,7 @@ export class ActionForm extends Component {
                 content={i18next.t("Cancel")}
               />
             </Modal.Actions>
-          </SemanticForm>
+          </>
         )}
       </Formik>
     );

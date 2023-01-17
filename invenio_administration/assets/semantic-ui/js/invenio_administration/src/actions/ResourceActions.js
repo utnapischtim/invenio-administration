@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { Button, Modal } from "semantic-ui-react";
 import { ActionForm } from "../formik";
 import ActionModal from "./ActionModal";
+import _isEmpty from "lodash/isEmpty";
 
 export class ResourceActions extends Component {
   constructor(props) {
@@ -69,7 +70,7 @@ export class ResourceActions extends Component {
         })}
         <ActionModal modalOpen={modalOpen} resource={resource}>
           {modalHeader && <Modal.Header>{modalHeader}</Modal.Header>}
-          {modalBody && <Modal.Content>{modalBody}</Modal.Content>}
+          {!_isEmpty(modalBody) && modalBody}
         </ActionModal>
       </>
     );
