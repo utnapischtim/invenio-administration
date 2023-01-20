@@ -8,6 +8,11 @@
 Changes
 =======
 
+Version 1.0.3 (released 2023-01-20)
+
+- forms: add tooltip to field when passed from fieldSchema
+- modal: fix styling
+
 Version 1.0.2 (released 2022-11-25)
 
 - use centralized axios configuration
