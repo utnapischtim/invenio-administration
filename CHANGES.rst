@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 1.0.4 (released 2023-01-24)
+
+- menu: add disable view hook method
+
 Version 1.0.3 (released 2023-01-20)
 
 - forms: add tooltip to field when passed from fieldSchema
