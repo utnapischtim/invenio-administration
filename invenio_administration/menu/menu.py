@@ -48,6 +48,10 @@ class AdminMenu:
             active_when = menu_entry.active_when
             label = menu_entry.label
             icon = menu_entry.icon
+            disabled = menu_entry.disabled
+
+            if disabled():
+                continue
 
             if category:
                 category_menu = main_menu.submenu(category)
@@ -102,6 +106,7 @@ class AdminMenu:
             label=view.menu_label,
             order=view.order,
             icon_key=view.icon,
+            disabled=view.disabled,
         )
 
         self.add_menu_item(menu_item, index)
@@ -137,6 +142,7 @@ class MenuItem:
         icon_key=None,
         active_when=None,
         label="",
+        disabled=lambda x: False
     ):
         """Constructor."""
         self.name = name
@@ -146,6 +152,7 @@ class MenuItem:
         self.active_when = active_when
         self.icon_key = icon_key
         self.label = label
+        self.disabled = disabled
 
     @property
     def icon(self):

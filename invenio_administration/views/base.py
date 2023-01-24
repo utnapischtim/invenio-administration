@@ -76,6 +76,11 @@ class AdminView(MethodView):
         if self.get is None:
             raise MissingDefaultGetView(self.__class__.__name__)
 
+    @staticmethod
+    def disabled():
+        """Determine if the view should be disabled."""
+        return False
+
     @property
     def endpoint(self):
         """Get name for endpoint location e.g: 'administration.index'."""
