@@ -17,10 +17,13 @@ class DeleteCmp extends Component {
       idKeyPath,
       resource,
     } = this.props;
+
+    const disabled = disable(resource);
+
     return (
       <Popup
         content={disabledMessage}
-        disabled={!disable}
+        disabled={!disabled}
         trigger={
           <span>
             <DeleteModalTrigger
@@ -29,7 +32,7 @@ class DeleteCmp extends Component {
               resource={resource}
               successCallback={successCallback}
               idKeyPath={idKeyPath}
-              disabled={disable(resource)}
+              disabled={disabled}
               apiEndpoint={_get(resource, "links.self")}
               disabledDeleteMessage={disabledMessage}
             />
