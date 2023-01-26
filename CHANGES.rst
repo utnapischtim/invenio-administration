@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 1.0.5 (released 2023-01-26)
+
+- assets: fix button help popup
+
 Version 1.0.4 (released 2023-01-24)
 
 - menu: add disable view hook method
