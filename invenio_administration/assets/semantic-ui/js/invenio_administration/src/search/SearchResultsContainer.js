@@ -25,8 +25,11 @@ export const SearchResultsContainer = ({
     <Table>
       <Table.Header>
         <Table.Row>
-          {columns.map(([property, { text, order }], index) => {
-            const width = index === 0 ? undefined : index === 1 ? 4 : 3;
+          {columns.map(([property, { text, order, width }], index) => {
+            if (!width) {
+              width = index === 0 ? undefined : index === 1 ? 4 : 3;
+            }
+
             return (
               <Table.HeaderCell key={property + order} width={width}>
                 {text}

@@ -15,13 +15,17 @@ import mapValues from "lodash/mapValues";
 export class AdminForm extends Component {
   constructor(props) {
     super(props);
-    const { resource, formFields } = props;
+    const { resource, resourceSchema } = props;
 
     this.state = {
       error: undefined,
       formData: resource
         ? resource
-        : mapValues(formFields, function (value) {
+        : mapValues(resourceSchema, function (value) {
+            const defaultValue = value.metadata?.default;
+            if (defaultValue) {
+              return defaultValue;
+            }
             return "";
           }),
     };

@@ -1,5 +1,11 @@
 import React from "react";
-import { Input, AutocompleteDropdown } from "react-invenio-forms";
+import {
+  Input,
+  AutocompleteDropdown,
+  BooleanField,
+  Dropdown,
+  TextArea,
+} from "react-invenio-forms";
 import _capitalize from "lodash/capitalize";
 import PropTypes from "prop-types";
 import { Form, Segment, Header } from "semantic-ui-react";
@@ -12,6 +18,7 @@ const fieldsMap = {
   integer: Input,
   uuid: Input,
   datetime: Input,
+  bool: BooleanField,
 };
 
 const generateFieldProps = (
@@ -34,11 +41,14 @@ const generateFieldProps = (
   }
 
   const htmlDescription = (
-    <div
-      dangerouslySetInnerHTML={{
-        __html: formFieldConfig?.description || fieldSchema?.metadata?.description,
-      }}
-    />
+    <>
+      <p />
+      <div
+        dangerouslySetInnerHTML={{
+          __html: formFieldConfig?.description || fieldSchema?.metadata?.description,
+        }}
+      />
+    </>
   );
 
   return {
@@ -49,6 +59,8 @@ const generateFieldProps = (
     required: fieldSchema.required,
     disabled: fieldSchema.readOnly || (fieldSchema.createOnly && !isCreate),
     placeholder,
+    options: formFieldConfig?.options || fieldSchema?.metadata?.options,
+    rows: formFieldConfig?.rows || fieldSchema?.metadata?.rows,
   };
 };
 
@@ -93,6 +105,20 @@ const mapFormFields = (obj, parentField, isCreate, formFieldsConfig, dropDumpOnl
       );
     }
 
+    if (fieldSchema.type === "bool") {
+      const description = fieldProps.description;
+      return (
+        <>
+          <BooleanField
+            key={fieldProps.fieldPath}
+            required={fieldSchema.required}
+            {...fieldProps}
+          />
+          {description && <label className="helptext">{description}</label>}
+        </>
+      );
+    }
+
     if (fieldSchema.type === "vocabulary") {
       return (
         <AutocompleteDropdown
@@ -122,6 +148,31 @@ const mapFormFields = (obj, parentField, isCreate, formFieldsConfig, dropDumpOnl
             </Form.Group>
           </Segment>
         </React.Fragment>
+      );
+    }
+
+    const dropdownOptions =
+      formFieldsConfig[fieldName]?.options || fieldSchema?.metadata?.options;
+    if (fieldSchema.type === "string" && dropdownOptions) {
+      return (
+        <Dropdown
+          key={fieldProps.fieldPath}
+          required={fieldSchema.required}
+          options={dropdownOptions}
+          {...fieldProps}
+        />
+      );
+    }
+
+    const rows = formFieldsConfig[fieldName]?.rows || fieldSchema?.metadata?.rows;
+    if (fieldSchema.type === "string" && rows) {
+      return (
+        <TextArea
+          key={fieldProps.fieldPath}
+          fieldPath={fieldProps.fieldPath}
+          rows={rows}
+          {...fieldProps}
+        />
       );
     }
 
