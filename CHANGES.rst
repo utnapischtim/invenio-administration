@@ -1,5 +1,5 @@
 ..
-    Copyright (C) 2022 CERN.
+    Copyright (C) 2022-2023 CERN.
 
     invenio-administration is free software; you can redistribute it and/or
     modify it under the terms of the MIT License; see LICENSE file for more
@@ -7,6 +7,12 @@
 
 Changes
 =======
+
+Version 1.0.6 (released 2023-02-15)
+
+- forms: add support for checkbox, dropdown and textarea fields
+- forms: add support for default value (prefill)
+- forms: add support for specific table column width (search view)
 
 Version 1.0.5 (released 2023-01-26)
 
