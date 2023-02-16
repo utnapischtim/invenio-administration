@@ -9,8 +9,8 @@ export const sortFields = (schema) => {
     Object.entries(schema)
       // sort by order
       .sort((a, b) => {
-        if (a[1]?.ui && b[1].ui) {
-          return a[1].ui.order > b[1].ui.order;
+        if (a[1] && b[1]) {
+          return a[1].order - b[1].order;
         }
         return true;
       })

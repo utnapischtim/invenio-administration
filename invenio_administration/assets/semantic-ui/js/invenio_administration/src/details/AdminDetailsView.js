@@ -75,7 +75,7 @@ export default class AdminDetailsView extends Component {
       uiSchema,
     } = this.props;
     const { loading, data, error } = this.state;
-    const sortedColumns = sortFields(resourceSchema);
+    const sortedColumns = sortFields(uiSchema);
     return (
       <Loader isLoading={loading}>
         <ErrorPage
@@ -107,7 +107,11 @@ export default class AdminDetailsView extends Component {
           </Grid>
           <Divider />
           <Container fluid>
-            <DetailsTable data={data} schema={sortedColumns} uiSchema={uiSchema} />
+            <DetailsTable
+              data={data}
+              schema={resourceSchema}
+              uiSchema={sortedColumns}
+            />
             {this.childrenWithData(data, columns)}
           </Container>
         </ErrorPage>

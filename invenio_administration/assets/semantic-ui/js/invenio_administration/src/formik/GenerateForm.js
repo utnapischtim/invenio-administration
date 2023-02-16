@@ -7,6 +7,7 @@ import {
   TextArea,
 } from "react-invenio-forms";
 import _capitalize from "lodash/capitalize";
+import _get from "lodash/get";
 import PropTypes from "prop-types";
 import { Form, Segment, Header } from "semantic-ui-react";
 import { AdminArrayField } from "./array";
@@ -69,9 +70,10 @@ const mapFormFields = (obj, parentField, isCreate, formFieldsConfig, dropDumpOnl
     return null;
   }
 
-  const sortedFields = sortFields(obj);
+  const sortedFields = sortFields(formFieldsConfig);
+  const elements = Object.entries(sortedFields).map(([fieldName]) => {
+    const fieldSchema = _get(obj, fieldName);
 
-  const elements = Object.entries(sortedFields).map(([fieldName, fieldSchema]) => {
     if (fieldSchema.readOnly && dropDumpOnly) {
       return null;
     }
