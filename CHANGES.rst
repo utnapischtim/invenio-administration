@@ -8,6 +8,12 @@
 Changes
 =======
 
+Version 1.1.0 (released 2023-03-02)
+
+- remove deprecated flask-babelex dependency and imports
+- upgrade invenio-theme, invenio-vocabularies
+- fix form field sorting order
+
 Version 1.0.6 (released 2023-02-15)
 
 - forms: add support for checkbox, dropdown and textarea fields
