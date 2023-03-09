@@ -19,14 +19,19 @@ const elementTypeMap = {
 
 class Formatter extends React.Component {
   render() {
-    const { resourceSchema, result, property, ...uiProps } = this.props;
+    const { resourceSchema, result, property, fieldSchema, ...uiProps } = this.props;
 
     const resourceSchemaProperty = property.replace(/\./g, ".properties.");
     const typePath = `${resourceSchemaProperty}.type`;
 
     const type = _get(resourceSchema, typePath);
     const Element = _get(elementTypeMap, type);
-    const value = _get(result, property, null);
+    let value = _get(result, property, null);
+
+    if (fieldSchema?.escape) {
+      return <div dangerouslySetInnerHTML={{ __html: value }} />;
+    }
+
     if (Element) {
       return <Element value={value} {...uiProps} />;
     } else {
@@ -39,6 +44,7 @@ Formatter.propTypes = {
   resourceSchema: PropTypes.object.isRequired,
   result: PropTypes.object.isRequired,
   property: PropTypes.string.isRequired,
+  fieldSchema: PropTypes.object.isRequired,
 };
 
 export default Formatter;

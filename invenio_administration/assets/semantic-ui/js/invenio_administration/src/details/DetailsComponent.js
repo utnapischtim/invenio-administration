@@ -13,6 +13,7 @@ import Formatter from "../components/Formatter";
 class DetailsTable extends Component {
   render() {
     const { schema, data, uiSchema } = this.props;
+
     let fields = uiSchema ? uiSchema : schema;
 
     const tableRows = Object.entries(fields).map(([field, fieldSchema]) => {
@@ -20,12 +21,16 @@ class DetailsTable extends Component {
 
       return (
         <Table.Row key={text}>
-          <Table.Cell width={3}>
+          <Table.Cell width={3} className="vertical-align-top">
             <b>{text}</b>
           </Table.Cell>
           <Table.Cell>
-            {" "}
-            <Formatter result={data} resourceSchema={schema} property={field} />
+            <Formatter
+              result={data}
+              resourceSchema={schema}
+              property={field}
+              fieldSchema={fieldSchema}
+            />
           </Table.Cell>
         </Table.Row>
       );
