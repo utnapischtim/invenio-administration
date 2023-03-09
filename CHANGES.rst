@@ -8,6 +8,11 @@
 Changes
 =======
 
+
+Version 1.1.1 (released 2023-03-09)
+
+- assets: add html formatting to display components
+
 Version 1.1.0 (released 2023-03-02)
 
 - remove deprecated flask-babelex dependency and imports
