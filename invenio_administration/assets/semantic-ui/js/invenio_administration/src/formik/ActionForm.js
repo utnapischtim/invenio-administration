@@ -86,7 +86,7 @@ export class ActionForm extends Component {
               <SemanticForm as={Form} id="action-form" onSubmit={props.handleSubmit}>
                 <GenerateForm
                   jsonSchema={actionSchema}
-                  formFields={formFields}
+                  formFields={actionSchema}
                   create
                   dropDumpOnly
                 />
