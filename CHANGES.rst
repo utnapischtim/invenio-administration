@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 1.4.1 (2023-05-25)
+
+- fix action form creation
+
 Version 1.4.0 (2023-04-25)
 
 - upgrade invenio-records-resources
