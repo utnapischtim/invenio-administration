@@ -56,7 +56,7 @@ def admin_role_need(db):
          If no User/Role is associated with that Need (in the DB), the
          permission is expanded to an empty list.
     """
-    role = Role(name="admin-access")
+    role = Role(name="admin-access", id="admin-access")
     db.session.add(role)
 
     action_role = ActionRoles.create(action=action_admin_access, role=role)
