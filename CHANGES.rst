@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 1.5.0 (2023-06-15)
+
+- setup: upgrade invenio dependencies
+
 Version 1.4.1 (2023-05-25)
 
 - fix action form creation
