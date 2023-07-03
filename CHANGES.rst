@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 1.6.0 (2023-07-03)
+
+- Adding a mapping for the fields.Method
+
 Version 1.5.0 (2023-06-15)
 
 - setup: upgrade invenio dependencies
