@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # Copyright (C) 2022 CERN.
+# Copyright (C) 2023 Graz University of Technology.
 #
 # invenio-administration is free software; you can redistribute it and/or
 # modify it under the terms of the MIT License; see LICENSE file for more
@@ -24,9 +25,9 @@
 #    $ tx pull -a
 
 [main]
-host = https://www.transifex.com
+host = https://app.transifex.com
 
-[invenio.invenio-administration-messages]
+[o:inveniosoftware:p:invenio:r:invenio-administration-messages]
 file_filter = invenio_administration/translations/<lang>/LC_MESSAGES/messages.po
 source_file = invenio_administration/translations/messages.pot
 source_lang = en
@@ -59,9 +60,8 @@ type = PO
 # 11) Convert .po file for a single language
 #    $ npm run compile_catalog lang <lang>
 
-[invenio.invenio-administration-messages-ui]
+[o:inveniosoftware:p:invenio:r:invenio-administration-messages-ui]
 file_filter = invenio_administration/assets/semantic-ui/translations/invenio_administration/messages/<lang>/messages.po
 source_file = invenio_administration/assets/semantic-ui/translations/invenio_administration/translations.pot
 source_lang = en
 type = PO
-
