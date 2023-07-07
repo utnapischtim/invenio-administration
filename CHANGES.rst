@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 1.6.1 (2023-07-07)
+
+- skip `fields.Method` from jsonify
+
 Version 1.6.0 (2023-07-03)
 
 - Adding a mapping for the fields.Method
