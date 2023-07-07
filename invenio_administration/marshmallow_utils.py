@@ -39,7 +39,8 @@ custom_mapping = {
     # TODO: This is needed for the is_current_user in the administration
     # of the user resources. It might be better to implement also a handler for this.
     # See https://github.com/inveniosoftware/invenio-administration/issues/174
-    fields.Method:  None,
+    # For the moment it is skipped when we call `jsonify_schema`
+    fields.Method: None,
     # invenio fields
     invenio_fields.SanitizedUnicode: "string",
     invenio_fields.links.Links: "array",
@@ -55,8 +56,10 @@ def jsonify_schema(schema):
 
     for field, field_type in schema.fields.items():
         is_links = isinstance(field_type, invenio_fields.links.Links)
+        # skip `fields.Method`
+        is_method = isinstance(field_type, fields.Method)
 
-        if is_links:
+        if is_links or is_method:
             continue
 
         is_read_only = field_type.dump_only
