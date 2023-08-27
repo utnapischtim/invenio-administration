@@ -16,15 +16,16 @@ from invenio_i18n import lazy_gettext as _
 from invenio_theme.proxies import current_theme_icons
 from speaklater import make_lazy_string
 
-from invenio_administration.permissions import administration_permission
+from ..permissions import administration_permission
 
 
 class AdminMenu:
     """Main class for the admin menu."""
 
-    def __init__(self):
+    def __init__(self, app):
         """Constructor."""
         self._menu_items = []
+        self.app = app
 
     @property
     def items(self):
@@ -87,7 +88,7 @@ class AdminMenu:
             visible_when=lambda: administration_permission.can(),
         )
 
-    def add_menu_item(self, item, index=None):
+    def _add_menu_item(self, item, index=None):
         """Add menu item."""
         if not isinstance(item, MenuItem):
             return TypeError("Item should be MenuItem instance.")
@@ -101,6 +102,7 @@ class AdminMenu:
     def add_view_to_menu(self, view, index=None):
         """Add menu item from view."""
         menu_item = MenuItem(
+            app=self.app,
             endpoint=view.endpoint,
             name=view.name,
             category=view.category,
@@ -110,7 +112,7 @@ class AdminMenu:
             disabled=view.disabled,
         )
 
-        self.add_menu_item(menu_item, index)
+        self._add_menu_item(menu_item, index)
 
     @staticmethod
     def default_active_when(self):
@@ -136,6 +138,7 @@ class MenuItem:
 
     def __init__(
         self,
+        app,
         name="",
         endpoint="",
         category="",
@@ -143,9 +146,10 @@ class MenuItem:
         icon_key=None,
         active_when=None,
         label="",
-        disabled=lambda x: False
+        disabled=lambda x: False,
     ):
         """Constructor."""
+        self.app = app
         self.name = name
         self.endpoint = endpoint
         self.category = category
@@ -161,4 +165,5 @@ class MenuItem:
         if not self.icon_key:
             return None
 
-        return current_theme_icons[self.icon_key]
+        # return current_theme_icons[self.icon_key]
+        return self.app.extensions["invenio-theme"].icons[self.icon_key]

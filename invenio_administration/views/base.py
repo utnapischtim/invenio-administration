@@ -13,7 +13,7 @@ from flask import current_app, render_template, url_for
 from flask.views import MethodView
 from invenio_search_ui.searchconfig import search_app_config
 
-from invenio_administration.errors import (
+from ..errors import (
     InvalidActionsConfiguration,
     InvalidExtensionName,
     InvalidResource,
@@ -21,8 +21,8 @@ from invenio_administration.errors import (
     MissingExtensionName,
     MissingResourceConfiguration,
 )
-from invenio_administration.marshmallow_utils import jsonify_schema
-from invenio_administration.permissions import administration_permission
+from ..marshmallow_utils import jsonify_schema
+from ..permissions import administration_permission
 
 
 class AdminView(MethodView):
@@ -259,8 +259,7 @@ class AdminResourceDetailView(AdminResourceBaseView):
         serialized_schema = self._schema_to_json(schema)
         fields = self.item_field_list
         return {
-            "request_headers"
-            "name": name,
+            "request_headers" "name": name,
             "resource_schema": serialized_schema,
             "fields": fields,
             "exclude_fields": self.item_field_exclude_list,
