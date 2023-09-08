@@ -12,3 +12,4 @@ export { SearchResultItem } from "./SearchResultItem";
 export { SearchBar } from "./SearchBar";
 export { SearchResults } from "./SearchResults";
 export { SearchResultsContainer } from "./SearchResultsContainer";
+export { SearchBulkActionContext } from "./SearchBulkActionContext";

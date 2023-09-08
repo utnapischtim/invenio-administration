@@ -4,7 +4,7 @@ import { DeleteModalTrigger } from "./DeleteModalTrigger";
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import isEmpty from "lodash/isEmpty";
-import { ResourceActions } from "./ResourceActions";
+import ResourceActions from "./ResourceActions";
 import { Button, Dropdown } from "semantic-ui-react";
 import { i18next } from "@translations/invenio_administration/i18next";
 import _get from "lodash/get";

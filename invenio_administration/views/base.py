@@ -389,7 +389,6 @@ class AdminResourceListView(AdminResourceBaseView):
         return self.render(
             **{
                 "search_config": search_conf,
-                "api_endpoint": self.get_api_endpoint(),
                 "title": self.title,
                 "name": self.name,
                 "resource_schema": serialized_schema,

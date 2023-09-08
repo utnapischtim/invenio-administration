@@ -7,7 +7,7 @@
  */
 
 import { createSearchAppInit } from "@js/invenio_search_ui";
-import { NotificationController } from "../ui_messages/context";
+import { SearchBulkActionContext } from "./SearchBulkActionContext";
 import { initDefaultSearchComponents } from "./SearchComponents";
 
 const domContainer = document.getElementById("invenio-search-config");
@@ -19,5 +19,5 @@ createSearchAppInit(
   true,
   "invenio-search-config",
   false,
-  NotificationController
+  SearchBulkActionContext
 );

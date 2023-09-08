@@ -14,7 +14,7 @@ from werkzeug.utils import import_string
 
 from invenio_administration.menu import AdminMenu
 
-from .views.base import AdminView
+from .views.base import AdminResourceListView, AdminView
 
 
 class Administration:
@@ -109,6 +109,7 @@ class Administration:
             AdminResourceDetailView,
         )
 
+        # TODO change to be configurable
         if not isinstance(view_instance, AdminResourceDetailView) and not isinstance(
                 view_instance, AdminFormView):
             self._menu.add_view_to_menu(view_instance)

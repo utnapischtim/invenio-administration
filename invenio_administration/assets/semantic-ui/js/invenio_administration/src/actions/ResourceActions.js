@@ -4,8 +4,9 @@ import { Button, Modal } from "semantic-ui-react";
 import { ActionForm } from "../formik";
 import ActionModal from "./ActionModal";
 import _isEmpty from "lodash/isEmpty";
+import Overridable from "react-overridable";
 
-export class ResourceActions extends Component {
+class ResourceActions extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -92,3 +93,8 @@ ResourceActions.defaultProps = {
   Element: Button,
   actions: undefined,
 };
+
+export default Overridable.component(
+  "InvenioAdministration.ResourceActions",
+  ResourceActions
+);

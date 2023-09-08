@@ -14,6 +14,7 @@ import { Actions } from "../actions/Actions";
 import { withState } from "react-searchkit";
 import { AdminUIRoutes } from "../routes";
 import Formatter from "../components/Formatter";
+import Overridable from "react-overridable";
 
 class SearchResultItemComponent extends Component {
   refreshAfterAction = () => {
@@ -34,53 +35,73 @@ class SearchResultItemComponent extends Component {
       resourceSchema,
       listUIEndpoint,
     } = this.props;
+
     const resourceHasActions = displayEdit || displayDelete || !isEmpty(actions);
 
     return (
-      <Table.Row>
-        {columns.map(([property, { text, order }], index) => {
-          return (
-            <Table.Cell
-              key={`${text}-${order}`}
-              data-label={text}
-              className="word-break-all"
-            >
-              {index === 0 && (
-                <a href={AdminUIRoutes.detailsView(listUIEndpoint, result, idKeyPath)}>
+      <Overridable
+        id="InvenioAdministration.SearchResultItem.layout"
+        title={title}
+        resourceName={resourceName}
+        result={result}
+        columns={columns}
+        displayEdit={displayEdit}
+        displayDelete={displayDelete}
+        actions={actions}
+        idKeyPath={idKeyPath}
+        resourceSchema={resourceSchema}
+        listUIEndpoint={listUIEndpoint}
+        resourceHasActions={resourceHasActions}
+      >
+        <Table.Row>
+          {columns.map(([property, { text, order }], index) => {
+            return (
+              <Table.Cell
+                key={`${text}-${order}`}
+                data-label={text}
+                className="word-break-all"
+              >
+                {index === 0 && (
+                  <a
+                    href={AdminUIRoutes.detailsView(listUIEndpoint, result, idKeyPath)}
+                  >
+                    <Formatter
+                      result={result}
+                      resourceSchema={resourceSchema}
+                      property={property}
+                    />
+                  </a>
+                )}
+                {index !== 0 && (
                   <Formatter
                     result={result}
                     resourceSchema={resourceSchema}
                     property={property}
                   />
-                </a>
-              )}
-              {index !== 0 && (
-                <Formatter
-                  result={result}
-                  resourceSchema={resourceSchema}
-                  property={property}
+                )}
+              </Table.Cell>
+            );
+          })}
+          {resourceHasActions && (
+            <Table.Cell collapsing>
+              <Overridable id="InvenioAdministration.SearchResultItem.actions.container">
+                <Actions
+                  title={title}
+                  resourceName={resourceName}
+                  editUrl={AdminUIRoutes.editView(listUIEndpoint, result, idKeyPath)}
+                  displayEdit={displayEdit}
+                  displayDelete={displayDelete}
+                  actions={actions}
+                  resource={result}
+                  idKeyPath={idKeyPath}
+                  successCallback={this.refreshAfterAction}
+                  listUIEndpoint={listUIEndpoint}
                 />
-              )}
+              </Overridable>
             </Table.Cell>
-          );
-        })}
-        {resourceHasActions && (
-          <Table.Cell collapsing>
-            <Actions
-              title={title}
-              resourceName={resourceName}
-              editUrl={AdminUIRoutes.editView(listUIEndpoint, result, idKeyPath)}
-              displayEdit={displayEdit}
-              displayDelete={displayDelete}
-              actions={actions}
-              resource={result}
-              idKeyPath={idKeyPath}
-              successCallback={this.refreshAfterAction}
-              listUIEndpoint={listUIEndpoint}
-            />
-          </Table.Cell>
-        )}
-      </Table.Row>
+          )}
+        </Table.Row>
+      </Overridable>
     );
   }
 }
