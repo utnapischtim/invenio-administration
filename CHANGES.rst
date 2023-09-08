@@ -8,6 +8,12 @@
 Changes
 =======
 
+Version 1.7.0 (2023-09-08)
+
+- chore: expose admin api
+- assets: overridable search result item layout
+- utils: process date field in schema
+
 Version 1.6.1 (2023-07-07)
 
 - skip `fields.Method` from jsonify
