@@ -204,6 +204,10 @@ class AdminResourceBaseView(AdminView):
 
         return f"{slash_tpl}{self.api_endpoint}"
 
+    def get_actions(self):
+        """Get actions attribute."""
+        return self.actions
+
     def serialize_actions(self):
         """Serialize actions for the resource frontend view.
 
@@ -215,7 +219,7 @@ class AdminResourceBaseView(AdminView):
          }
         """
         serialized_actions = {}
-        for key, value in self.actions.items():
+        for key, value in self.get_actions().items():
             if "payload_schema" and "order" not in value:
                 raise InvalidActionsConfiguration
 

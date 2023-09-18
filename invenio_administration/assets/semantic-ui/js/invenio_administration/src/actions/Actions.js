@@ -63,7 +63,7 @@ export class Actions extends Component {
       );
     } else {
       return (
-        <Button.Group size="tiny" className="relaxed">
+        <>
           {!isEmpty(actions) && (
             <ResourceActions
               resource={resource}
@@ -81,7 +81,7 @@ export class Actions extends Component {
               title={title}
             />
           )}
-        </Button.Group>
+        </>
       );
     }
   }

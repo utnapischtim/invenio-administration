@@ -15,6 +15,7 @@ from invenio_vocabularies.services.schema import (
 )
 from marshmallow import fields
 from marshmallow_utils import fields as invenio_fields
+from marshmallow_utils.fields import EDTFDateString
 
 vocabulary_schemas = [ContribVocabularyRelationSchema, BaseVocabularySchema,
                       VocabularyRelationSchema]
@@ -47,7 +48,8 @@ custom_mapping = {
     invenio_fields.links.Link: "string",
     invenio_fields.tzdatetime.TZDateTime: "datetime",
     invenio_fields.sanitizedhtml.SanitizedHTML: "string",
-    invenio_fields.isodate.ISODateString: "date"
+    invenio_fields.isodate.ISODateString: "date",
+    EDTFDateString: "date"
 }
 
 
@@ -103,7 +105,7 @@ def jsonify_schema(schema):
             # list of plain types
             schema_dict[field].update({
                 "type": "array",
-                "items": {"type": custom_mapping[field_type.inner]},
+                "items": {"type": custom_mapping[field_type.inner.__class__]},
             })
         else:
             try:

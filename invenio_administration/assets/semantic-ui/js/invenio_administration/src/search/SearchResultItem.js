@@ -8,7 +8,7 @@
 
 import PropTypes from "prop-types";
 import React, { Component } from "react";
-import { Table } from "semantic-ui-react";
+import { Table, Button } from "semantic-ui-react";
 import isEmpty from "lodash/isEmpty";
 import { Actions } from "../actions/Actions";
 import { withState } from "react-searchkit";
@@ -85,18 +85,20 @@ class SearchResultItemComponent extends Component {
           {resourceHasActions && (
             <Table.Cell collapsing>
               <Overridable id="InvenioAdministration.SearchResultItem.actions.container">
-                <Actions
-                  title={title}
-                  resourceName={resourceName}
-                  editUrl={AdminUIRoutes.editView(listUIEndpoint, result, idKeyPath)}
-                  displayEdit={displayEdit}
-                  displayDelete={displayDelete}
-                  actions={actions}
-                  resource={result}
-                  idKeyPath={idKeyPath}
-                  successCallback={this.refreshAfterAction}
-                  listUIEndpoint={listUIEndpoint}
-                />
+                <Button.Group size="tiny" className="relaxed">
+                  <Actions
+                    title={title}
+                    resourceName={resourceName}
+                    editUrl={AdminUIRoutes.editView(listUIEndpoint, result, idKeyPath)}
+                    displayEdit={displayEdit}
+                    displayDelete={displayDelete}
+                    actions={actions}
+                    resource={result}
+                    idKeyPath={idKeyPath}
+                    successCallback={this.refreshAfterAction}
+                    listUIEndpoint={listUIEndpoint}
+                  />
+                </Button.Group>
               </Overridable>
             </Table.Cell>
           )}

@@ -1,7 +1,7 @@
 import { AdminUIRoutes } from "@js/invenio_administration/src/routes";
 import PropTypes from "prop-types";
 import React, { Component } from "react";
-import { Grid, Header, Divider, Container } from "semantic-ui-react";
+import { Grid, Header, Divider, Container, Button } from "semantic-ui-react";
 import { InvenioAdministrationActionsApi } from "../api/actions";
 import DetailsTable from "./DetailsComponent";
 import { Actions } from "../actions/Actions";
@@ -89,19 +89,21 @@ export default class AdminDetailsView extends Component {
                 <Header as="h1">{title}</Header>
               </Grid.Column>
               <Grid.Column verticalAlign="middle" floated="right" textAlign="right">
-                <Actions
-                  title={title}
-                  resourceName={resourceName}
-                  apiEndpoint={apiEndpoint}
-                  editUrl={AdminUIRoutes.editView(listUIEndpoint, data, idKeyPath)}
-                  actions={actions}
-                  displayEdit={displayEdit}
-                  displayDelete={displayDelete}
-                  resource={data}
-                  idKeyPath={idKeyPath}
-                  successCallback={this.handleDelete}
-                  listUIEndpoint={listUIEndpoint}
-                />
+                <Button.Group size="tiny" className="relaxed">
+                  <Actions
+                    title={title}
+                    resourceName={resourceName}
+                    apiEndpoint={apiEndpoint}
+                    editUrl={AdminUIRoutes.editView(listUIEndpoint, data, idKeyPath)}
+                    actions={actions}
+                    displayEdit={displayEdit}
+                    displayDelete={displayDelete}
+                    resource={data}
+                    idKeyPath={idKeyPath}
+                    successCallback={this.handleDelete}
+                    listUIEndpoint={listUIEndpoint}
+                  />
+                </Button.Group>
               </Grid.Column>
             </Grid.Row>
           </Grid>
