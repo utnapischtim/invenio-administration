@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 1.9.0 (2023-09-18)
+
+- views: adapt actions creation
+
 Version 1.8.0 (2023-09-14)
 
 - setup: bump to invenio-vocabularies v2.0.0
