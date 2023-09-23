@@ -40,7 +40,7 @@ export default class AdminDetailsView extends Component {
       });
     } catch (e) {
       console.error(e);
-      this.setState({ error: e });
+      this.setState({ error: e, loading: false });
     }
   };
 

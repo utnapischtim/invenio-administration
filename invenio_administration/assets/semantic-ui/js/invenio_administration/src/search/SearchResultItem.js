@@ -85,7 +85,7 @@ class SearchResultItemComponent extends Component {
           {resourceHasActions && (
             <Table.Cell collapsing>
               <Overridable id="InvenioAdministration.SearchResultItem.actions.container">
-                <Button.Group size="tiny" className="relaxed">
+                <Button.Group size="tiny" basic widths={5} compact className="margined">
                   <Actions
                     title={title}
                     resourceName={resourceName}

@@ -64,6 +64,7 @@ class ResourceActions extends Component {
               payloadSchema={actionConfig.payload_schema}
               dataName={actionConfig.text}
               dataActionKey={actionKey}
+              basic
             >
               {actionConfig.text}
             </Element>
