@@ -8,6 +8,11 @@
 Changes
 =======
 
+Version 1.9.1 (2023-09-25)
+
+- assets: improve error handling on details page
+- styling: minor improvements
+
 Version 1.9.0 (2023-09-18)
 
 - views: adapt actions creation
