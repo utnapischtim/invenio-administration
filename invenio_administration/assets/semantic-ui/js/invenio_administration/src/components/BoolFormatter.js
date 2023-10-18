@@ -13,11 +13,11 @@ import Overridable from "react-overridable";
 
 class BoolFormatter extends React.Component {
   render() {
-    const { value, icon, color } = this.props;
+    const { value, icon, color, tooltip } = this.props;
     if (!value) {
       return null;
     }
-    return <Icon name={icon} color={color} />;
+    return <Icon title={tooltip} name={icon} color={color} />;
   }
 }
 
@@ -25,6 +25,7 @@ BoolFormatter.propTypes = {
   value: PropTypes.string.isRequired,
   icon: PropTypes.string,
   color: PropTypes.string,
+  tooltip: PropTypes.string,
 };
 
 BoolFormatter.defaultProps = {
