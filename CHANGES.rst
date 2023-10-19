@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 1.9.2 (2023-10-19)
+
+- accessibility: add tooltips to icons
+
 Version 1.9.1 (2023-09-25)
 
 - assets: improve error handling on details page
