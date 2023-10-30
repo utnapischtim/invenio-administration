@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 1.9.3 (2023-10-30)
+
+- marshmallow_utils: add ``URL`` field type mapping
+
 Version 1.9.2 (2023-10-19)
 
 - accessibility: add tooltips to icons
