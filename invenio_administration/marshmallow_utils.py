@@ -49,6 +49,7 @@ custom_mapping = {
     invenio_fields.tzdatetime.TZDateTime: "datetime",
     invenio_fields.sanitizedhtml.SanitizedHTML: "string",
     invenio_fields.isodate.ISODateString: "date",
+    invenio_fields.url.URL: "string",
     EDTFDateString: "date",
 }
 
