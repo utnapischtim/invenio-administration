@@ -15,7 +15,7 @@ from invenio_vocabularies.services.schema import (
 )
 from marshmallow import fields
 from marshmallow_utils import fields as invenio_fields
-from marshmallow_utils.fields import EDTFDateString
+from marshmallow_utils.fields import EDTFDateString, EDTFDateTimeString
 
 vocabulary_schemas = [ContribVocabularyRelationSchema, BaseVocabularySchema,
                       VocabularyRelationSchema]
@@ -51,6 +51,7 @@ custom_mapping = {
     invenio_fields.isodate.ISODateString: "date",
     invenio_fields.url.URL: "string",
     EDTFDateString: "date",
+    EDTFDateTimeString: "datetime",
 }
 
 
