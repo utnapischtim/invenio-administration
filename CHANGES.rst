@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 1.10.0 (2023-11-30)
+
+- marshmallw_utils: add EDTFDateTimeString mapping
+
 Version 1.9.3 (2023-10-30)
 
 - marshmallow_utils: add ``URL`` field type mapping
