@@ -2,7 +2,7 @@
 #
 # This file is part of Invenio.
 # Copyright (C) 2022 CERN.
-#
+# Copyright (C) 2023 KTH Royal Institute of Technology.
 # Invenio is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
 
@@ -55,6 +55,29 @@ custom_mapping = {
 }
 
 
+def find_type_in_mapping(field_type, custom_mapping):
+    """
+    Find a field type by traversing the inheritance chain.
+
+    Args:
+        field_type (Type): The field type to be searched.
+        custom_mapping (dict): The mapping of types.
+
+    Returns:
+        The mapped value for the found field type.
+
+    Raises:
+        KeyError: If the field type is not found in the mapping.
+    """
+    current_type = field_type
+    while current_type:
+        if current_type in custom_mapping:
+            return custom_mapping[current_type]
+        current_type = current_type.__base__
+
+    raise KeyError(f"Unrecognized field type: {field_type}")
+
+
 def jsonify_schema(schema):
     """Marshmallow schema to dict."""
     schema_dict = {}
@@ -105,15 +128,26 @@ def jsonify_schema(schema):
             })
         elif list_field and not isinstance(field_type.inner, fields.Nested):
             # list of plain types
-            schema_dict[field].update({
-                "type": "array",
-                "items": {"type": custom_mapping[field_type.inner.__class__]},
-            })
+            schema_dict[field].update(
+                {
+                    "type": "array",
+                    "items": {"type": find_type_in_mapping(
+                        field_type.inner.__class__,
+                        custom_mapping
+                        )},
+                }
+            )
         else:
             try:
-                schema_dict[field].update({
-                    "type": custom_mapping[field_type_name],
-                })
+                field_type_mapping = find_type_in_mapping(
+                    field_type_name,
+                    custom_mapping
+                    )
+                schema_dict[field].update(
+                    {
+                        "type": field_type_mapping,
+                    }
+                )
             except KeyError:
                 raise Exception(f"Unrecognised schema field {field}: {field_type_name}")
     return schema_dict
