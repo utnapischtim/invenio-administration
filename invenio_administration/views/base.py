@@ -278,9 +278,9 @@ class AdminResourceDetailView(AdminResourceBaseView):
             "display_edit": self.display_edit,
             "display_delete": self.display_delete,
             "list_ui_endpoint": self.get_list_view_endpoint(),
-            "resource_name": self.resource_name
-            if self.resource_name
-            else self.pid_path,
+            "resource_name": (
+                self.resource_name if self.resource_name else self.pid_path
+            ),
             "request_headers": self.request_headers,
         }
 
@@ -406,9 +406,9 @@ class AdminResourceListView(AdminResourceBaseView):
                 "pid_path": self.pid_path,
                 "create_ui_endpoint": self.get_create_view_endpoint(),
                 "list_ui_endpoint": self.get_list_view_endpoint(),
-                "resource_name": self.resource_name
-                if self.resource_name
-                else self.pid_path,
+                "resource_name": (
+                    self.resource_name if self.resource_name else self.pid_path
+                ),
             }
         )
 

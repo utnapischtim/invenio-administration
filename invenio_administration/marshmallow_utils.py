@@ -109,9 +109,9 @@ def jsonify_schema(schema):
         schema_dict[field] = {
             "required": is_required,
             "readOnly": is_read_only,
-            "title": field_type.metadata["title"]
-            if "title" in field_type.metadata
-            else None,
+            "title": (
+                field_type.metadata["title"] if "title" in field_type.metadata else None
+            ),
             "createOnly": is_create_only,
             "metadata": field_type.metadata,
         }
