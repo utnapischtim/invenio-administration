@@ -114,6 +114,7 @@ const mapFormFields = (obj, parentField, isCreate, formFieldsConfig, dropDumpOnl
           <BooleanField
             key={fieldProps.fieldPath}
             required={fieldSchema.required}
+            value={fieldSchema.metadata.checked === "true"}
             {...fieldProps}
           />
           {description && <label className="helptext">{description}</label>}
