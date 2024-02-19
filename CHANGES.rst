@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 2.0.1 (released 2024-02-19)
+
+- Add default bool value for BooleanField
+
 Version 2.0.0 (released 2024-01-29)
 
 - installation: bump invenio-accounts
