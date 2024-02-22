@@ -5,6 +5,7 @@ import {
   BooleanField,
   Dropdown,
   TextArea,
+  RichInput,
 } from "react-invenio-forms";
 import _capitalize from "lodash/capitalize";
 import _get from "lodash/get";
@@ -174,6 +175,16 @@ const mapFormFields = (obj, parentField, isCreate, formFieldsConfig, dropDumpOnl
           key={fieldProps.fieldPath}
           fieldPath={fieldProps.fieldPath}
           rows={rows}
+          {...fieldProps}
+        />
+      );
+    }
+
+    if (fieldSchema.type === "html") {
+      return (
+        <RichInput
+          key={fieldProps.fieldPath}
+          fieldPath={fieldProps.fieldPath}
           {...fieldProps}
         />
       );
