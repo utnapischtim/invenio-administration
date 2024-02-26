@@ -21,13 +21,15 @@ export class Actions extends Component {
       editUrl,
       displayEdit,
       displayDelete,
+      displayAsDropdown,
     } = this.props;
 
     // if number of actions is greater than 3, we display all in a dropdown
-    const displayAsDropdown =
-      displayEdit && displayDelete && Object.keys(actions).length > 1;
+    const _displayAsDropdown =
+      displayAsDropdown ||
+      (displayEdit && displayDelete && Object.keys(actions).length > 1);
 
-    if (displayAsDropdown) {
+    if (_displayAsDropdown) {
       return (
         <Dropdown>
           {!isEmpty(actions) && (
@@ -92,6 +94,7 @@ Actions.propTypes = {
   resourceName: PropTypes.string.isRequired,
   displayEdit: PropTypes.bool,
   displayDelete: PropTypes.bool,
+  displayAsDropdown: PropTypes.bool,
   resource: PropTypes.object.isRequired,
   successCallback: PropTypes.func.isRequired,
   idKeyPath: PropTypes.string,
@@ -102,5 +105,6 @@ Actions.propTypes = {
 Actions.defaultProps = {
   displayEdit: true,
   displayDelete: true,
+  displayAsDropdown: false,
   idKeyPath: "pid",
 };
