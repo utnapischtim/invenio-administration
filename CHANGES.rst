@@ -8,6 +8,11 @@
 Changes
 =======
 
+Version 2.1.0 (released 2024-02-27)
+
+- actions: add explicit prop for dropdown display
+- form: updated mapping and added RichInput
+
 Version 2.0.1 (released 2024-02-19)
 
 - Add default bool value for BooleanField
