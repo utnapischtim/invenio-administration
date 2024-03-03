@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 2.1.1 (released 2024-03-04)
+
+- bump react-invenio-forms
+
 Version 2.1.0 (released 2024-02-27)
 
 - actions: add explicit prop for dropdown display
